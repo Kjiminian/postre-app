@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
+import { normalizeToBase } from "@/lib/conversions";
 
 interface IngredientItem {
   id: string;
@@ -117,6 +118,54 @@ export default function IngredientesPage() {
     density: "",
     notes: "",
   });
+
+  const calculateLiveCostPerBase = () => {
+    const qty = Number(newIng.packageQty);
+    const priceDOP = Number(newIng.packagePriceDOP);
+    const densityVal = newIng.density ? Number(newIng.density) : undefined;
+    if (qty <= 0 || priceDOP <= 0) return 0;
+    const norm = normalizeToBase(qty, newIng.packageUnit, newIng.baseUnit, densityVal);
+    if (!norm.ok || norm.value <= 0) return 0;
+    return priceDOP / norm.value;
+  };
+
+  const handleCreateIngredient = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newIng.name.trim()) return;
+
+    const priceCents = Math.round(Number(newIng.packagePriceDOP) * 100);
+    const qty = Number(newIng.packageQty);
+    const densityVal = newIng.density ? Number(newIng.density) : undefined;
+    const norm = normalizeToBase(qty, newIng.packageUnit, newIng.baseUnit, densityVal);
+    const costPerBaseUnit = norm.ok && norm.value > 0 ? (priceCents / 100) / norm.value : 0;
+
+    const created: IngredientItem = {
+      id: `ING-${Date.now().toString(36).toUpperCase()}`,
+      name: newIng.name.trim(),
+      supplier: newIng.supplier.trim() || "Distribuidor Local",
+      packagePriceCents: priceCents,
+      packageQty: qty,
+      packageUnit: newIng.packageUnit,
+      baseUnit: newIng.baseUnit,
+      costPerBaseUnit,
+      density: densityVal,
+      reviewFlag: false,
+      notes: newIng.notes.trim() || undefined,
+    };
+
+    setIngredients([created, ...ingredients]);
+    setIsModalOpen(false);
+    setNewIng({
+      name: "",
+      supplier: "",
+      packagePriceDOP: 0,
+      packageQty: 1,
+      packageUnit: "kg",
+      baseUnit: "g",
+      density: "",
+      notes: "",
+    });
+  };
 
   const filtered = ingredients.filter(
     (i) =>
@@ -231,6 +280,193 @@ export default function IngredientesPage() {
             </table>
           </div>
         </div>
+
+        {/* Modal: Registrar Nuevo Ingrediente */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-lg w-full border border-cream-300 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="p-5 border-b border-cream-200 flex items-center justify-between bg-cream-50">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-plum-100 text-plum-600 flex items-center justify-center">
+                    <UtensilsCrossed className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-ink">Nuevo Ingrediente / Insumo</h3>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="w-8 h-8 rounded-lg hover:bg-cream-200 flex items-center justify-center text-ink-muted transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateIngredient} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                    Nombre del Ingrediente / Insumo *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Chocolate Amargo 70% Callebaut"
+                    value={newIng.name}
+                    onChange={(e) => setNewIng({ ...newIng, name: e.target.value })}
+                    className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500 focus:outline-none font-medium"
+                    required
+                  />
+                  <span className="text-[11px] text-ink-muted mt-0.5 block">
+                    No fusionar variantes (RF-011): si cambia la marca o presentación, usa un nombre diferenciado.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                    Proveedor
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Distribuidora Gourmet / Molinos Modernos"
+                    value={newIng.supplier}
+                    onChange={(e) => setNewIng({ ...newIng, supplier: e.target.value })}
+                    className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                      Precio Empaque (RD$) *
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="0.00"
+                      value={newIng.packagePriceDOP || ""}
+                      onChange={(e) => setNewIng({ ...newIng, packagePriceDOP: Number(e.target.value) })}
+                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-bold focus:border-plum-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                      Cant. Empaque *
+                    </label>
+                    <input
+                      type="number"
+                      step="0.001"
+                      min="0.001"
+                      value={newIng.packageQty}
+                      onChange={(e) => setNewIng({ ...newIng, packageQty: Number(e.target.value) })}
+                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-semibold focus:border-plum-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                      Unidad Empaque
+                    </label>
+                    <select
+                      value={newIng.packageUnit}
+                      onChange={(e) => setNewIng({ ...newIng, packageUnit: e.target.value })}
+                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500 focus:outline-none"
+                    >
+                      <optgroup label="Masa">
+                        <option value="kg">Kilogramos (kg)</option>
+                        <option value="g">Gramos (g)</option>
+                        <option value="lb">Libras (lb - 453.59g)</option>
+                        <option value="oz">Onzas (oz - 28.35g)</option>
+                      </optgroup>
+                      <optgroup label="Volumen">
+                        <option value="l">Litros (l)</option>
+                        <option value="ml">Mililitros (ml)</option>
+                      </optgroup>
+                      <optgroup label="Unidades">
+                        <option value="unidad">Unidad / Pieza</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                      Unidad Base de Costeo
+                    </label>
+                    <select
+                      value={newIng.baseUnit}
+                      onChange={(e) => setNewIng({ ...newIng, baseUnit: e.target.value })}
+                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-medium focus:border-plum-500 focus:outline-none"
+                    >
+                      <option value="g">Gramos (g) — Masa</option>
+                      <option value="ml">Mililitros (ml) — Líquidos</option>
+                      <option value="unidad">Unidad — Conteo</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                      Densidad (g/ml)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="Ej: 1.07"
+                      value={newIng.density}
+                      onChange={(e) => setNewIng({ ...newIng, density: e.target.value })}
+                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500 focus:outline-none"
+                    />
+                    <span className="text-[10px] text-ink-muted">Solo si cruza volumen a masa</span>
+                  </div>
+                </div>
+
+                {/* Previsualización en tiempo real del costo por base */}
+                <div className="p-3 bg-cream-100 rounded-xl border border-cream-300 flex items-center justify-between text-xs">
+                  <div>
+                    <span className="text-ink-muted block text-[11px] uppercase font-semibold">Costo Calculado por Unidad Base:</span>
+                    <span className="font-bold text-plum-600 text-sm">
+                      RD$ {calculateLiveCostPerBase().toFixed(4)} /{newIng.baseUnit}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-sage-600 font-semibold bg-sage-500/10 px-2 py-1 rounded-full border border-sage-500/20">
+                    Conversión Automática
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
+                    Notas / Observaciones
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Presentación saco 50 lb, rendimiento verificado"
+                    value={newIng.notes}
+                    onChange={(e) => setNewIng({ ...newIng, notes: e.target.value })}
+                    className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500 focus:outline-none"
+                  />
+                </div>
+
+                <div className="pt-4 border-t border-cream-200 flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2 rounded-lg text-sm text-ink-light hover:bg-cream-200 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg text-sm bg-plum-500 hover:bg-plum-600 text-white font-medium shadow-sm transition-colors"
+                  >
+                    Guardar Ingrediente
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
