@@ -1,33 +1,30 @@
 # ESTADO ACTUAL DEL PROYECTO — POSTRES APP
 
 ## 1. SITUACIÓN OPERATIVA
-* **Fase Activa:** P-01 (Inicio y Clasificación) / P-02 (Descubrimiento Multidisciplinario)
-* **Estado:** EN PROCESO
+* **Fase Activa:** FASE 0 (Completada) ➔ Preparando FASE 1 (Fundación Arquitectónica y Base de Datos)
+* **Estado:** LISTO PARA PLAN DE IMPLEMENTACIÓN FASE 1
 * **Último Avance:** 
-  - Inicialización formal bajo el marco GEM PROYECTOS SOFTWARE V3.0.
-  - Creación de memoria técnica base (`AGENTS.md`, `GEM_ESTADO.json`, `context.md`, `estado_actual.md`, `roadmap.md`, `requisitos.md`, `reglas_negocio.md`, `decisiones.md`).
-  - Inicialización del repositorio Git.
-  - Formulación de preguntas de calibración para el Supervisor.
-* **Última Validación:** No iniciada (Greenfield, fase conceptual).
+  - Clasificación Greenfield (P-01) y Descubrimiento Multidimensional (P-02) completados y alineados con el Supervisor.
+  - Modelo de solución híbrido definido: Catálogo web mobile-first + Pedido y despacho a WhatsApp + Panel administrativo interno de gestión.
+  - Catálogo de 12 Requisitos Funcionales (`RF-001` a `RF-012`) y 6 No Funcionales (`RNF-001` a `RNF-006`) formalizados en `requisitos.md`.
+  - Catálogo de 8 Reglas de Negocio (`RN-001` a `RN-008`) e invariantes formalizados en `reglas_negocio.md`.
+  - Decisiones de arquitectura y stack aprobadas en `decisiones.md` (`DEC-001`, `DEC-002`, `DEC-003`: Next.js App Router, Tailwind con paleta gastronómica cálida, Prisma ORM, SQLite/PostgreSQL, Zod, Vitest).
+  - Roadmap estructurado en 6 rebanadas verticales con criterios `CA-xxx` en `roadmap.md`.
+* **Última Validación:** Descubrimiento P-02 formalmente respondido y validado por el Supervisor.
 * **Bloqueos Activos:** Ninguno.
-* **Riesgos Identificados:** Ambigüedad inicial en requerimientos de negocio (mitigándose mediante P-02).
-* **Próximo Hito:** Concluir descubrimiento P-02 con el Supervisor y formular el catálogo formal de Requisitos (`P-04`) y Reglas de Negocio (`P-05`).
+* **Riesgos Mitigados:** Se eliminó el riesgo de desacople funcional y de métodos de pago mediante la adopción de checkout con WhatsApp y confirmación manual verificada.
 
 ---
 
 ## 2. COMPUERTAS DE GOBERNANZA THEMIS
 | Compuerta | Protocolo | Estado | Observaciones |
 | :--- | :--- | :--- | :--- |
-| **G1: Pre-Auditoría de Plan** | P-11 / P-33 | NO INICIADA | Aplica antes de cada fase de código |
-| **G2: Aprobación del Supervisor** | P-11 | PENDIENTE | Se requiere firma antes de tocar código |
-| **G3: Auditoría Imparcial de Fase**| P-14 / P-33 | NO INICIADA | Subagentes `themis_fiscal_codigo` / `themis_auditor_antislop` |
-| **G4: Cierre Formal de Fase** | P-16 | NO INICIADA | Checklist de 13 puntos |
+| **G1: Pre-Auditoría de Plan** | P-11 / P-33 | PENDIENTE | Convocará a `themis_fiscal_planes` al redactar plan de Fase 1 |
+| **G2: Aprobación del Supervisor** | P-11 | PENDIENTE | Firma requerida para iniciar ejecución de Fase 1 |
+| **G3: Auditoría Imparcial de Fase**| P-14 / P-33 | NO INICIADA | Subagentes `themis_fiscal_codigo` / `themis_auditor_antislop` al concluir Fase 1 |
+| **G4: Cierre Formal de Fase** | P-16 | NO INICIADA | Actualización de memoria técnica y checklist de 13 puntos |
 
 ---
 
-## 3. PENDIENTES INMEDIATOS
-- [ ] Responder preguntas de calibración de negocio (Supervisor).
-- [ ] Documentar requisitos funcionales (`RF-xxx`) y no funcionales (`RNF-xxx`) en `requisitos.md`.
-- [ ] Documentar reglas de negocio (`RN-xxx`) e invariantes en `reglas_negocio.md`.
-- [ ] Proponer arquitectura y stack tecnológico (`decisiones.md`).
-- [ ] Elaborar roadmap de fases por rebanadas verticales (`roadmap.md`).
+## 3. PRÓXIMO PASO INMEDIATO
+* Formular el Plan de Implementación de la **FASE 1: Fundación Arquitectónica, Diseño Anti-Slop y Base de Datos** (`implementation_plan.md`), someterlo a pre-auditoría con `themis_fiscal_planes` y presentarlo a la firma del Supervisor.

@@ -1,10 +1,10 @@
 {
   "proyecto": "postres-app",
   "metodologia": "GEM PROYECTOS SOFTWARE V3.0",
-  "estado": "INICIALIZACION",
+  "estado": "FASE_0_COMPLETADA",
   "tipologia": "GREENFIELD",
-  "fase_activa": "P-01_P-02",
-  "fase_nombre": "Inicio y Descubrimiento",
+  "fase_activa": "FASE_1",
+  "fase_nombre": "Fundacion Arquitectonica, Diseno Anti-Slop y Base de Datos",
   "fecha_inicio": "2026-11-11",
   "ultima_actualizacion": "2026-11-11",
   "supervisor": "Katherine Jiminian",
@@ -15,12 +15,12 @@
     "auditor_antislop": "themis_auditor_antislop"
   },
   "metricas": {
-    "total_rf": 0,
-    "total_rnf": 0,
-    "total_rn": 0,
-    "total_dec": 0,
-    "fases_completadas": 0,
-    "fases_totales": 0
+    "total_rf": 12,
+    "total_rnf": 6,
+    "total_rn": 8,
+    "total_dec": 3,
+    "fases_completadas": 1,
+    "fases_totales": 7
   },
   "ultimo_dictamen_fiscal": null
 }
