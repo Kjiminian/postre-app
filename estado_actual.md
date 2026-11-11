@@ -1,30 +1,28 @@
-# ESTADO ACTUAL DEL PROYECTO — POSTRES APP
+# ESTADO ACTUAL — K_SWEET (GEM PROYECTOS SOFTWARE V3.0)
 
-## 1. SITUACIÓN OPERATIVA
-* **Fase Activa:** FASE 0 (Completada) ➔ Preparando FASE 1 (Fundación Arquitectónica y Base de Datos)
-* **Estado:** LISTO PARA PLAN DE IMPLEMENTACIÓN FASE 1
-* **Último Avance:** 
-  - Clasificación Greenfield (P-01) y Descubrimiento Multidimensional (P-02) completados y alineados con el Supervisor.
-  - Modelo de solución híbrido definido: Catálogo web mobile-first + Pedido y despacho a WhatsApp + Panel administrativo interno de gestión.
-  - Catálogo de 12 Requisitos Funcionales (`RF-001` a `RF-012`) y 6 No Funcionales (`RNF-001` a `RNF-006`) formalizados en `requisitos.md`.
-  - Catálogo de 8 Reglas de Negocio (`RN-001` a `RN-008`) e invariantes formalizados en `reglas_negocio.md`.
-  - Decisiones de arquitectura y stack aprobadas en `decisiones.md` (`DEC-001`, `DEC-002`, `DEC-003`: Next.js App Router, Tailwind con paleta gastronómica cálida, Prisma ORM, SQLite/PostgreSQL, Zod, Vitest).
-  - Roadmap estructurado en 6 rebanadas verticales con criterios `CA-xxx` en `roadmap.md`.
-* **Última Validación:** Descubrimiento P-02 formalmente respondido y validado por el Supervisor.
-* **Bloqueos Activos:** Ninguno.
-* **Riesgos Mitigados:** Se eliminó el riesgo de desacople funcional y de métodos de pago mediante la adopción de checkout con WhatsApp y confirmación manual verificada.
+Última actualización: 11 de Noviembre de 2026 (Zona: America/Santo_Domingo)
 
 ---
 
-## 2. COMPUERTAS DE GOBERNANZA THEMIS
-| Compuerta | Protocolo | Estado | Observaciones |
-| :--- | :--- | :--- | :--- |
-| **G1: Pre-Auditoría de Plan** | P-11 / P-33 | PENDIENTE | Convocará a `themis_fiscal_planes` al redactar plan de Fase 1 |
-| **G2: Aprobación del Supervisor** | P-11 | PENDIENTE | Firma requerida para iniciar ejecución de Fase 1 |
-| **G3: Auditoría Imparcial de Fase**| P-14 / P-33 | NO INICIADA | Subagentes `themis_fiscal_codigo` / `themis_auditor_antislop` al concluir Fase 1 |
-| **G4: Cierre Formal de Fase** | P-16 | NO INICIADA | Actualización de memoria técnica y checklist de 13 puntos |
+## 1. HITOS ALCANZADOS
+- **Gobernanza GEM V3:** `AGENTS.md` y compuertas Themis plenamente operativas.
+- **Base de Datos Persistente:** SQLite (`ksweet.db`) creada y sincronizada con Prisma Schema completo cubriendo los 9 módulos funcionales.
+- **Preservación del Excel Original:** Archivo `Costos Productos (Recovered).xlsx` respaldado íntegramente en `data/costos_postres_original.xlsx` con trazabilidad completa (RF-024). Inconsistencias (#REF!, unidades ambiguas, cantidades de harina) identificadas y señaladas sin corrección silenciosa.
+- **Diseño de Interfaz:** Paleta gastronómica Crema & Rosa Ciruela (`#FAF8F6`, `#9C4266`, `#831843`, `#302B32`, `#3B7865`), navegación lateral fija (Sidebar), Header con reloj de Santo Domingo, y los 4 estados de UI Anti-Slop (Loading, Error, Empty, Real Data).
+- **Módulos Implementados:**
+  1. `Ventas & Cobranzas` (`/ventas`): Catálogo reutilizable, filtros por fecha/producto, cálculo de saldo, costos históricos congelados.
+  2. `Cuadre Semanal (L-D)` (`/cuadre`): Facturado, cobrado, COGS, gastos, resultado neto, arqueo de gaveta física y detección de alteraciones post-cierre.
+  3. `Ingredientes & Insumos` (`/ingredientes`): Proveedores, empaques, costo por base unitaria, densidad y regla de no fusionar variantes (RF-011).
+  4. `Recetas & Subrecetas` (`/recetas`): Rendimiento, ingredientes, subrecetas, empaque, mano de obra, gastos indirectos, duplicación y recálculo en cascada sin alterar ventas pasadas.
+  5. `Costos y Precios` (`/costos-precios`): Fórmula vinculante $P = C / (1 - M)$, simulador interactivo, comparativa matemática entre margen sobre venta y recargo sobre costo.
+  6. `Gastos Operativos` (`/gastos`): Categorías, fecha, medio de pago y protección anti-duplicidad con compras de insumos (RF-020).
+  7. `Conversor de Unidades` (`/conversiones`): 1 lb = 453.59237g, 1 oz = 28.349523125g, exigencia de densidad para cruce volumen-masa y tabla editable de equivalencias del Excel.
+  8. `Importación XLSX & Respaldos` (`/importar`): Auditoría de hojas, mapeo de columnas, borrador por revisar y exportador de respaldo JSON.
+  9. `Panel Principal (Dashboard)` (`/`): Métricas semanales L-D, ventas por día, postres más vendidos y alertas de recetas no revisadas.
+- **Suite de Pruebas Automatizadas:** 9 pruebas unitarias pasando con exit code 0 (`scripts/run_domain_tests.mjs`).
 
 ---
 
-## 3. PRÓXIMO PASO INMEDIATO
-* Formular el Plan de Implementación de la **FASE 1: Fundación Arquitectónica, Diseño Anti-Slop y Base de Datos** (`implementation_plan.md`), someterlo a pre-auditoría con `themis_fiscal_planes` y presentarlo a la firma del Supervisor.
+## 2. COMPUERTAS DE AUDITORÍA
+- Pre-auditoría de Plan: `themis_fiscal_planes` dictaminó `PLAN VIABLE`.
+- Auditoría de Código y Calidad: En ejecución con `themis_fiscal_codigo` y `themis_auditor_antislop`.

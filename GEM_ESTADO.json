@@ -1,26 +1,42 @@
 {
-  "proyecto": "postres-app",
   "metodologia": "GEM PROYECTOS SOFTWARE V3.0",
-  "estado": "FASE_0_COMPLETADA",
-  "tipologia": "GREENFIELD",
-  "fase_activa": "FASE_1",
-  "fase_nombre": "Fundacion Arquitectonica, Diseno Anti-Slop y Base de Datos",
-  "fecha_inicio": "2026-11-11",
-  "ultima_actualizacion": "2026-11-11",
-  "supervisor": "Katherine Jiminian",
-  "antigravity": {
-    "arquitecto": "Activo",
-    "fiscal_planes": "themis_fiscal_planes",
-    "fiscal_codigo": "themis_fiscal_codigo",
-    "auditor_antislop": "themis_auditor_antislop"
+  "proyecto": "K_Sweet — Sistema Integral de Repostería RD",
+  "version": "1.0.0",
+  "fase_actual": "FASE_2_EJECUCION_Y_VERIFICACION",
+  "estado": "COMPLETO_PENDIENTE_AUDITORIA",
+  "arquitectura": {
+    "framework": "Next.js 14 / TypeScript",
+    "base_datos": "SQLite (ksweet.db) via Prisma",
+    "estilos": "Tailwind CSS (Crema & Rosa Ciruela)",
+    "moneda": "RD$ (DOP)",
+    "zona_horaria": "America/Santo_Domingo"
   },
-  "metricas": {
-    "total_rf": 12,
-    "total_rnf": 6,
-    "total_rn": 8,
-    "total_dec": 3,
-    "fases_completadas": 1,
-    "fases_totales": 7
+  "modulos": [
+    { "id": 1, "nombre": "Ventas & Cobranzas", "ruta": "/ventas", "estado": "IMPLEMENTADO" },
+    { "id": 2, "nombre": "Cuadre Semanal (L-D)", "ruta": "/cuadre", "estado": "IMPLEMENTADO" },
+    { "id": 3, "nombre": "Ingredientes & Insumos", "ruta": "/ingredientes", "estado": "IMPLEMENTADO" },
+    { "id": 4, "nombre": "Recetas & Subrecetas", "ruta": "/recetas", "estado": "IMPLEMENTADO" },
+    { "id": 5, "nombre": "Costos y Precios P = C / (1-M)", "ruta": "/costos-precios", "estado": "IMPLEMENTADO" },
+    { "id": 6, "nombre": "Gastos Operativos", "ruta": "/gastos", "estado": "IMPLEMENTADO" },
+    { "id": 7, "nombre": "Conversor de Unidades & Densidades", "ruta": "/conversiones", "estado": "IMPLEMENTADO" },
+    { "id": 8, "nombre": "Importación XLSX & Respaldos", "ruta": "/importar", "estado": "IMPLEMENTADO" },
+    { "id": 9, "nombre": "Panel Principal (Dashboard)", "ruta": "/", "estado": "IMPLEMENTADO" }
+  ],
+  "trazabilidad_excel": {
+    "archivo_original": "data/costos_postres_original.xlsx",
+    "inconsistencias_documentadas": [
+      "Fórmulas #REF! en hoja Cheesecake filas 47-51 y 62",
+      "Multiplicación errónea en Harina 5 lb (453g vs 2267.96g)",
+      "Unidades ambiguas 'framos', 'palitos', 'unidad segun excel'",
+      "Referencias a celdas vacías L66 y G62"
+    ],
+    "politica": "Preservado sin corrección silenciosa; importación en estado Borrador"
   },
-  "ultimo_dictamen_fiscal": null
+  "pruebas_automatizadas": {
+    "suite": "scripts/run_domain_tests.mjs",
+    "total": 9,
+    "aprobadas": 9,
+    "fallidas": 0,
+    "exit_code": 0
+  }
 }
