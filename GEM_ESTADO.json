@@ -1,0 +1,26 @@
+{
+  "proyecto": "postres-app",
+  "metodologia": "GEM PROYECTOS SOFTWARE V3.0",
+  "estado": "INICIALIZACION",
+  "tipologia": "GREENFIELD",
+  "fase_activa": "P-01_P-02",
+  "fase_nombre": "Inicio y Descubrimiento",
+  "fecha_inicio": "2026-11-11",
+  "ultima_actualizacion": "2026-11-11",
+  "supervisor": "Katherine Jiminian",
+  "antigravity": {
+    "arquitecto": "Activo",
+    "fiscal_planes": "themis_fiscal_planes",
+    "fiscal_codigo": "themis_fiscal_codigo",
+    "auditor_antislop": "themis_auditor_antislop"
+  },
+  "metricas": {
+    "total_rf": 0,
+    "total_rnf": 0,
+    "total_rn": 0,
+    "total_dec": 0,
+    "fases_completadas": 0,
+    "fases_totales": 0
+  },
+  "ultimo_dictamen_fiscal": null
+}
