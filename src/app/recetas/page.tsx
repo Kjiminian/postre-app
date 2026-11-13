@@ -101,6 +101,7 @@ export default function RecetasPage() {
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
   const [expandedRecipes, setExpandedRecipes] = useState<Record<string, boolean>>({});
   const [simPortions, setSimPortions] = useState<Record<string, number>>({});
+  const [comboQtyOverride, setComboQtyOverride] = useState<Record<string, number>>({});
 
   // Edición en línea de precio de presentación
   const [editingPresId, setEditingPresId] = useState<string | null>(null);
@@ -263,7 +264,9 @@ export default function RecetasPage() {
   };
 
   const calcPresPreview = () => {
-    if (!selectedMotherRecipe) return { totalCostDOP: 0, suggestedPriceDOP: 0, profitDOP: 0, realMargin: 0 };
+    if (!selectedMotherRecipe) {
+      return { baseCostDOP: 0, packagingCostDOP: 0, totalCostDOP: 0, suggestedPriceDOP: 0, profitDOP: 0, realMargin: 0 };
+    }
 
     const baseCostCents = Math.round(selectedMotherRecipe.costPerYieldUnit * presForm.motherRecipeQty);
     const packagingCostCents = presForm.materials.reduce((sum, m) => sum + (m.totalCostCents || 0), 0);
@@ -282,6 +285,8 @@ export default function RecetasPage() {
     const realMargin = finalCents > 0 ? ((finalCents - totalCostCents) / finalCents) * 100 : 0;
 
     return {
+      baseCostDOP: baseCostCents / 100,
+      packagingCostDOP: packagingCostCents / 100,
       totalCostDOP: totalCostCents / 100,
       suggestedPriceDOP: suggestedCents / 100,
       profitDOP: profitCents / 100,
@@ -756,7 +761,26 @@ export default function RecetasPage() {
                           ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {recipe.presentations.map((pres) => {
-                                const baseConsumedCents = Math.round(recipe.costPerYieldUnit * pres.motherRecipeQty);
+                                const activeQty = comboQtyOverride[pres.id] ?? pres.motherRecipeQty;
+                                const isScaled = Math.abs(activeQty - pres.motherRecipeQty) > 0.001;
+                                const scaleFactor = pres.motherRecipeQty > 0 ? activeQty / pres.motherRecipeQty : 1;
+
+                                const baseConsumedCents = Math.round(recipe.costPerYieldUnit * activeQty);
+                                const scaledPackagingCents = Math.round(pres.packagingCostCents * scaleFactor);
+                                const scaledTotalCostCents = baseConsumedCents + scaledPackagingCents;
+
+                                const scaledSuggestedCents =
+                                  pres.pricingMethod === "MARKUP"
+                                    ? Math.ceil(scaledTotalCostCents * (1 + pres.desiredMarginPercent / 100))
+                                    : pres.desiredMarginPercent < 100
+                                      ? Math.ceil(scaledTotalCostCents / (1 - pres.desiredMarginPercent / 100))
+                                      : scaledTotalCostCents;
+
+                                const activeFinalCents = isScaled ? scaledSuggestedCents : pres.finalPriceCents;
+                                const activeProfitCents = activeFinalCents - scaledTotalCostCents;
+                                const activeMarginPercent =
+                                  activeFinalCents > 0 ? ((activeFinalCents - scaledTotalCostCents) / activeFinalCents) * 100 : 0;
+
                                 const isEditingThisPrice = editingPresId === pres.id;
 
                                 return (
@@ -767,18 +791,52 @@ export default function RecetasPage() {
                                     <div>
                                       {/* Cabecera de la presentación */}
                                       <div className="px-4 py-3 bg-[#FAF5F7] border-b border-[#F3D5E2] flex items-start justify-between gap-2">
-                                        <div>
+                                        <div className="flex-1">
                                           <h4 className="text-sm font-bold text-[#4A3B32]">{pres.name}</h4>
                                           {pres.sizeDescription && (
                                             <p className="text-[11px] text-[#7D6E65] mt-0.5">{pres.sizeDescription}</p>
                                           )}
-                                          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded bg-white border border-[#F3D5E2] text-[10px] font-semibold text-[#9C4266] tabular-nums">
-                                              Consume {pres.motherRecipeQty} {pres.motherRecipeUnit}
+
+                                          {/* Escalador / Cantidad dinámica de Combo */}
+                                          <div className="flex flex-wrap items-center gap-2 mt-2 bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#F3D5E2]">
+                                            <span className="text-[10px] font-semibold text-[#4A3B32]">
+                                              Cant. Combo:
                                             </span>
-                                            <span className="text-[10px] text-[#7D6E65] tabular-nums">
-                                              ({pres.presentationYield.toFixed(1)} pres/lote)
-                                            </span>
+                                            <input
+                                              type="number"
+                                              step="1"
+                                              min="0.1"
+                                              value={activeQty}
+                                              onChange={(e) => {
+                                                const v = parseFloat(e.target.value);
+                                                setComboQtyOverride((prev) => ({
+                                                  ...prev,
+                                                  [pres.id]: isNaN(v) || v <= 0 ? 0.1 : v,
+                                                }));
+                                              }}
+                                              className="w-16 px-1.5 py-0.5 text-center text-xs font-bold rounded border border-[#9C4266] text-[#9C4266] bg-white tabular-nums"
+                                            />
+                                            <span className="text-[10px] text-[#7D6E65]">{pres.motherRecipeUnit}</span>
+                                            {isScaled ? (
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  setComboQtyOverride((prev) => {
+                                                    const copy = { ...prev };
+                                                    delete copy[pres.id];
+                                                    return copy;
+                                                  })
+                                                }
+                                                className="text-[10px] font-semibold text-[#9C4266] hover:underline ml-auto"
+                                                title="Restablecer a cantidad base"
+                                              >
+                                                ↺ Base ({pres.motherRecipeQty})
+                                              </button>
+                                            ) : (
+                                              <span className="text-[10px] text-[#7D6E65] tabular-nums ml-auto">
+                                                ({pres.presentationYield.toFixed(1)} pres/lote)
+                                              </span>
+                                            )}
                                           </div>
                                         </div>
 
@@ -819,36 +877,42 @@ export default function RecetasPage() {
                                                 RD$ {(recipe.costPerYieldUnit / 100).toFixed(2)}
                                               </td>
                                               <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
-                                                {pres.motherRecipeQty}
+                                                {Number(activeQty.toFixed(2))}
                                               </td>
                                               <td className="py-1.5 px-3 text-right font-semibold text-[#4A3B32] tabular-nums">
                                                 {formatDOP(baseConsumedCents)}
                                               </td>
                                             </tr>
 
-                                            {/* Materiales / Empaques específicos */}
+                                            {/* Materiales / Empaques específicos escalados automáticamente */}
                                             {pres.materials && pres.materials.length > 0 ? (
-                                              pres.materials.map((mat) => (
-                                                <tr key={mat.id}>
-                                                  <td className="py-1.5 px-3 text-[#4A3B32]">{mat.name}</td>
-                                                  <td className="py-1.5 px-2 text-right text-[#7D6E65] tabular-nums">
-                                                    RD$ {(mat.unitCostCents / 100).toFixed(2)}
-                                                  </td>
-                                                  <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
-                                                    {mat.quantity}
-                                                  </td>
-                                                  <td className="py-1.5 px-3 text-right text-[#4A3B32] tabular-nums">
-                                                    {formatDOP(mat.totalCostCents)}
-                                                  </td>
-                                                </tr>
-                                              ))
-                                            ) : pres.packagingCostCents > 0 ? (
+                                              pres.materials.map((mat) => {
+                                                const scaledQty = Number((mat.quantity * scaleFactor).toFixed(2));
+                                                const scaledMatCents = Math.round(mat.totalCostCents * scaleFactor);
+                                                return (
+                                                  <tr key={mat.id}>
+                                                    <td className="py-1.5 px-3 text-[#4A3B32]">{mat.name}</td>
+                                                    <td className="py-1.5 px-2 text-right text-[#7D6E65] tabular-nums">
+                                                      RD$ {(mat.unitCostCents / 100).toFixed(2)}
+                                                    </td>
+                                                    <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
+                                                      {scaledQty}
+                                                    </td>
+                                                    <td className="py-1.5 px-3 text-right text-[#4A3B32] tabular-nums">
+                                                      {formatDOP(scaledMatCents)}
+                                                    </td>
+                                                  </tr>
+                                                );
+                                              })
+                                            ) : scaledPackagingCents > 0 ? (
                                               <tr>
                                                 <td className="py-1.5 px-3 text-[#4A3B32]">Empaques / Materiales</td>
                                                 <td className="py-1.5 px-2 text-right text-[#7D6E65]">-</td>
-                                                <td className="py-1.5 px-2 text-right text-[#4A3B32]">1</td>
+                                                <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
+                                                  {Number(scaleFactor.toFixed(2))}
+                                                </td>
                                                 <td className="py-1.5 px-3 text-right text-[#4A3B32] tabular-nums">
-                                                  {formatDOP(pres.packagingCostCents)}
+                                                  {formatDOP(scaledPackagingCents)}
                                                 </td>
                                               </tr>
                                             ) : null}
@@ -859,21 +923,31 @@ export default function RecetasPage() {
 
                                     {/* Pie Financiero de la Presentación */}
                                     <div className="p-3 bg-[#FAF8F6] border-t border-[#E8E2D9] space-y-1.5 text-xs">
+                                      <div className="flex justify-between text-[11px] text-[#7D6E65]">
+                                        <span>Base ({formatDOP(baseConsumedCents)}) + Adic. ({formatDOP(scaledPackagingCents)})</span>
+                                        {isScaled && (
+                                          <span className="font-semibold text-[#9C4266] tabular-nums">
+                                            Escala {scaleFactor.toFixed(2)}×
+                                          </span>
+                                        )}
+                                      </div>
                                       <div className="flex justify-between text-[#4A3B32]">
                                         <span className="font-semibold">Costo Total Presentación:</span>
-                                        <span className="font-bold tabular-nums">{formatDOP(pres.totalCostCents)}</span>
+                                        <span className="font-bold tabular-nums">{formatDOP(scaledTotalCostCents)}</span>
                                       </div>
 
                                       <div className="flex justify-between text-[11px] text-[#7D6E65]">
                                         <span>
                                           Sugerido ({pres.desiredMarginPercent}% {pres.pricingMethod === "MARKUP" ? "Recargo" : "Margen"}):
                                         </span>
-                                        <span className="tabular-nums">{formatDOP(pres.suggestedPriceCents)}</span>
+                                        <span className="tabular-nums">{formatDOP(scaledSuggestedCents)}</span>
                                       </div>
 
                                       <div className="pt-1.5 border-t border-[#E8E2D9] flex items-center justify-between gap-2">
-                                        <span className="font-semibold text-[#4A3B32]">Precio Venta:</span>
-                                        {isEditingThisPrice ? (
+                                        <span className="font-semibold text-[#4A3B32]">
+                                          {isScaled ? "Precio Combo Escalado:" : "Precio Venta:"}
+                                        </span>
+                                        {!isScaled && isEditingThisPrice ? (
                                           <div className="flex items-center gap-1">
                                             <input
                                               type="number"
@@ -896,6 +970,10 @@ export default function RecetasPage() {
                                               <X className="w-3 h-3" />
                                             </button>
                                           </div>
+                                        ) : isScaled ? (
+                                          <span className="text-sm font-bold text-[#9C4266] tabular-nums">
+                                            {formatDOP(activeFinalCents)}
+                                          </span>
                                         ) : (
                                           <button
                                             onClick={() => {
@@ -905,7 +983,7 @@ export default function RecetasPage() {
                                             className="inline-flex items-center gap-1 text-sm font-bold text-[#9C4266] hover:underline tabular-nums"
                                             title="Clic para ajustar precio final de venta"
                                           >
-                                            <span>{formatDOP(pres.finalPriceCents)}</span>
+                                            <span>{formatDOP(activeFinalCents)}</span>
                                             <Edit2 className="w-3 h-3 opacity-60" />
                                           </button>
                                         )}
@@ -913,16 +991,16 @@ export default function RecetasPage() {
 
                                       <div className="flex justify-between items-center text-[11px] pt-0.5">
                                         <span className="text-[#22543D] font-semibold tabular-nums">
-                                          Ganancia: {formatDOP(pres.realProfitCents)}
+                                          Ganancia: {formatDOP(activeProfitCents)}
                                         </span>
                                         <span
                                           className={`font-bold px-1.5 py-0.5 rounded tabular-nums ${
-                                            pres.realMarginPercent < 25
+                                            activeMarginPercent < 25
                                               ? "bg-[#FED7D7] text-[#9B2C2C]"
                                               : "bg-[#C6F6D5]/60 text-[#22543D]"
                                           }`}
                                         >
-                                          {pres.realMarginPercent.toFixed(1)}% Margen Real
+                                          {activeMarginPercent.toFixed(1)}% Margen Real
                                         </span>
                                       </div>
                                     </div>
@@ -1435,25 +1513,41 @@ export default function RecetasPage() {
                   </div>
                 </div>
 
-                {/* PREVIEW EN VIVO */}
-                <div className="p-3.5 rounded-xl bg-[#FAF5F7] border border-[#F3D5E2] grid grid-cols-3 gap-2 text-center">
-                  <div>
-                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Costo Total</span>
-                    <span className="text-sm font-bold text-[#4A3B32] tabular-nums">
-                      RD$ {presPreview.totalCostDOP.toFixed(2)}
+                {/* PREVIEW EN VIVO CON DESGLOSE TRANSPARENTE */}
+                <div className="p-3.5 rounded-xl bg-[#FAF5F7] border border-[#F3D5E2] space-y-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#4A3B32] pb-2 border-b border-[#F3D5E2]">
+                    <span>
+                      Base Receta ({presForm.motherRecipeQty} × RD$ {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}):{" "}
+                      <strong className="tabular-nums">RD$ {presPreview.baseCostDOP.toFixed(2)}</strong>
+                    </span>
+                    <span>
+                      + Empaques/Adic.:{" "}
+                      <strong className="tabular-nums">RD$ {presPreview.packagingCostDOP.toFixed(2)}</strong>
+                    </span>
+                    <span>
+                      = Costo Total:{" "}
+                      <strong className="text-[#9C4266] tabular-nums">RD$ {presPreview.totalCostDOP.toFixed(2)}</strong>
                     </span>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Precio Sugerido</span>
-                    <span className="text-sm font-bold text-[#9C4266] tabular-nums">
-                      RD$ {presPreview.suggestedPriceDOP.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Ganancia / Margen</span>
-                    <span className="text-sm font-bold text-[#22543D] tabular-nums">
-                      RD$ {presPreview.profitDOP.toFixed(2)} ({presPreview.realMargin.toFixed(1)}%)
-                    </span>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Costo Total</span>
+                      <span className="text-sm font-bold text-[#4A3B32] tabular-nums">
+                        RD$ {presPreview.totalCostDOP.toFixed(2)}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Precio Sugerido</span>
+                      <span className="text-sm font-bold text-[#9C4266] tabular-nums">
+                        RD$ {presPreview.suggestedPriceDOP.toFixed(2)}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Ganancia / Margen</span>
+                      <span className="text-sm font-bold text-[#22543D] tabular-nums">
+                        RD$ {presPreview.profitDOP.toFixed(2)} ({presPreview.realMargin.toFixed(1)}%)
+                      </span>
+                    </div>
                   </div>
                 </div>
 
