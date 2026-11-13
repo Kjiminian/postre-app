@@ -1,0 +1,400 @@
+// Schema Prisma — K_Sweet (GEM V3 — Todos los 9 módulos)
+// RN-001: precios en centavos/enteros; RN-007: estados de pedido; RN-008: pagos
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./ksweet.db"
+}
+
+// ─── Autenticación ───────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN") // ADMIN | STAFF
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ─── Módulo 3: Ingredientes e Insumos ────────────────────────────────────────
+
+model Supplier {
+  id          String       @id @default(cuid())
+  name        String
+  phone       String?
+  notes       String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  ingredients Ingredient[]
+
+  @@map("suppliers")
+}
+
+model Ingredient {
+  id                String             @id @default(cuid())
+  name              String
+  category          String             @default("INGREDIENT") // INGREDIENT | PACKAGING | DECORATION | UTENSIL
+  supplierId        String?
+  supplier          Supplier?          @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  packagePriceCents Int // Precio del empaque en centavos (RD$)
+  packageQty        Float // Cantidad en el empaque
+  packageUnit       String // Unidad del empaque: g, kg, ml, l, lb, oz, unidad
+  baseUnit          String // Unidad base para cálculos: g, ml, unidad
+  costPerBaseUnit   Float // Calculado: packagePriceCents / (qty en baseUnit)
+  density           Float? // g/ml para conversiones volumen→masa
+  isActive          Boolean            @default(true)
+  notes             String?
+  importedFrom      String? // Nombre de la hoja/fila del Excel de origen
+  reviewFlag        Boolean            @default(false) // true = importado, requiere revisión
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  recipeIngredients RecipeIngredient[]
+
+  @@index([name])
+  @@index([category])
+  @@map("ingredients")
+}
+
+// ─── Módulo 4 & 5: Recetas, Subrecetas, Costos y Precios ─────────────────────
+
+model Recipe {
+  id                  String               @id @default(cuid())
+  name                String
+  slug                String               @unique
+  description         String?
+  recipeType          String               @default("MOTHER") // MOTHER | SUBRECIPE
+  yield               Float // Rendimiento en porciones/unidades (> 0)
+  yieldUnit           String               @default("unidad") // porciones, unidades, gramos, ml
+  packageCostCents    Int                  @default(0) // Costo de empaque del lote en centavos
+  laborPercent        Float                @default(0) // % mano de obra sobre costo de ingredientes
+  overheadPercent     Float                @default(0) // % gastos indirectos (gas, luz, agua)
+  targetMargin        Float                @default(40) // Margen objetivo sobre venta %
+  batchCostCents      Int                  @default(0) // Calculado: sum ingredientes + empaque + overhead + labor
+  unitCostCents       Int                  @default(0) // batchCost / yield
+  costPerYieldUnit    Float                @default(0) // Costo por unidad de rendimiento (centavos / yieldUnit)
+  suggestedPriceCents Int                  @default(0) // unitCost / (1 - margin/100)
+  currentPriceCents   Int                  @default(0) // Precio activo de venta de la receta madre (si aplica)
+  status              String               @default("DRAFT") // DRAFT | ACTIVE | ARCHIVED
+  reviewFlag          Boolean              @default(false)
+  notes               String?
+  importedFrom        String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  ingredients         RecipeIngredient[]
+  subRecipeUses       SubRecipeUse[]       @relation("ParentRecipe")
+  usedInRecipes       SubRecipeUse[]       @relation("ChildRecipe")
+  presentations       RecipePresentation[]
+  saleItems           SaleItem[]
+  priceHistory        RecipePriceHistory[]
+
+  @@index([status])
+  @@index([recipeType])
+  @@map("recipes")
+}
+
+model RecipePresentation {
+  id                   String                  @id @default(cuid())
+  recipeId             String
+  recipe               Recipe                  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  name                 String // ej: "Shot 2 oz", "Caja San Valentín 2 uds", "Completo 8\""
+  sizeDescription      String? // ej: "2 oz", "15 porciones", "Caja x 12"
+  motherRecipeQty      Float // Cantidad de receta madre consumida
+  motherRecipeUnit     String // Unidad consumida (unidad, g, ml, porcion)
+  presentationYield    Float                   @default(1) // Rendimiento de esta presentación por lote
+  packagingCostCents   Int                     @default(0) // Costo de empaques específicos (vasos, tapas, caja, lazo)
+  additionalCostCents  Int                     @default(0) // Costo de toppings o subrecetas complementarias
+  totalCostCents       Int                     @default(0) // Costo total unitario de la presentación
+  pricingMethod        String                  @default("MARGIN") // MARGIN (sobre venta) | MARKUP (recargo sobre costo)
+  desiredMarginPercent Float                   @default(40) // Margen o recargo deseado %
+  suggestedPriceCents  Int                     @default(0) // Precio sugerido calculado
+  finalPriceCents      Int                     @default(0) // Precio final de venta editable fijado en carta
+  realProfitCents      Int                     @default(0) // Ganancia = finalPriceCents - totalCostCents
+  realMarginPercent    Float                   @default(0) // Margen real = (finalPriceCents - totalCostCents) / finalPriceCents * 100
+  isActive             Boolean                 @default(true) // Desactivar sin romper histórico
+  isComposite          Boolean                 @default(false) // Si agrupa múltiples unidades (ej. caja 12)
+  notes                String?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+  materials            PresentationMaterial[]
+  subrecipes           PresentationSubrecipe[]
+  saleItems            SaleItem[]
+
+  @@index([recipeId])
+  @@index([isActive])
+  @@map("recipe_presentations")
+}
+
+model PresentationMaterial {
+  id             String             @id @default(cuid())
+  presentationId String
+  presentation   RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  ingredientId   String?
+  name           String // Vaso, Domo, Caja, Capacillo, Cinta, Etiqueta, Mensaje
+  quantity       Float
+  unit           String
+  unitCostCents  Int
+  totalCostCents Int
+
+  @@index([presentationId])
+  @@map("presentation_materials")
+}
+
+model PresentationSubrecipe {
+  id             String             @id @default(cuid())
+  presentationId String
+  presentation   RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  subRecipeId    String?
+  name           String // Topping, Crema adicional, Dulce de leche
+  quantity       Float
+  unit           String
+  costCents      Int
+
+  @@index([presentationId])
+  @@map("presentation_subrecipes")
+}
+
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipeId     String
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+  quantity     Float // Cantidad en la unidad especificada
+  unit         String // Unidad usada en la receta
+  costCents    Int // Costo calculado al momento de la receta (centavos)
+  notes        String?
+
+  @@index([recipeId])
+  @@index([ingredientId])
+  @@map("recipe_ingredients")
+}
+
+model SubRecipeUse {
+  id        String @id @default(cuid())
+  parentId  String
+  parent    Recipe @relation("ParentRecipe", fields: [parentId], references: [id], onDelete: Cascade)
+  childId   String
+  child     Recipe @relation("ChildRecipe", fields: [childId], references: [id], onDelete: Restrict)
+  quantity  Float // Número de lotes o porciones de la subreceta usados
+  costCents Int // Costo calculado
+
+  @@index([parentId])
+  @@map("sub_recipe_uses")
+}
+
+model RecipePriceHistory {
+  id             String   @id @default(cuid())
+  recipeId       String
+  recipe         Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  batchCostCents Int
+  unitCostCents  Int
+  priceCents     Int
+  margin         Float
+  recordedAt     DateTime @default(now())
+  reason         String? // "ingredient_update" | "manual" | "import"
+
+  @@index([recipeId])
+  @@map("recipe_price_history")
+}
+
+// ─── Módulo 1: Ventas y Clientes ─────────────────────────────────────────────
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  notes     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sales     Sale[]
+
+  @@map("customers")
+}
+
+model Sale {
+  id             String       @id @default(cuid())
+  saleDate       DateTime
+  customerId     String?
+  customer       Customer?    @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName   String? // Para ventas sin cliente registrado
+  notes          String?
+  totalCents     Int // Suma de items
+  totalCostCents Int // Costo histórico congelado al momento de la venta
+  collectedCents Int          @default(0)
+  balanceCents   Int          @default(0) // totalCents - collectedCents
+  paymentMethod  String       @default("EFECTIVO") // EFECTIVO | TRANSFERENCIA | TARJETA | PENDIENTE
+  status         String       @default("ACTIVE") // ACTIVE | CANCELLED
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  items          SaleItem[]
+  payments       Payment[]
+  weeklyCloseId  String?
+  weeklyClose    WeeklyClose? @relation(fields: [weeklyCloseId], references: [id], onDelete: SetNull)
+
+  @@index([saleDate])
+  @@index([status])
+  @@index([weeklyCloseId])
+  @@map("sales")
+}
+
+model SaleItem {
+  id             String              @id @default(cuid())
+  saleId         String
+  sale           Sale                @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  recipeId       String?
+  recipe         Recipe?             @relation(fields: [recipeId], references: [id], onDelete: SetNull)
+  presentationId String?
+  presentation   RecipePresentation? @relation(fields: [presentationId], references: [id], onDelete: SetNull)
+  productName    String // Copiado en el momento de la venta (histórico)
+  quantity       Float
+  unitPriceCents Int // Precio cobrado (RF-014 congelado)
+  totalCents     Int // quantity * unitPriceCents
+  unitCostCents  Int // Costo unitario histórico congelado (RF-014)
+  totalCostCents Int // quantity * unitCostCents
+  notes          String?
+
+  @@index([saleId])
+  @@index([recipeId])
+  @@index([presentationId])
+  @@map("sale_items")
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  saleId      String
+  sale        Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  amountCents Int
+  method      String // EFECTIVO | TRANSFERENCIA | TARJETA
+  paidAt      DateTime @default(now())
+  reference   String?
+  notes       String?
+
+  @@index([saleId])
+  @@map("payments")
+}
+
+// ─── Módulo 2: Cuadre Semanal ────────────────────────────────────────────────
+
+model WeeklyClose {
+  id                  String               @id @default(cuid())
+  weekStart           DateTime // Lunes 00:00 AST
+  weekEnd             DateTime // Domingo 23:59:59 AST
+  invoicedCents       Int                  @default(0)
+  collectedCents      Int                  @default(0)
+  pendingCents        Int                  @default(0)
+  costOfGoodsCents    Int                  @default(0) // Suma de costos históricos de ventas
+  operationalExpCents Int                  @default(0) // Suma de gastos operativos del período
+  netResultCents      Int                  @default(0) // invoiced - cogs - expenses
+  cashFundCents       Int                  @default(0) // Fondo inicial de efectivo
+  expectedCashCents   Int                  @default(0) // Fondo + cobros_efectivo - gastos_efectivo
+  countedCashCents    Int                  @default(0) // Efectivo físico contado
+  cashDifferenceCents Int                  @default(0) // expectedCash - countedCash
+  isClosed            Boolean              @default(false)
+  closedAt            DateTime?
+  notes               String?
+  modifiedAfterClose  Boolean              @default(false) // Alerta RF-009
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  sales               Sale[]
+  expenses            OperationalExpense[]
+
+  @@unique([weekStart])
+  @@map("weekly_closes")
+}
+
+// ─── Módulo 6: Gastos Operativos ─────────────────────────────────────────────
+
+model ExpenseCategory {
+  id       String               @id @default(cuid())
+  name     String               @unique
+  isActive Boolean              @default(true)
+  expenses OperationalExpense[]
+
+  @@map("expense_categories")
+}
+
+model OperationalExpense {
+  id                   String          @id @default(cuid())
+  expenseDate          DateTime
+  categoryId           String
+  category             ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  concept              String
+  amountCents          Int
+  paymentMethod        String          @default("EFECTIVO")
+  weeklyCloseId        String?
+  weeklyClose          WeeklyClose?    @relation(fields: [weeklyCloseId], references: [id], onDelete: SetNull)
+  notes                String?
+  isIngredientPurchase Boolean         @default(false) // Señala si ya está en costo de recetas (RF-020)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([expenseDate])
+  @@index([weeklyCloseId])
+  @@map("operational_expenses")
+}
+
+// ─── Módulo 7: Conversiones y Equivalencias ──────────────────────────────────
+
+model UnitConversionRef {
+  id         String   @id @default(cuid())
+  name       String   @unique // "taza_harina", "cucharada_azucar"
+  category   String   @default("GENERAL") // MASS | VOLUME | COUNT | INGREDIENT | GENERAL
+  fromUnit   String
+  toUnit     String
+  factor     Float // toUnit = fromUnit * factor
+  ingredient String? // Si aplica sólo a un ingrediente
+  isEditable Boolean  @default(true)
+  isActive   Boolean  @default(true)
+  source     String   @default("EXCEL") // "EXCEL" | "STANDARD" | "USER"
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("unit_conversion_refs")
+}
+
+// ─── Módulo 8: Importación XLSX / Trazabilidad ───────────────────────────────
+
+model ImportSession {
+  id          String      @id @default(cuid())
+  fileName    String
+  fileSizeKb  Float
+  sheetCount  Int
+  status      String      @default("PENDING") // PENDING | PREVIEWING | CONFIRMED | CANCELLED
+  mappingJson String? // JSON con el mapeo de columnas
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  rows        ImportRow[]
+
+  @@map("import_sessions")
+}
+
+model ImportRow {
+  id             String        @id @default(cuid())
+  sessionId      String
+  session        ImportSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sheetName      String
+  rowIndex       Int
+  rawDataJson    String // Datos crudos del Excel preservados
+  mappedDataJson String? // Datos mapeados
+  status         String        @default("DRAFT") // DRAFT | IMPORTED | SKIPPED | ERROR
+  errorMessage   String?
+  isDuplicate    Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+
+  @@index([sessionId])
+  @@map("import_rows")
+}

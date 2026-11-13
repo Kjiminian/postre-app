@@ -199,13 +199,13 @@ export async function duplicateRecipe(recipeId: string, newName?: string) {
     overheadPercent: original.overheadPercent,
     targetMargin: original.targetMargin,
     currentPriceCents: original.currentPriceCents,
-    ingredients: original.ingredients.map((ing) => ({
+    ingredients: original.ingredients.map((ing: any) => ({
       ingredientId: ing.ingredientId,
       quantity: ing.quantity,
       unit: ing.unit,
       notes: ing.notes || undefined,
     })),
-    subRecipes: original.subRecipeUses.map((sub) => ({
+    subRecipes: original.subRecipeUses.map((sub: any) => ({
       childRecipeId: sub.childId,
       quantity: sub.quantity,
     })),

@@ -33,6 +33,7 @@ model Supplier {
   name        String
   phone       String?
   notes       String?
+  isActive    Boolean      @default(true)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   ingredients Ingredient[]
@@ -43,6 +44,7 @@ model Supplier {
 model Ingredient {
   id               String          @id @default(cuid())
   name             String
+  category         String          @default("INGREDIENT") // INGREDIENT | PACKAGING | DECORATION | UTENSIL
   supplierId       String?
   supplier         Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
   packagePriceCents Int            // Precio del empaque en centavos (RD$)
@@ -60,6 +62,7 @@ model Ingredient {
   recipeIngredients RecipeIngredient[]
 
   @@index([name])
+  @@index([category])
   @@map("ingredients")
 }
 
@@ -70,16 +73,18 @@ model Recipe {
   name              String
   slug              String           @unique
   description       String?
+  recipeType        String           @default("MOTHER") // MOTHER | SUBRECIPE
   yield             Float            // Rendimiento en porciones/unidades (> 0)
-  yieldUnit         String           @default("unidad") // porciones, unidades, gramos, etc.
+  yieldUnit         String           @default("unidad") // porciones, unidades, gramos, ml
   packageCostCents  Int              @default(0) // Costo de empaque del lote en centavos
   laborPercent      Float            @default(0) // % mano de obra sobre costo de ingredientes
-  overheadPercent   Float            @default(0) // % gastos indirectos
+  overheadPercent   Float            @default(0) // % gastos indirectos (gas, luz, agua)
   targetMargin      Float            @default(40) // Margen objetivo sobre venta %
-  batchCostCents    Int              @default(0) // Calculado: sum ingredientes + empaque + overhead
+  batchCostCents    Int              @default(0) // Calculado: sum ingredientes + empaque + overhead + labor
   unitCostCents     Int              @default(0) // batchCost / yield
+  costPerYieldUnit  Float            @default(0) // Costo por unidad de rendimiento (centavos / yieldUnit)
   suggestedPriceCents Int            @default(0) // unitCost / (1 - margin/100)
-  currentPriceCents Int              @default(0) // Precio activo de venta
+  currentPriceCents Int              @default(0) // Precio activo de venta de la receta madre (si aplica)
   status            String           @default("DRAFT") // DRAFT | ACTIVE | ARCHIVED
   reviewFlag        Boolean          @default(false)
   notes             String?
@@ -89,11 +94,74 @@ model Recipe {
   ingredients       RecipeIngredient[]
   subRecipeUses     SubRecipeUse[]   @relation("ParentRecipe")
   usedInRecipes     SubRecipeUse[]   @relation("ChildRecipe")
+  presentations     RecipePresentation[]
   saleItems         SaleItem[]
   priceHistory      RecipePriceHistory[]
 
   @@index([status])
+  @@index([recipeType])
   @@map("recipes")
+}
+
+model RecipePresentation {
+  id                    String                 @id @default(cuid())
+  recipeId              String
+  recipe                Recipe                 @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  name                  String                 // ej: "Shot 2 oz", "Caja San Valentín 2 uds", "Completo 8\""
+  sizeDescription       String?                // ej: "2 oz", "15 porciones", "Caja x 12"
+  motherRecipeQty       Float                  // Cantidad de receta madre consumida
+  motherRecipeUnit      String                 // Unidad consumida (unidad, g, ml, porcion)
+  presentationYield     Float                  @default(1) // Rendimiento de esta presentación por lote
+  packagingCostCents    Int                    @default(0) // Costo de empaques específicos (vasos, tapas, caja, lazo)
+  additionalCostCents   Int                    @default(0) // Costo de toppings o subrecetas complementarias
+  totalCostCents        Int                    @default(0) // Costo total unitario de la presentación
+  pricingMethod         String                 @default("MARGIN") // MARGIN (sobre venta) | MARKUP (recargo sobre costo)
+  desiredMarginPercent  Float                  @default(40) // Margen o recargo deseado %
+  suggestedPriceCents   Int                    @default(0) // Precio sugerido calculado
+  finalPriceCents       Int                    @default(0) // Precio final de venta editable fijado en carta
+  realProfitCents       Int                    @default(0) // Ganancia = finalPriceCents - totalCostCents
+  realMarginPercent     Float                  @default(0) // Margen real = (finalPriceCents - totalCostCents) / finalPriceCents * 100
+  isActive              Boolean                @default(true) // Desactivar sin romper histórico
+  isComposite           Boolean                @default(false) // Si agrupa múltiples unidades (ej. caja 12)
+  notes                 String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  materials             PresentationMaterial[]
+  subrecipes            PresentationSubrecipe[]
+  saleItems             SaleItem[]
+
+  @@index([recipeId])
+  @@index([isActive])
+  @@map("recipe_presentations")
+}
+
+model PresentationMaterial {
+  id              String             @id @default(cuid())
+  presentationId  String
+  presentation    RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  ingredientId    String?
+  name            String             // Vaso, Domo, Caja, Capacillo, Cinta, Etiqueta, Mensaje
+  quantity        Float
+  unit            String
+  unitCostCents   Int
+  totalCostCents  Int
+
+  @@index([presentationId])
+  @@map("presentation_materials")
+}
+
+model PresentationSubrecipe {
+  id              String             @id @default(cuid())
+  presentationId  String
+  presentation    RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  subRecipeId     String?
+  name            String             // Topping, Crema adicional, Dulce de leche
+  quantity        Float
+  unit            String
+  costCents       Int
+
+  @@index([presentationId])
+  @@map("presentation_subrecipes")
 }
 
 model RecipeIngredient {
@@ -148,6 +216,7 @@ model Customer {
   phone     String?
   email     String?
   notes     String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   sales     Sale[]
@@ -182,21 +251,24 @@ model Sale {
 }
 
 model SaleItem {
-  id               String  @id @default(cuid())
+  id               String               @id @default(cuid())
   saleId           String
-  sale             Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  sale             Sale                 @relation(fields: [saleId], references: [id], onDelete: Cascade)
   recipeId         String?
-  recipe           Recipe? @relation(fields: [recipeId], references: [id], onDelete: SetNull)
-  productName      String  // Copiado en el momento de la venta (histórico)
+  recipe           Recipe?              @relation(fields: [recipeId], references: [id], onDelete: SetNull)
+  presentationId   String?
+  presentation     RecipePresentation?  @relation(fields: [presentationId], references: [id], onDelete: SetNull)
+  productName      String               // Copiado en el momento de la venta (histórico)
   quantity         Float
-  unitPriceCents   Int     // Precio cobrado
-  totalCents       Int     // quantity * unitPriceCents
-  unitCostCents    Int     // Costo unitario histórico congelado (RF-014)
-  totalCostCents   Int     // quantity * unitCostCents
+  unitPriceCents   Int                  // Precio cobrado (RF-014 congelado)
+  totalCents       Int                  // quantity * unitPriceCents
+  unitCostCents    Int                  // Costo unitario histórico congelado (RF-014)
+  totalCostCents   Int                  // quantity * unitCostCents
   notes            String?
 
   @@index([saleId])
   @@index([recipeId])
+  @@index([presentationId])
   @@map("sale_items")
 }
 
@@ -248,6 +320,7 @@ model WeeklyClose {
 model ExpenseCategory {
   id       String               @id @default(cuid())
   name     String               @unique
+  isActive Boolean              @default(true)
   expenses OperationalExpense[]
 
   @@map("expense_categories")
@@ -276,14 +349,16 @@ model OperationalExpense {
 // ─── Módulo 7: Conversiones y Equivalencias ──────────────────────────────────
 
 model UnitConversionRef {
-  id          String  @id @default(cuid())
-  name        String  @unique // "taza_harina", "cucharada_azucar"
+  id          String   @id @default(cuid())
+  name        String   @unique // "taza_harina", "cucharada_azucar"
+  category    String   @default("GENERAL") // MASS | VOLUME | COUNT | INGREDIENT | GENERAL
   fromUnit    String
   toUnit      String
-  factor      Float   // toUnit = fromUnit * factor
-  ingredient  String? // Si aplica sólo a un ingrediente
-  isEditable  Boolean @default(true)
-  source      String  @default("EXCEL") // "EXCEL" | "STANDARD" | "USER"
+  factor      Float    // toUnit = fromUnit * factor
+  ingredient  String?  // Si aplica sólo a un ingrediente
+  isEditable  Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  source      String   @default("EXCEL") // "EXCEL" | "STANDARD" | "USER"
   notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

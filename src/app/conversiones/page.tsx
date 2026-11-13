@@ -1,289 +1,446 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Scale,
   ArrowRightLeft,
-  Info,
-  CheckCircle2,
-  AlertTriangle,
   Sparkles,
   Edit2,
   Check,
+  Plus,
+  X,
+  RefreshCw,
+  Trash2,
+  AlertCircle,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { convertUnit } from "@/lib/conversions";
 
-interface ExcelRef {
+interface ConversionRef {
   id: string;
   name: string;
-  from: string;
-  to: string;
-  grams: number;
-  ingredient: string;
-  isEditing: boolean;
+  category: string;
+  fromUnit: string;
+  toUnit: string;
+  factor: number;
+  ingredient?: string;
+  isEditable: boolean;
+  notes?: string;
 }
 
-const INITIAL_EXCEL_REFS: ExcelRef[] = [
-  {
-    id: "REF-1",
-    name: "Taza aproximada según Excel",
-    from: "1 taza",
-    to: "gramos",
-    grams: 150,
-    ingredient: "Referencia General (Harina / Azúcar)",
-    isEditing: false,
-  },
-  {
-    id: "REF-2",
-    name: "Media taza aproximada según Excel",
-    from: "1/2 taza",
-    to: "gramos",
-    grams: 75,
-    ingredient: "Referencia General",
-    isEditing: false,
-  },
-  {
-    id: "REF-3",
-    name: "Cucharada (cda) según Excel",
-    from: "1 cda",
-    to: "gramos",
-    grams: 15,
-    ingredient: "Referencia General",
-    isEditing: false,
-  },
-];
-
-const INGREDIENT_DENSITIES = [
-  { name: "Agua / Leche Líquida", density: 1.0, note: "1 ml ≈ 1.00 g" },
-  { name: "Leche Evaporada Carnation", density: 1.07, note: "1 ml ≈ 1.07 g" },
-  { name: "Aceite Vegetal", density: 0.92, note: "1 ml ≈ 0.92 g" },
-  { name: "Miel de Abeja / Sirope", density: 1.42, note: "1 ml ≈ 1.42 g" },
-  { name: "Harina de Trigo (suelta)", density: 0.53, note: "1 taza (236 ml) ≈ 125 g" },
-  { name: "Azúcar Granulada", density: 0.85, note: "1 taza (236 ml) ≈ 200 g" },
-];
-
 export default function ConversionesPage() {
-  // Calculadora
+  const [conversions, setConversions] = useState<ConversionRef[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Calculadora interactiva
   const [val, setVal] = useState<number>(1);
   const [fromUnit, setFromUnit] = useState<string>("lb");
   const [toUnit, setToUnit] = useState<string>("g");
   const [density, setDensity] = useState<number>(1.0);
 
-  // Tabla editable de equivalencias Excel
-  const [excelRefs, setExcelRefs] = useState<ExcelRef[]>(INITIAL_EXCEL_REFS);
+  // Edición en línea
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editFactor, setEditFactor] = useState<number>(1);
 
-  // Ejecutar conversión
+  // Modal nueva conversión
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "INGREDIENT",
+    fromUnit: "taza",
+    toUnit: "g",
+    factor: 150,
+    ingredient: "",
+    notes: "",
+  });
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/conversiones");
+      const json = await res.json();
+      if (json.success) setConversions(json.data);
+      else throw new Error(json.error);
+    } catch (err: any) {
+      setError(err.message || "Error cargando conversiones");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const result = convertUnit(val, fromUnit, toUnit, density);
 
-  const handleEditGrams = (id: string, newGrams: number) => {
-    setExcelRefs(
-      excelRefs.map((ref) => (ref.id === id ? { ...ref, grams: newGrams } : ref))
-    );
+  const handleStartEdit = (ref: ConversionRef) => {
+    setEditingId(ref.id);
+    setEditFactor(ref.factor);
+  };
+
+  const handleSaveEdit = async (id: string) => {
+    try {
+      const res = await fetch("/api/conversiones", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, factor: editFactor }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setEditingId(null);
+        loadData();
+      } else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al actualizar: " + err.message);
+    }
+  };
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/conversiones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setIsModalOpen(false);
+        loadData();
+      } else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al crear conversión: " + err.message);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("¿Deseas eliminar esta equivalencia?")) return;
+    try {
+      const res = await fetch(`/api/conversiones?id=${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) loadData();
+      else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al eliminar: " + err.message);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-cream-100 pb-16">
-      <Header
-        title="Conversor de Unidades & Densidades"
-        subtitle="Conversiones científicas exactas (1 lb = 453.59237g) • Densidades para volumen a masa • Equivalencias históricas Excel"
-      />
+    <div className="min-h-screen bg-[#FAF8F6]">
+      <Header />
 
-      <div className="p-8 max-w-7xl mx-auto space-y-6">
-        {/* Banner de Rigor Metodológico (RF-021 y RF-022) */}
-        <div className="p-5 rounded-2xl bg-white border border-plum-200 shadow-card flex items-start gap-4">
-          <div className="w-10 h-10 rounded-xl bg-plum-100 text-plum-600 flex items-center justify-center shrink-0">
-            <Scale className="w-5 h-5" />
-          </div>
-          <div className="text-xs text-ink-light space-y-1.5 leading-relaxed">
-            <h4 className="font-bold text-ink text-sm">
-              Estándar Científico Innegociable (RF-021, RF-022, RF-023)
-            </h4>
-            <p>
-              • <strong>Masa Exacta:</strong> <code>1 lb = 453.59237 g</code> y <code>1 oz = 28.349523125 g</code>.
-            </p>
-            <p>
-              • <strong>Cruce Volumen ↔ Masa:</strong> Prohibido asumir que 1 taza equivale a una masa fija para todos
-              los ingredientes. Se <strong>exige la densidad</strong> de cada insumo porque una taza de harina pesa
-              aprox. 125g mientras que una taza de azúcar pesa aprox. 200g y una taza de miel pesa 335g.
-            </p>
-            <p>
-              • <strong>Valores del Excel Original:</strong> Las equivalencias del Excel (1 taza = 150g, 1/2 taza = 75g,
-              1 cda = 15g) se conservan abajo como <em>referencias aproximadas editables</em>, jamás universales.
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
+              <Scale className="w-4 h-4" />
+              <span>Metrología y Equivalencias</span>
+            </div>
+            <h1 className="text-2xl font-serif font-bold text-[#4A3B32]">
+              Conversiones de Unidades y Densidades
+            </h1>
+            <p className="text-sm text-[#7D6E65] mt-1">
+              Conversiones exactas (1 lb = 453.59237 g), factores de densidad para volumen a masa y equivalencias editables del Excel.
             </p>
           </div>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all self-start md:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nueva Equivalencia</span>
+          </button>
         </div>
 
-        {/* Calculadora Interactiva */}
-        <div className="p-6 bg-white rounded-2xl border border-cream-300 shadow-card">
-          <h3 className="font-serif font-bold text-ink text-base mb-4 flex items-center gap-2">
-            <ArrowRightLeft className="w-4 h-4 text-plum-500" />
-            <span>Calculadora de Conversión Instantánea</span>
-          </h3>
+        {/* CALCULADORA INTERACTIVA */}
+        <div className="p-6 bg-white rounded-2xl border border-[#E8E2D9] shadow-sm space-y-4">
+          <div className="flex items-center gap-2">
+            <ArrowRightLeft className="w-5 h-5 text-[#9C4266]" />
+            <h3 className="font-serif font-bold text-base text-[#4A3B32]">
+              Calculadora Científica de Conversión
+            </h3>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Cantidad</label>
+              <label className="block text-xs font-semibold text-[#7D6E65] mb-1">Cantidad</label>
               <input
                 type="number"
                 step="0.01"
-                min="0.0001"
+                min="0.01"
                 value={val}
-                onChange={(e) => setVal(Number(e.target.value))}
-                className="w-full p-2.5 text-base font-bold bg-cream-50 border border-cream-300 rounded-lg text-ink"
+                onChange={(e) => setVal(parseFloat(e.target.value) || 0)}
+                className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9]"
               />
             </div>
-
             <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Unidad Origen</label>
+              <label className="block text-xs font-semibold text-[#7D6E65] mb-1">Desde (Origen)</label>
               <select
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-medium"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
               >
-                <optgroup label="Masa (Peso)">
-                  <option value="g">Gramos (g)</option>
-                  <option value="kg">Kilogramos (kg)</option>
-                  <option value="lb">Libras US (lb - 453.59g)</option>
-                  <option value="oz">Onzas de masa (oz - 28.35g)</option>
-                </optgroup>
-                <optgroup label="Volumen">
-                  <option value="ml">Mililitros (ml)</option>
-                  <option value="l">Litros (l)</option>
-                  <option value="taza">Taza US (236.59 ml)</option>
-                  <option value="cda">Cucharada US (14.79 ml)</option>
-                  <option value="cdita">Cucharadita US (4.93 ml)</option>
-                </optgroup>
+                <option value="lb">Libras (lb)</option>
+                <option value="oz">Onzas (oz)</option>
+                <option value="kg">Kilos (kg)</option>
+                <option value="g">Gramos (g)</option>
+                <option value="taza">Tazas (taza)</option>
+                <option value="cda">Cucharadas (cda)</option>
+                <option value="ml">Mililitros (ml)</option>
               </select>
             </div>
-
             <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Unidad Destino</label>
+              <label className="block text-xs font-semibold text-[#7D6E65] mb-1">Hacia (Destino)</label>
               <select
                 value={toUnit}
                 onChange={(e) => setToUnit(e.target.value)}
-                className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-medium"
+                className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
               >
-                <optgroup label="Masa (Peso)">
-                  <option value="g">Gramos (g)</option>
-                  <option value="kg">Kilogramos (kg)</option>
-                  <option value="lb">Libras US (lb - 453.59g)</option>
-                  <option value="oz">Onzas de masa (oz - 28.35g)</option>
-                </optgroup>
-                <optgroup label="Volumen">
-                  <option value="ml">Mililitros (ml)</option>
-                  <option value="l">Litros (l)</option>
-                  <option value="taza">Taza US (236.59 ml)</option>
-                  <option value="cda">Cucharada US (14.79 ml)</option>
-                  <option value="cdita">Cucharadita US (4.93 ml)</option>
-                </optgroup>
+                <option value="g">Gramos (g)</option>
+                <option value="kg">Kilos (kg)</option>
+                <option value="lb">Libras (lb)</option>
+                <option value="oz">Onzas (oz)</option>
+                <option value="ml">Mililitros (ml)</option>
+                <option value="l">Litros (l)</option>
               </select>
             </div>
-
             <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                Densidad (g/ml)
-              </label>
+              <label className="block text-xs font-semibold text-[#7D6E65] mb-1">Densidad (g/ml)</label>
               <input
                 type="number"
                 step="0.01"
-                min="0.1"
                 value={density}
-                onChange={(e) => setDensity(Number(e.target.value))}
-                className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink"
+                onChange={(e) => setDensity(parseFloat(e.target.value) || 1)}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
               />
-              <span className="text-[10px] text-ink-muted">Requerida para cruce volumen ↔ masa</span>
             </div>
           </div>
 
-          {/* Resultado de Conversión */}
-          <div className="mt-5 p-4 rounded-xl bg-cream-100 border border-cream-300 flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-[#FAF5F7] border border-[#F3D5E2] flex items-center justify-between">
             <div>
-              <span className="text-xs text-ink-muted uppercase font-semibold">Resultado Calculado:</span>
-              {result.ok ? (
-                <p className="text-2xl font-bold font-serif text-plum-600 mt-0.5">
-                  {val} {fromUnit} = {result.value.toFixed(4)} {toUnit}
-                </p>
-              ) : (
-                <p className="text-sm font-semibold text-red-600 mt-1 flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4" /> {result.error}
-                </p>
-              )}
-            </div>
-            {result.ok && (
-              <span className="text-xs font-medium text-sage-600 px-3 py-1 rounded-full bg-sage-500/10 border border-sage-500/20">
-                Factor verificado exacto
+              <span className="text-[11px] text-[#7D6E65] block font-medium">Resultado de la conversión:</span>
+              <span className="text-lg font-bold text-[#9C4266] tabular-nums">
+                {result.ok ? `${result.value.toFixed(4)} ${toUnit}` : result.error}
               </span>
+            </div>
+            <Sparkles className="w-5 h-5 text-[#9C4266]" />
+          </div>
+        </div>
+
+        {/* TABLA DE EQUIVALENCIAS PERSISTENTES */}
+        <div className="bg-white rounded-2xl border border-[#E8E2D9] shadow-sm overflow-hidden">
+          <div className="p-4 border-b border-[#E8E2D9] flex items-center justify-between">
+            <h3 className="font-serif font-bold text-base text-[#4A3B32]">
+              Tabla de Factores y Equivalencias ({conversions.length})
+            </h3>
+            {error && (
+              <button
+                onClick={() => { setError(null); loadData(); }}
+                className="text-xs text-[#9C4266] hover:underline flex items-center gap-1 font-medium"
+              >
+                <RefreshCw className="w-3.5 h-3.5" /> Reintentar
+              </button>
             )}
           </div>
+
+          {loading ? (
+            <div className="p-12 text-center">
+              <RefreshCw className="w-7 h-7 text-[#9C4266] animate-spin mx-auto mb-2" />
+              <p className="text-xs text-[#7D6E65]">Cargando equivalencias...</p>
+            </div>
+          ) : error ? (
+            <div className="p-12 text-center">
+              <AlertCircle className="w-8 h-8 text-[#C53030] mx-auto mb-2" />
+              <p className="text-sm font-semibold text-[#4A3B32] mb-1">Ocurrió un error al cargar las conversiones</p>
+              <p className="text-xs text-[#7D6E65] mb-4">{error}</p>
+              <button
+                onClick={() => { setError(null); loadData(); }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#9C4266] text-white text-xs font-medium hover:bg-[#833554]"
+              >
+                <RefreshCw className="w-3.5 h-3.5" /> Reintentar carga
+              </button>
+            </div>
+          ) : conversions.length === 0 ? (
+            <div className="p-12 text-center">
+              <Scale className="w-8 h-8 text-[#A89F91] mx-auto mb-2" />
+              <p className="text-sm font-semibold text-[#4A3B32] mb-1">No hay equivalencias registradas</p>
+              <p className="text-xs text-[#7D6E65] mb-4">Puedes registrar factores personalizados para ingredientes o recipientes.</p>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#9C4266] text-white text-xs font-medium hover:bg-[#833554]"
+              >
+                <Plus className="w-3.5 h-3.5" /> Agregar primera equivalencia
+              </button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#FAF8F6] border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
+                    <th className="py-3 px-4">Nombre / Equivalencia</th>
+                    <th className="py-3 px-4">Origen</th>
+                    <th className="py-3 px-4">Destino</th>
+                    <th className="py-3 px-4">Factor de Multiplicación</th>
+                    <th className="py-3 px-4">Aplica A</th>
+                    <th className="py-3 px-4 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E8E2D9] text-sm">
+                  {conversions.map((ref) => {
+                    const isEditing = editingId === ref.id;
+                    return (
+                      <tr key={ref.id} className="hover:bg-[#FAF8F6]/60 transition-colors">
+                        <td className="py-3 px-4 font-semibold text-[#4A3B32]">{ref.name}</td>
+                        <td className="py-3 px-4 font-mono text-xs">{ref.fromUnit}</td>
+                        <td className="py-3 px-4 font-mono text-xs">{ref.toUnit}</td>
+                        <td className="py-3 px-4 font-bold text-[#9C4266] tabular-nums">
+                          {isEditing ? (
+                            <input
+                              type="number"
+                              step="0.0001"
+                              value={editFactor}
+                              onChange={(e) => setEditFactor(parseFloat(e.target.value) || 0)}
+                              className="w-24 px-1.5 py-0.5 rounded border border-[#9C4266] bg-white text-xs"
+                            />
+                          ) : (
+                            ref.factor
+                          )}
+                        </td>
+                        <td className="py-3 px-4 text-xs text-[#7D6E65]">
+                          {ref.ingredient || "Estándar Universal"}
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            {isEditing ? (
+                              <>
+                                <button
+                                  onClick={() => handleSaveEdit(ref.id)}
+                                  className="p-1 bg-[#22543D] text-white rounded hover:bg-[#1A4331]"
+                                >
+                                  <Check className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => setEditingId(null)}
+                                  className="p-1 bg-[#E8E2D9] text-[#7D6E65] rounded"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            ) : (
+                              ref.isEditable && (
+                                <>
+                                  <button
+                                    onClick={() => handleStartEdit(ref)}
+                                    className="p-1 text-[#7D6E65] hover:text-[#9C4266] rounded hover:bg-[#FAF8F6]"
+                                  >
+                                    <Edit2 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(ref.id)}
+                                    className="p-1 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#FAF8F6]"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </>
+                              )
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
-        {/* Tabla Editable de Equivalencias Aproximadas del Excel */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-6 bg-white rounded-2xl border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-serif font-bold text-ink text-base">
-                  Equivalencias Aproximadas del Excel Original (RF-023)
-                </h3>
-                <p className="text-xs text-ink-muted">Valores editables utilizados históricamente en los cálculos</p>
-              </div>
-            </div>
+        {/* MODAL NUEVA EQUIVALENCIA */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-[#E8E2D9] relative">
+              <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-1.5 text-[#7D6E65]">
+                <X className="w-5 h-5" />
+              </button>
 
-            <div className="space-y-3">
-              {excelRefs.map((ref) => (
-                <div
-                  key={ref.id}
-                  className="p-3.5 rounded-xl border border-cream-200 bg-cream-50 flex items-center justify-between gap-4"
-                >
+              <h3 className="text-lg font-serif font-bold text-[#4A3B32] mb-1">Nueva Equivalencia</h3>
+              <p className="text-xs text-[#7D6E65] mb-4">
+                Define una relación personalizada (ej. 1 cucharada de azúcar = 15g).
+              </p>
+
+              <form onSubmit={handleCreate} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Nombre</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ej. Taza de Harina Repostería"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <p className="font-semibold text-ink text-xs">{ref.name}</p>
-                    <p className="text-[11px] text-ink-muted">{ref.ingredient}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-ink">{ref.from} =</span>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Desde</label>
                     <input
-                      type="number"
-                      step="1"
-                      value={ref.grams}
-                      onChange={(e) => handleEditGrams(ref.id, Number(e.target.value))}
-                      className="w-16 p-1 text-xs font-bold text-center bg-white border border-cream-300 rounded focus:border-plum-500"
+                      type="text"
+                      required
+                      placeholder="taza"
+                      value={formData.fromUnit}
+                      onChange={(e) => setFormData({ ...formData, fromUnit: e.target.value })}
+                      className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
                     />
-                    <span className="text-xs font-mono text-ink-muted">g</span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Tabla de Densidades de Referencia */}
-          <div className="p-6 bg-white rounded-2xl border border-cream-300 shadow-card">
-            <h3 className="font-serif font-bold text-ink text-base mb-1">
-              Densidades Gastronómicas de Referencia
-            </h3>
-            <p className="text-xs text-ink-muted mb-4">
-              Factores de peso por volumen para repostería dominicana
-            </p>
-
-            <div className="space-y-2.5">
-              {INGREDIENT_DENSITIES.map((ing) => (
-                <div
-                  key={ing.name}
-                  className="flex items-center justify-between p-2.5 rounded-lg border border-cream-200 text-xs"
-                >
                   <div>
-                    <span className="font-semibold text-ink">{ing.name}</span>
-                    <span className="text-[11px] text-ink-muted block">{ing.note}</span>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Hacia</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="g"
+                      value={formData.toUnit}
+                      onChange={(e) => setFormData({ ...formData, toUnit: e.target.value })}
+                      className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
+                    />
                   </div>
-                  <span className="px-2 py-1 rounded bg-cream-100 font-mono font-bold text-plum-600">
-                    {ing.density} g/ml
-                  </span>
                 </div>
-              ))}
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Factor (Equivalente en destino)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={formData.factor}
+                    onChange={(e) => setFormData({ ...formData, factor: parseFloat(e.target.value) || 1 })}
+                    className="w-full px-3 py-1.5 text-xs font-bold rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Ingrediente específico (opcional)</label>
+                  <input
+                    type="text"
+                    placeholder="Harina, Azúcar..."
+                    value={formData.ingredient}
+                    onChange={(e) => setFormData({ ...formData, ingredient: e.target.value })}
+                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+                <div className="flex items-center justify-end gap-2 pt-2">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 text-xs text-[#7D6E65]">
+                    Cancelar
+                  </button>
+                  <button type="submit" className="px-3 py-1.5 text-xs font-medium bg-[#9C4266] text-white rounded-lg">
+                    Guardar
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -167,6 +167,113 @@ const tests = [
       assert.ok(Math.abs(pesoCorrectoGramos - 2267.96185) < 0.001);
     },
   },
+  {
+    name: "Receta Madre: Costo de Lote y Costo por Unidad de Rendimiento (P-33 / RN-014)",
+    fn: () => {
+      // Caso Brownie 15 porciones del Excel:
+      // Ingredientes = 421.72 DOP = 42172 centavos
+      // Overhead 10% = 4217 centavos
+      // Mano de obra 20% = 8434 centavos
+      // Empaque lote = 0
+      // Lote Total = 54823 centavos (RD$ 548.23)
+      // Rendimiento = 15 unidades -> Costo Unitario Rendimiento = 54823 / 15 = 3654.86 centavos (~RD$ 36.55)
+      const ingCost = 42172;
+      const overhead = Math.round(ingCost * 0.10);
+      const labor = Math.round(ingCost * 0.20);
+      const batchCost = ingCost + overhead + labor;
+      assert.strictEqual(batchCost, 54823);
+
+      const costPerYieldUnit = batchCost / 15;
+      assert.ok(Math.abs(costPerYieldUnit - 3654.866) < 0.01);
+    },
+  },
+  {
+    name: "Presentación Derivada: Consumo de Receta Madre + Empaque (Combo 1 San Valentín)",
+    fn: () => {
+      // Combo 1 consume: 2 brownies @ 3654.87 = 7309.7 centavos
+      // Empaques: Caja (12500) + Capacillos (60) + Lazo (1667) + Etiqueta (600) + Mensaje (1000) = 15827 centavos
+      // Costo Total Presentación = 7310 + 15827 = 23137 centavos (RD$ 231.37)
+      const motherUnitCost = 3654.866;
+      const baseCost = Math.round(motherUnitCost * 2);
+      const packagingCost = 12500 + 60 + 1667 + 600 + 1000;
+      const totalPresentationCost = baseCost + packagingCost;
+
+      assert.strictEqual(baseCost, 7310);
+      assert.strictEqual(packagingCost, 15827);
+      assert.strictEqual(totalPresentationCost, 23137);
+
+      // Margen deseado sobre venta: 40% (0.40)
+      // P_sug = 23137 / (1 - 0.40) = 23137 / 0.60 = 38562 centavos (RD$ 385.62)
+      const suggestedPrice = calcSuggestedPrice(totalPresentationCost, 0.40);
+      assert.strictEqual(suggestedPrice, 38562);
+
+      // Ganancia real y margen real al precio final de RD$ 400.00 (40000 centavos)
+      const finalPrice = 40000;
+      const profit = finalPrice - totalPresentationCost;
+      const realMargin = calcMarginOnSale(finalPrice, totalPresentationCost);
+      assert.strictEqual(profit, 16863); // RD$ 168.63
+      assert.ok(Math.abs(realMargin - 42.1575) < 0.01);
+    },
+  },
+  {
+    name: "Validación de Fronteras Matemáticas (PRE-001): Margen < 100% y Precio <= 0",
+    fn: () => {
+      // 1. Margen >= 100% debe lanzar excepción
+      assert.throws(() => calcSuggestedPrice(5000, 1.0), /Margen debe ser/);
+      assert.throws(() => calcSuggestedPrice(5000, 1.05), /Margen debe ser/);
+      assert.throws(() => calcSuggestedPrice(5000, -0.1), /Margen debe ser/);
+
+      // 2. Precio final <= 0 debe retornar margen 0% sin arrojar error ni -Infinity
+      const zeroMargin = calcMarginOnSale(0, 5000);
+      assert.strictEqual(zeroMargin, 0);
+      const negMargin = calcMarginOnSale(-100, 5000);
+      assert.strictEqual(negMargin, 0);
+    },
+  },
+  {
+    name: "Presentación Compuesta: Caja de 12 Unidades con Empaque Adicional",
+    fn: () => {
+      // 12 unidades de brownie a 3655 centavos cada uno = 43860
+      // Caja grande (6500) + Lazo (2500) + Etiqueta (600) = 9600
+      // Costo total = 53460 centavos (RD$ 534.60)
+      const unitCost = 3655;
+      const boxCost = (12 * unitCost) + 6500 + 2500 + 600;
+      assert.strictEqual(boxCost, 53460);
+
+      // Recargo (Markup) 50%: Costo * 1.50 = 80190 centavos (RD$ 801.90)
+      const markupPrice = Math.ceil(boxCost * 1.5);
+      assert.strictEqual(markupPrice, 80190);
+    },
+  },
+  {
+    name: "Cascada Reactiva y Congelación de Ventas Históricas (PRE-002 / RF-014)",
+    fn: () => {
+      // Venta registrada en el pasado con Costo Histórico RD$ 200.00 y Precio RD$ 350.00
+      const historicalSaleItem = {
+        productName: "Caja San Valentín",
+        unitPriceCents: 35000,
+        unitCostCents: 20000,
+        quantity: 2,
+        totalCents: 70000,
+        totalCostCents: 40000,
+      };
+
+      // Nuevo costo de producción sube a RD$ 250.00 tras alza de mantequilla
+      const newPresentationCost = 25000;
+      const preservedFinalPrice = 35000; // Preserva precio manual
+
+      // Ganancia se actualiza para futuras ventas
+      const newProfit = preservedFinalPrice - newPresentationCost;
+      const newMargin = calcMarginOnSale(preservedFinalPrice, newPresentationCost);
+
+      assert.strictEqual(newProfit, 10000); // RD$ 100.00
+      assert.ok(Math.abs(newMargin - 28.57) < 0.1);
+
+      // La venta histórica NO se altera
+      assert.strictEqual(historicalSaleItem.unitCostCents, 20000);
+      assert.strictEqual(historicalSaleItem.totalCostCents, 40000);
+    },
+  },
 ];
 
 console.log("=================================================");

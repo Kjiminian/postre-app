@@ -1,437 +1,643 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ShoppingCart,
   Plus,
   Search,
-  Filter,
-  DollarSign,
-  Calendar,
-  CheckCircle2,
-  Clock,
   AlertCircle,
   X,
+  RefreshCw,
+  Trash2,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
 
-interface SaleRecord {
+interface SaleItemData {
   id: string;
-  saleDate: string;
   productName: string;
-  customerName: string;
   quantity: number;
   unitPriceCents: number;
   totalCents: number;
   unitCostCents: number;
   totalCostCents: number;
-  paymentMethod: string;
-  collectedCents: number;
-  balanceCents: number;
+  presentation?: {
+    id: string;
+    name: string;
+  };
 }
 
-const CATALOG_PRESETS = [
-  { name: "Cheesecake Clásico 8\"", defaultPriceCents: 140000, unitCostCents: 67200 },
-  { name: "Bizcocho Dominicano Suspiro 1 lb", defaultPriceCents: 130000, unitCostCents: 67600 },
-  { name: "Caja Brownies Artesanales (6 uds)", defaultPriceCents: 45000, unitCostCents: 18900 },
-  { name: "Tres Leches Tradicional", defaultPriceCents: 60000, unitCostCents: 33000 },
-  { name: "Tarta de Limón y Merengue", defaultPriceCents: 95000, unitCostCents: 48000 },
-];
+interface PaymentData {
+  id: string;
+  amountCents: number;
+  method: string;
+  paidAt: string;
+  reference?: string;
+}
+
+interface SaleRecord {
+  id: string;
+  saleDate: string;
+  customerName?: string;
+  customer?: { name: string; phone?: string };
+  totalCents: number;
+  totalCostCents: number;
+  collectedCents: number;
+  balanceCents: number;
+  paymentMethod: string;
+  status: string;
+  notes?: string;
+  items: SaleItemData[];
+  payments: PaymentData[];
+}
+
+interface PresentationOption {
+  id: string;
+  name: string;
+  recipeName: string;
+  finalPriceCents: number;
+  totalCostCents: number;
+}
 
 export default function VentasPage() {
-  const [sales, setSales] = useState<SaleRecord[]>([
-    {
-      id: "VTA-001",
-      saleDate: "2026-11-10",
-      productName: "Cheesecake Clásico 8\"",
-      customerName: "María Fernández",
-      quantity: 2,
-      unitPriceCents: 140000,
-      totalCents: 280000,
-      unitCostCents: 67200,
-      totalCostCents: 134400,
-      paymentMethod: "TRANSFERENCIA",
-      collectedCents: 280000,
-      balanceCents: 0,
-    },
-    {
-      id: "VTA-002",
-      saleDate: "2026-11-11",
-      productName: "Bizcocho Dominicano Suspiro 1 lb",
-      customerName: "Carlos Gómez",
-      quantity: 1,
-      unitPriceCents: 130000,
-      totalCents: 130000,
-      unitCostCents: 67600,
-      totalCostCents: 67600,
-      paymentMethod: "EFECTIVO",
-      collectedCents: 80000,
-      balanceCents: 50000, // Saldo pendiente
-    },
-    {
-      id: "VTA-003",
-      saleDate: "2026-11-11",
-      productName: "Caja Brownies Artesanales (6 uds)",
-      customerName: "Ana Rodríguez",
-      quantity: 3,
-      unitPriceCents: 45000,
-      totalCents: 135000,
-      unitCostCents: 18900,
-      totalCostCents: 56700,
-      paymentMethod: "TARJETA",
-      collectedCents: 135000,
-      balanceCents: 0,
-    },
-  ]);
+  const [sales, setSales] = useState<SaleRecord[]>([]);
+  const [presentations, setPresentations] = useState<PresentationOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [searchProduct, setSearchProduct] = useState("");
-  const [filterPayment, setFilterPayment] = useState("");
+  const [search, setSearch] = useState("");
+  const [filterPayment, setFilterPayment] = useState("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAbonoModalOpen, setIsAbonoModalOpen] = useState(false);
+  const [selectedSaleForAbono, setSelectedSaleForAbono] = useState<SaleRecord | null>(null);
 
-  // Formulario de nueva venta
-  const [newSale, setNewSale] = useState({
+  // Formulario nueva venta
+  const [saleForm, setSaleForm] = useState({
     saleDate: new Date().toISOString().slice(0, 10),
-    productName: CATALOG_PRESETS[0].name,
     customerName: "",
+    selectedPresentationId: "",
     quantity: 1,
-    unitPriceDOP: 1400,
-    unitCostDOP: 672,
+    unitPriceDOP: 0,
+    unitCostDOP: 0,
+    collectedDOP: 0,
     paymentMethod: "EFECTIVO",
-    collectedDOP: 1400,
+    paymentReference: "",
+    notes: "",
   });
 
-  const handleSelectProductPreset = (name: string) => {
-    const preset = CATALOG_PRESETS.find((p) => p.name === name);
-    if (preset) {
-      setNewSale({
-        ...newSale,
-        productName: preset.name,
-        unitPriceDOP: preset.defaultPriceCents / 100,
-        unitCostDOP: preset.unitCostCents / 100,
-        collectedDOP: (preset.defaultPriceCents / 100) * newSale.quantity,
+  // Formulario de abono
+  const [abonoForm, setAbonoForm] = useState({
+    amountDOP: 0,
+    method: "EFECTIVO",
+    reference: "",
+    notes: "",
+  });
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [resSales, resPres] = await Promise.all([
+        fetch("/api/ventas"),
+        fetch("/api/presentaciones"),
+      ]);
+      const dataSales = await resSales.json();
+      const dataPres = await resPres.json();
+
+      if (dataSales.success) setSales(dataSales.data);
+      else throw new Error(dataSales.error);
+
+      if (dataPres.success) {
+        setPresentations(dataPres.data);
+        if (dataPres.data.length > 0 && !saleForm.selectedPresentationId) {
+          const first = dataPres.data[0];
+          setSaleForm((prev) => ({
+            ...prev,
+            selectedPresentationId: first.id,
+            unitPriceDOP: first.finalPriceCents / 100,
+            unitCostDOP: first.totalCostCents / 100,
+            collectedDOP: first.finalPriceCents / 100,
+          }));
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || "Error cargando ventas");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleSelectPresentation = (presId: string) => {
+    const selected = presentations.find((p) => p.id === presId);
+    if (selected) {
+      const priceDOP = selected.finalPriceCents / 100;
+      setSaleForm({
+        ...saleForm,
+        selectedPresentationId: presId,
+        unitPriceDOP: priceDOP,
+        unitCostDOP: selected.totalCostCents / 100,
+        collectedDOP: priceDOP * saleForm.quantity,
       });
     }
   };
 
-  const handleCreateSale = (e: React.FormEvent) => {
+  const handleSaveSale = async (e: React.FormEvent) => {
     e.preventDefault();
-    const qty = Number(newSale.quantity);
-    const unitPriceCents = Math.round(Number(newSale.unitPriceDOP) * 100);
-    const unitCostCents = Math.round(Number(newSale.unitCostDOP) * 100);
-    const totalCents = qty * unitPriceCents;
-    const totalCostCents = qty * unitCostCents;
-    const collectedCents = Math.min(totalCents, Math.round(Number(newSale.collectedDOP) * 100));
-    const balanceCents = totalCents - collectedCents;
+    if (!saleForm.selectedPresentationId) return;
 
-    const created: SaleRecord = {
-      id: `VTA-${Date.now().toString(36).toUpperCase()}`,
-      saleDate: newSale.saleDate,
-      productName: newSale.productName,
-      customerName: newSale.customerName.trim() || "Cliente Ocasional",
-      quantity: qty,
-      unitPriceCents,
-      totalCents,
-      unitCostCents,
-      totalCostCents,
-      paymentMethod: newSale.paymentMethod,
-      collectedCents,
-      balanceCents,
-    };
+    try {
+      const selectedPres = presentations.find((p) => p.id === saleForm.selectedPresentationId);
+      const payload = {
+        saleDate: saleForm.saleDate,
+        customerName: saleForm.customerName || "Cliente Mostrador",
+        paymentMethod: saleForm.paymentMethod,
+        collectedCents: Math.round(saleForm.collectedDOP * 100),
+        paymentReference: saleForm.paymentReference,
+        notes: saleForm.notes,
+        items: [
+          {
+            presentationId: saleForm.selectedPresentationId,
+            productName: selectedPres ? `${selectedPres.recipeName} — ${selectedPres.name}` : "Postre",
+            quantity: saleForm.quantity,
+            unitPriceCents: Math.round(saleForm.unitPriceDOP * 100),
+            unitCostCents: Math.round(saleForm.unitCostDOP * 100),
+          },
+        ],
+      };
 
-    setSales([created, ...sales]);
-    setIsModalOpen(false);
+      const res = await fetch("/api/ventas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      setIsModalOpen(false);
+      loadData();
+    } catch (err: any) {
+      alert("Error al registrar venta: " + err.message);
+    }
+  };
+
+  const handleOpenAbono = (sale: SaleRecord) => {
+    setSelectedSaleForAbono(sale);
+    setAbonoForm({
+      amountDOP: sale.balanceCents / 100,
+      method: "EFECTIVO",
+      reference: "",
+      notes: "",
+    });
+    setIsAbonoModalOpen(true);
+  };
+
+  const handleSaveAbono = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedSaleForAbono || abonoForm.amountDOP <= 0) return;
+
+    try {
+      const res = await fetch("/api/abonos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          saleId: selectedSaleForAbono.id,
+          amountCents: Math.round(abonoForm.amountDOP * 100),
+          method: abonoForm.method,
+          reference: abonoForm.reference,
+          notes: abonoForm.notes,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      setIsAbonoModalOpen(false);
+      loadData();
+    } catch (err: any) {
+      alert("Error al registrar abono: " + err.message);
+    }
+  };
+
+  const handleCancelSale = async (id: string) => {
+    if (!confirm("¿Seguro que deseas anular esta venta?")) return;
+    try {
+      const res = await fetch(`/api/ventas?id=${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) loadData();
+      else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al anular venta: " + err.message);
+    }
   };
 
   const filteredSales = sales.filter((s) => {
-    const matchesProduct = !searchProduct || s.productName.toLowerCase().includes(searchProduct.toLowerCase()) || s.customerName.toLowerCase().includes(searchProduct.toLowerCase());
-    const matchesPayment = !filterPayment || s.paymentMethod === filterPayment;
-    return matchesProduct && matchesPayment;
+    const custName = s.customer?.name || s.customerName || "";
+    const prodName = s.items.map((i) => i.productName).join(" ");
+    const matchesSearch =
+      custName.toLowerCase().includes(search.toLowerCase()) ||
+      prodName.toLowerCase().includes(search.toLowerCase());
+    const matchesPayment = filterPayment === "ALL" || s.paymentMethod === filterPayment;
+    return matchesSearch && matchesPayment;
   });
 
-  // Totales calculados
   const totalInvoiced = filteredSales.reduce((acc, s) => acc + s.totalCents, 0);
-  const totalCost = filteredSales.reduce((acc, s) => acc + s.totalCostCents, 0);
   const totalCollected = filteredSales.reduce((acc, s) => acc + s.collectedCents, 0);
-  const totalBalance = filteredSales.reduce((acc, s) => acc + s.balanceCents, 0);
+  const totalPending = filteredSales.reduce((acc, s) => acc + s.balanceCents, 0);
+  const totalCost = filteredSales.reduce((acc, s) => acc + s.totalCostCents, 0);
+  const totalProfit = totalInvoiced - totalCost;
 
   return (
-    <div className="min-h-screen bg-cream-100 pb-16">
-      <Header
-        title="Módulo de Ventas & Cobranzas"
-        subtitle="Registro con costos históricos congelados • Sin conversión automática de cotizaciones"
-      />
+    <div className="min-h-screen bg-[#FAF8F6]">
+      <Header />
 
-      <div className="p-8 max-w-7xl mx-auto space-y-6">
-        {/* Barra superior de acciones y filtros */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-cream-300 shadow-card">
-          <div className="flex flex-1 items-center gap-3">
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-ink-muted absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Buscar por producto o cliente..."
-                value={searchProduct}
-                onChange={(e) => setSearchProduct(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm bg-cream-50 border border-cream-300 rounded-lg focus:outline-none focus:border-plum-500"
-              />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
+              <ShoppingCart className="w-4 h-4" />
+              <span>Ventas y Cobranzas</span>
             </div>
-            <select
-              value={filterPayment}
-              onChange={(e) => setFilterPayment(e.target.value)}
-              className="px-3 py-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:outline-none focus:border-plum-500"
-            >
-              <option value="">Todos los pagos</option>
-              <option value="EFECTIVO">Efectivo</option>
-              <option value="TRANSFERENCIA">Transferencia</option>
-              <option value="TARJETA">Tarjeta</option>
-            </select>
+            <h1 className="text-2xl font-serif font-bold text-[#4A3B32]">
+              Registro de Ventas y Abonos
+            </h1>
+            <p className="text-sm text-[#7D6E65] mt-1">
+              Selecciona presentación, carga precio activo y congela el costo unitario histórico de producción.
+            </p>
           </div>
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-plum-500 hover:bg-plum-600 text-white font-medium text-sm transition-colors shadow-sm"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all self-start md:self-auto"
           >
             <Plus className="w-4 h-4" />
             <span>Registrar Venta</span>
           </button>
         </div>
 
-        {/* Resumen de totales filtrados */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-white rounded-xl border border-cream-300 shadow-card">
-            <span className="text-xs text-ink-muted font-medium uppercase">Total Facturado</span>
-            <p className="text-xl font-bold font-serif text-ink mt-1">{formatDOP(totalInvoiced)}</p>
+        {/* Tarjetas de Resumen Rápido */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+            <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Total Facturado</span>
+            <span className="text-xl font-bold text-[#4A3B32]">{formatDOP(totalInvoiced)}</span>
           </div>
-          <div className="p-4 bg-white rounded-xl border border-cream-300 shadow-card">
-            <span className="text-xs text-ink-muted font-medium uppercase">Costo Histórico</span>
-            <p className="text-xl font-bold font-serif text-ink mt-1">{formatDOP(totalCost)}</p>
+          <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+            <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Total Cobrado</span>
+            <span className="text-xl font-bold text-[#22543D]">{formatDOP(totalCollected)}</span>
           </div>
-          <div className="p-4 bg-white rounded-xl border border-cream-300 shadow-card">
-            <span className="text-xs text-sage-600 font-medium uppercase">Total Cobrado</span>
-            <p className="text-xl font-bold font-serif text-sage-600 mt-1">{formatDOP(totalCollected)}</p>
+          <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+            <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Saldo Pendiente</span>
+            <span className={`text-xl font-bold ${totalPending > 0 ? "text-[#C53030]" : "text-[#7D6E65]"}`}>
+              {formatDOP(totalPending)}
+            </span>
           </div>
-          <div className="p-4 bg-white rounded-xl border border-cream-300 shadow-card">
-            <span className="text-xs text-amber-600 font-medium uppercase">Saldo Pendiente</span>
-            <p className="text-xl font-bold font-serif text-amber-600 mt-1">{formatDOP(totalBalance)}</p>
+          <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+            <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Ganancia Neta (Histórica)</span>
+            <span className="text-xl font-bold text-[#9C4266]">{formatDOP(totalProfit)}</span>
           </div>
         </div>
 
-        {/* Tabla de Ventas */}
-        <div className="bg-white rounded-xl border border-cream-300 shadow-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-cream-50 border-b border-cream-300 text-xs font-semibold text-ink-muted uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Fecha</th>
-                  <th className="py-3 px-4">Producto</th>
-                  <th className="py-3 px-4">Cliente</th>
-                  <th className="py-3 px-4 text-center">Cant.</th>
-                  <th className="py-3 px-4 text-right">Precio Unit.</th>
-                  <th className="py-3 px-4 text-right">Importe</th>
-                  <th className="py-3 px-4 text-right">Costo Hist.</th>
-                  <th className="py-3 px-4 text-center">Pago</th>
-                  <th className="py-3 px-4 text-right">Cobrado</th>
-                  <th className="py-3 px-4 text-right">Saldo</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-cream-200">
-                {filteredSales.length === 0 ? (
-                  <tr>
-                    <td colSpan={10} className="py-8 text-center text-ink-muted text-xs">
-                      No se encontraron ventas registradas con los filtros aplicados.
-                    </td>
+        {/* Filtros */}
+        <div className="bg-white rounded-xl p-4 border border-[#E8E2D9] shadow-sm flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7D6E65]" />
+            <input
+              type="text"
+              placeholder="Buscar por cliente o postre..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-[#FAF8F6]"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            {[
+              { id: "ALL", label: "Todos los Pagos" },
+              { id: "EFECTIVO", label: "Efectivo" },
+              { id: "TRANSFERENCIA", label: "Transferencia" },
+              { id: "TARJETA", label: "Tarjeta" },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setFilterPayment(p.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  filterPayment === p.id ? "bg-[#9C4266] text-white" : "bg-[#FAF8F6] text-[#7D6E65] hover:bg-[#F3EFEA]"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 4 ESTADOS UI */}
+        {loading ? (
+          <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
+            <RefreshCw className="w-8 h-8 text-[#9C4266] animate-spin mx-auto mb-3" />
+            <p className="text-sm font-medium text-[#4A3B32]">Cargando ventas y cobros...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-[#FFF5F5] rounded-xl p-8 border border-[#FED7D7] text-center">
+            <AlertCircle className="w-8 h-8 text-[#E53E3E] mx-auto mb-2" />
+            <p className="text-sm font-semibold text-[#9B2C2C]">{error}</p>
+            <button onClick={loadData} className="mt-4 px-4 py-2 bg-[#E53E3E] text-white text-xs font-semibold rounded-lg">
+              Reintentar
+            </button>
+          </div>
+        ) : filteredSales.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
+            <ShoppingCart className="w-10 h-10 text-[#C4B5A5] mx-auto mb-3" />
+            <h3 className="text-base font-semibold text-[#4A3B32]">No hay ventas registradas</h3>
+            <p className="text-xs text-[#7D6E65] max-w-sm mx-auto mt-1">
+              Registra tu primera venta seleccionando el postre y la presentación deseada.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-[#E8E2D9] shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#FAF8F6] border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
+                    <th className="py-3 px-4">Fecha</th>
+                    <th className="py-3 px-4">Cliente</th>
+                    <th className="py-3 px-4">Presentación / Items</th>
+                    <th className="py-3 px-4">Costo Congelado</th>
+                    <th className="py-3 px-4">Total Venta</th>
+                    <th className="py-3 px-4">Cobrado</th>
+                    <th className="py-3 px-4">Saldo</th>
+                    <th className="py-3 px-4">Método</th>
+                    <th className="py-3 px-4 text-right">Acciones</th>
                   </tr>
-                ) : (
-                  filteredSales.map((sale) => (
-                    <tr key={sale.id} className="hover:bg-cream-50/60 transition-colors">
-                      <td className="py-3 px-4 font-mono text-xs text-ink-light">{sale.saleDate}</td>
-                      <td className="py-3 px-4 font-medium text-ink">{sale.productName}</td>
-                      <td className="py-3 px-4 text-ink-light">{sale.customerName}</td>
-                      <td className="py-3 px-4 text-center font-medium tabular-nums">{sale.quantity}</td>
-                      <td className="py-3 px-4 text-right tabular-nums">{formatDOP(sale.unitPriceCents)}</td>
-                      <td className="py-3 px-4 text-right font-semibold text-ink tabular-nums">{formatDOP(sale.totalCents)}</td>
-                      <td className="py-3 px-4 text-right text-xs text-ink-muted tabular-nums">{formatDOP(sale.totalCostCents)}</td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-cream-200 text-ink">
-                          {sale.paymentMethod}
-                        </span>
+                </thead>
+                <tbody className="divide-y divide-[#E8E2D9] text-sm">
+                  {filteredSales.map((sale) => (
+                    <tr key={sale.id} className="hover:bg-[#FAF8F6]/60 transition-colors">
+                      <td className="py-3 px-4 text-xs font-medium text-[#7D6E65]">
+                        {new Date(sale.saleDate).toLocaleDateString("es-DO")}
                       </td>
-                      <td className="py-3 px-4 text-right font-medium text-sage-600 tabular-nums">{formatDOP(sale.collectedCents)}</td>
-                      <td className="py-3 px-4 text-right font-semibold tabular-nums">
+                      <td className="py-3 px-4 font-semibold text-[#4A3B32]">
+                        {sale.customer?.name || sale.customerName || "Mostrador"}
+                      </td>
+                      <td className="py-3 px-4 text-[#4A3B32]">
+                        {sale.items.map((it) => (
+                          <div key={it.id} className="text-xs">
+                            <span className="font-medium">{it.productName}</span>{" "}
+                            <span className="text-[#7D6E65]">({it.quantity}x {formatDOP(it.unitPriceCents)})</span>
+                          </div>
+                        ))}
+                      </td>
+                      <td className="py-3 px-4 text-xs text-[#7D6E65]">
+                        {formatDOP(sale.totalCostCents)}
+                      </td>
+                      <td className="py-3 px-4 font-bold text-[#4A3B32]">
+                        {formatDOP(sale.totalCents)}
+                      </td>
+                      <td className="py-3 px-4 font-semibold text-[#22543D]">
+                        {formatDOP(sale.collectedCents)}
+                      </td>
+                      <td className="py-3 px-4">
                         {sale.balanceCents > 0 ? (
-                          <span className="text-amber-600 font-bold">{formatDOP(sale.balanceCents)}</span>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[#FED7D7] text-[#C53030]">
+                            Pendiente: {formatDOP(sale.balanceCents)}
+                          </span>
                         ) : (
-                          <span className="text-xs text-sage-600 flex items-center justify-end gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Saldo RD$ 0
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-[#C6F6D5] text-[#22543D]">
+                            Saldado
                           </span>
                         )}
                       </td>
+                      <td className="py-3 px-4 text-xs text-[#7D6E65]">
+                        <span className="px-2 py-0.5 rounded bg-[#FAF8F6] border border-[#E8E2D9]">
+                          {sale.paymentMethod}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {sale.balanceCents > 0 && (
+                            <button
+                              onClick={() => handleOpenAbono(sale)}
+                              className="px-2.5 py-1 text-xs font-medium bg-[#22543D] text-white rounded hover:bg-[#1A4331]"
+                              title="Registrar Abono"
+                            >
+                              Abonar
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleCancelSale(sale.id)}
+                            className="p-1.5 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#FAF8F6]"
+                            title="Anular Venta"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Modal: Registrar Venta */}
+        {/* MODAL NUEVA VENTA */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-lg w-full border border-cream-300 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-              <div className="p-5 border-b border-cream-200 flex items-center justify-between bg-cream-50">
-                <h3 className="font-serif font-bold text-lg text-ink">Registrar Venta de Postre</h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-8 h-8 rounded-lg hover:bg-cream-200 flex items-center justify-center text-ink-muted"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full text-[#7D6E65] hover:bg-[#FAF8F6]"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-              <form onSubmit={handleCreateSale} className="p-6 space-y-4">
+              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">Registrar Venta</h2>
+              <p className="text-xs text-[#7D6E65] mb-4">
+                El costo unitario de la presentación seleccionada quedará congelado en el histórico.
+              </p>
+
+              <form onSubmit={handleSaveSale} className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Fecha</label>
+                    <input
+                      type="date"
+                      required
+                      value={saleForm.saleDate}
+                      onChange={(e) => setSaleForm({ ...saleForm, saleDate: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Cliente</label>
+                    <input
+                      type="text"
+                      placeholder="Nombre del cliente"
+                      value={saleForm.customerName}
+                      onChange={(e) => setSaleForm({ ...saleForm, customerName: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                    Seleccionar del Catálogo Reutilizable
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                    Seleccionar Presentación del Obrador
                   </label>
                   <select
-                    value={newSale.productName}
-                    onChange={(e) => handleSelectProductPreset(e.target.value)}
-                    className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink focus:border-plum-500"
+                    value={saleForm.selectedPresentationId}
+                    onChange={(e) => handleSelectPresentation(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white font-medium text-[#4A3B32]"
                   >
-                    {CATALOG_PRESETS.map((p) => (
-                      <option key={p.name} value={p.name}>
-                        {p.name} — Precio sugerido: RD$ {(p.defaultPriceCents / 100).toFixed(2)}
+                    {presentations.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.recipeName} — {p.name} (RD$ {(p.finalPriceCents / 100).toFixed(2)})
                       </option>
                     ))}
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Fecha</label>
-                    <input
-                      type="date"
-                      value={newSale.saleDate}
-                      onChange={(e) => setNewSale({ ...newSale, saleDate: e.target.value })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Cliente</label>
-                    <input
-                      type="text"
-                      placeholder="Nombre del cliente"
-                      value={newSale.customerName}
-                      onChange={(e) => setNewSale({ ...newSale, customerName: e.target.value })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                    />
-                  </div>
-                </div>
-
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Cantidad</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Cantidad</label>
                     <input
                       type="number"
                       min="1"
-                      step="1"
-                      value={newSale.quantity}
+                      value={saleForm.quantity}
                       onChange={(e) => {
-                        const q = Number(e.target.value);
-                        setNewSale({
-                          ...newSale,
+                        const q = parseInt(e.target.value) || 1;
+                        setSaleForm({
+                          ...saleForm,
                           quantity: q,
-                          collectedDOP: newSale.unitPriceDOP * q,
+                          collectedDOP: saleForm.unitPriceDOP * q,
                         });
                       }}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                      required
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Precio Unit (RD$)</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Precio Unitario (RD$)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={newSale.unitPriceDOP}
+                      value={saleForm.unitPriceDOP}
                       onChange={(e) => {
-                        const p = Number(e.target.value);
-                        setNewSale({
-                          ...newSale,
+                        const p = parseFloat(e.target.value) || 0;
+                        setSaleForm({
+                          ...saleForm,
                           unitPriceDOP: p,
-                          collectedDOP: p * newSale.quantity,
+                          collectedDOP: p * saleForm.quantity,
                         });
                       }}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                      required
+                      className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Costo Unit (RD$)</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Costo Unitario (RD$)</label>
                     <input
                       type="number"
-                      step="0.01"
-                      value={newSale.unitCostDOP}
-                      onChange={(e) => setNewSale({ ...newSale, unitCostDOP: Number(e.target.value) })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                      required
+                      disabled
+                      value={saleForm.unitCostDOP.toFixed(2)}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-[#F3EFEA] text-[#7D6E65]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Medio de Pago</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Método de Pago</label>
                     <select
-                      value={newSale.paymentMethod}
-                      onChange={(e) => setNewSale({ ...newSale, paymentMethod: e.target.value })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
+                      value={saleForm.paymentMethod}
+                      onChange={(e) => setSaleForm({ ...saleForm, paymentMethod: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
                     >
                       <option value="EFECTIVO">Efectivo</option>
-                      <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                      <option value="TRANSFERENCIA">Transferencia</option>
                       <option value="TARJETA">Tarjeta</option>
-                      <option value="PENDIENTE">Pendiente de Cobro</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Monto Cobrado (RD$)</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Monto Cobrado (RD$)</label>
                     <input
                       type="number"
                       step="0.01"
-                      value={newSale.collectedDOP}
-                      onChange={(e) => setNewSale({ ...newSale, collectedDOP: Number(e.target.value) })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
+                      value={saleForm.collectedDOP}
+                      onChange={(e) => setSaleForm({ ...saleForm, collectedDOP: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-sm font-bold text-[#22543D] rounded-lg border border-[#E8E2D9]"
                     />
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-cream-200 flex items-center justify-between">
-                  <div className="text-xs text-ink-muted">
-                    Total: <span className="font-bold text-ink">RD$ {(newSale.quantity * newSale.unitPriceDOP).toFixed(2)}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 rounded-lg text-sm font-medium text-ink-light hover:bg-cream-200"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 rounded-lg text-sm font-medium bg-plum-500 hover:bg-plum-600 text-white shadow-sm"
-                    >
-                      Guardar Venta
-                    </button>
-                  </div>
+                <div className="p-3 rounded-lg bg-[#FAF8F6] border border-[#E8E2D9] flex justify-between text-xs font-medium">
+                  <span>Total Venta: <strong>{formatDOP(Math.round(saleForm.unitPriceDOP * saleForm.quantity * 100))}</strong></span>
+                  <span>Saldo Restante: <strong>{formatDOP(Math.max(0, Math.round((saleForm.unitPriceDOP * saleForm.quantity - saleForm.collectedDOP) * 100)))}</strong></span>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm text-[#7D6E65]">
+                    Cancelar
+                  </button>
+                  <button type="submit" className="px-4 py-2 text-sm font-medium bg-[#9C4266] text-white rounded-lg hover:bg-[#833554]">
+                    Guardar Venta
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         )}
-      </div>
+
+        {/* MODAL ABONO */}
+        {isAbonoModalOpen && selectedSaleForAbono && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-[#E8E2D9] relative">
+              <button onClick={() => setIsAbonoModalOpen(false)} className="absolute top-4 right-4 p-1.5 text-[#7D6E65]">
+                <X className="w-5 h-5" />
+              </button>
+
+              <h3 className="text-lg font-serif font-bold text-[#4A3B32] mb-1">Registrar Abono</h3>
+              <p className="text-xs text-[#7D6E65] mb-4">
+                Saldo pendiente: <strong>{formatDOP(selectedSaleForAbono.balanceCents)}</strong>
+              </p>
+
+              <form onSubmit={handleSaveAbono} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Monto del Abono (RD$)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    max={selectedSaleForAbono.balanceCents / 100}
+                    required
+                    value={abonoForm.amountDOP}
+                    onChange={(e) => setAbonoForm({ ...abonoForm, amountDOP: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 text-base font-bold text-[#22543D] rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Método de Pago</label>
+                  <select
+                    value={abonoForm.method}
+                    onChange={(e) => setAbonoForm({ ...abonoForm, method: e.target.value })}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
+                  >
+                    <option value="EFECTIVO">Efectivo</option>
+                    <option value="TRANSFERENCIA">Transferencia</option>
+                    <option value="TARJETA">Tarjeta</option>
+                  </select>
+                </div>
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button type="button" onClick={() => setIsAbonoModalOpen(false)} className="px-3 py-1.5 text-xs text-[#7D6E65]">
+                    Cancelar
+                  </button>
+                  <button type="submit" className="px-3 py-1.5 text-xs font-medium bg-[#22543D] text-white rounded-lg">
+                    Confirmar Abono
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

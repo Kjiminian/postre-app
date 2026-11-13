@@ -41,10 +41,62 @@ export type Unit = MassUnit | VolumeUnit | "unidad";
 
 // ─── DTOs de Negocio ──────────────────────────────────────────────────────────
 
+export type ItemCategory = "INGREDIENT" | "PACKAGING" | "DECORATION" | "UTENSIL";
+export type RecipeType = "MOTHER" | "SUBRECIPE";
+export type PricingMethod = "MARGIN" | "MARKUP";
+
+export interface PresentationMaterialDto {
+  id?: string;
+  presentationId?: string;
+  ingredientId?: string | null;
+  name: string;
+  quantity: number;
+  unit: string;
+  unitCostCents: number;
+  totalCostCents: number;
+}
+
+export interface PresentationSubrecipeDto {
+  id?: string;
+  presentationId?: string;
+  subRecipeId?: string | null;
+  name: string;
+  quantity: number;
+  unit: string;
+  costCents: number;
+}
+
+export interface RecipePresentationDto {
+  id: string;
+  recipeId: string;
+  recipeName?: string;
+  name: string;
+  sizeDescription?: string | null;
+  motherRecipeQty: number;
+  motherRecipeUnit: string;
+  presentationYield: number;
+  packagingCostCents: number;
+  additionalCostCents: number;
+  totalCostCents: number;
+  pricingMethod: PricingMethod;
+  desiredMarginPercent: number;
+  suggestedPriceCents: number;
+  finalPriceCents: number;
+  realProfitCents: number;
+  realMarginPercent: number;
+  isActive: boolean;
+  isComposite: boolean;
+  notes?: string | null;
+  materials?: PresentationMaterialDto[];
+  subrecipes?: PresentationSubrecipeDto[];
+}
+
 export interface IngredientDto {
   id: string;
   name: string;
-  supplierName: string | null;
+  category: ItemCategory;
+  supplierId?: string | null;
+  supplierName?: string | null;
   packagePriceCents: number;
   packageQty: number;
   packageUnit: string;
@@ -68,20 +120,28 @@ export interface RecipeDto {
   id: string;
   name: string;
   slug: string;
+  recipeType: RecipeType;
   yield: number;
   yieldUnit: string;
+  laborPercent: number;
+  overheadPercent: number;
+  packageCostCents: number;
   batchCostCents: number;
   unitCostCents: number;
+  costPerYieldUnit: number;
   suggestedPriceCents: number;
   currentPriceCents: number;
   targetMargin: number;
   status: RecipeStatus;
   reviewFlag: boolean;
+  notes?: string | null;
   ingredients: RecipeIngredientLine[];
+  presentations?: RecipePresentationDto[];
 }
 
 export interface SaleItemInput {
   recipeId?: string;
+  presentationId?: string;
   productName: string;
   quantity: number;
   unitPriceCents: number;
@@ -151,8 +211,8 @@ export function formatDOP(cents: number): string {
 }
 
 /** Convierte valor decimal RD$ a centavos enteros */
-export function toCents(dop: number): number {
-  return Math.round(dop * 100);
+export function toCents(dop: number | string): number {
+  return Math.round(parseFloat(String(dop)) * 100);
 }
 
 /** Convierte centavos enteros a valor decimal RD$ */
@@ -162,20 +222,53 @@ export function fromCents(cents: number): number {
 
 /** Calcula precio sugerido dado costo y margen sobre venta (RF-017)
  * P = C / (1 - M)  donde M es entre 0 y 1
+ * PRE-001: Validación de fronteras 0 <= M < 1
  */
 export function calcSuggestedPrice(unitCostCents: number, marginFraction: number): number {
-  if (marginFraction >= 1 || marginFraction < 0) throw new Error("Margen debe ser >= 0% y < 100%");
+  if (marginFraction >= 1 || marginFraction < 0) {
+    throw new Error("Margen sobre venta debe ser >= 0% y < 100%");
+  }
   return Math.ceil(unitCostCents / (1 - marginFraction));
 }
 
-/** Calcula margen sobre venta (RF-018) */
+/** Calcula precio sugerido según método ('MARGIN' sobre ventas o 'MARKUP' recargo sobre costo) */
+export function calcPriceByMethod(costCents: number, percent: number, method: PricingMethod = "MARGIN"): number {
+  if (method === "MARKUP") {
+    if (percent < 0) throw new Error("Recargo sobre costo debe ser >= 0%");
+    return Math.ceil(costCents * (1 + percent / 100));
+  }
+  const fraction = percent / 100;
+  return calcSuggestedPrice(costCents, fraction);
+}
+
+/** Calcula ganancia real en centavos: P - C */
+export function calcRealProfitCents(priceCents: number, costCents: number): number {
+  return priceCents - costCents;
+}
+
+/** Calcula margen real sobre venta con protección contra división por cero (PRE-001):
+ * Si priceCents <= 0, retorna 0%
+ */
 export function calcMarginOnSale(priceCents: number, costCents: number): number {
   if (priceCents <= 0) return 0;
   return ((priceCents - costCents) / priceCents) * 100;
 }
 
-/** Calcula markup sobre costo (RF-018) */
+/** Calcula markup sobre costo con protección contra división por cero */
 export function calcMarkupOnCost(priceCents: number, costCents: number): number {
   if (costCents <= 0) return 0;
   return ((priceCents - costCents) / costCents) * 100;
+}
+
+/** Calcula costo unitario total de una presentación:
+ * (costo_rendimiento_madre * cantidad_consumida) + empaques + toppings
+ */
+export function calcPresentationCost(
+  costPerYieldUnit: number,
+  motherRecipeQty: number,
+  packagingCostCents: number = 0,
+  additionalCostCents: number = 0
+): number {
+  const baseCost = Math.round(costPerYieldUnit * motherRecipeQty);
+  return baseCost + packagingCostCents + additionalCostCents;
 }

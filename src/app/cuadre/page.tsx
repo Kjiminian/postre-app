@@ -1,243 +1,298 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CalendarDays,
   Lock,
   CheckCircle2,
   AlertTriangle,
-  Receipt,
-  DollarSign,
-  TrendingUp,
-  History,
-  Clock,
+  RefreshCw,
+  Coins,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
 
-export default function CuadrePage() {
-  const [selectedWeek, setSelectedWeek] = useState("2026-W46"); // Semana actual
-  const [cashFundDOP, setCashFundDOP] = useState<number>(3000); // RD$ 3,000 fondo de caja
-  const [countedCashDOP, setCountedCashDOP] = useState<number>(24500); // Efectivo contado físico
-  const [isClosed, setIsClosed] = useState(false);
-  const [alertPostClose, setAlertPostClose] = useState(false);
+interface ExistingClose {
+  id: string;
+  status: string;
+  isClosed?: boolean;
+  closedAt: string;
+  notes?: string | null;
+  differenceCents?: number;
+}
 
-  // Métricas dinámicas calculadas de la semana
-  const metrics = {
-    period: "Lunes 09/11/2026 al Domingo 15/11/2026",
-    invoicedCents: 4850000,
-    collectedCents: 4200000,
-    pendingCents: 650000,
-    costOfGoodsCents: 1940000,
-    expensesCents: 780000,
-    netResultCents: 2130000,
-    cashCollectedCents: 2350000, // Cobrado en efectivo
-    cashExpensesCents: 200000, // Pagos en efectivo
+interface WeeklyCloseData {
+  weekStart: string;
+  weekEnd: string;
+  invoicedCents: number;
+  collectedCents: number;
+  pendingCents: number;
+  costOfGoodsCents: number;
+  operationalExpCents: number;
+  netResultCents: number;
+  cashCollectedCents: number;
+  cashExpensesCents: number;
+  salesCount: number;
+  expensesCount: number;
+  existingClose?: ExistingClose | null;
+}
+
+export default function CuadrePage() {
+  const [data, setData] = useState<WeeklyCloseData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [cashFundDOP, setCashFundDOP] = useState<number>(3000);
+  const [countedCashDOP, setCountedCashDOP] = useState<number>(3000);
+  const [notes, setNotes] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const loadWeeklyData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/cuadre");
+      const json = await res.json();
+      if (json.success) {
+        setData(json.data);
+        if (json.data.existingClose) {
+          setCashFundDOP(json.data.existingClose.cashFundCents / 100);
+          setCountedCashDOP(json.data.existingClose.countedCashCents / 100);
+          setNotes(json.data.existingClose.notes || "");
+        } else {
+          // Prellenar counted con lo esperado
+          const exp = (3000 * 100) + json.data.cashCollectedCents - json.data.cashExpensesCents;
+          setCountedCashDOP(exp / 100);
+        }
+      } else throw new Error(json.error);
+    } catch (err: any) {
+      setError(err.message || "Error cargando cuadre");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    loadWeeklyData();
+  }, []);
 
   const cashFundCents = Math.round(cashFundDOP * 100);
   const countedCashCents = Math.round(countedCashDOP * 100);
 
-  // Efectivo esperado = Fondo Inicial + Cobros Efectivo - Gastos Efectivo
-  const expectedCashCents = cashFundCents + metrics.cashCollectedCents - metrics.cashExpensesCents;
-  const cashDiffCents = countedCashCents - expectedCashCents;
+  const expectedCashCents = data
+    ? cashFundCents + data.cashCollectedCents - data.cashExpensesCents
+    : cashFundCents;
+  const cashDifferenceCents = countedCashCents - expectedCashCents;
 
-  const handleCloseWeek = () => {
-    setIsClosed(true);
+  const handleSaveClose = async () => {
+    if (!data) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/cuadre", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          weekStart: data.weekStart,
+          weekEnd: data.weekEnd,
+          cashFundCents,
+          countedCashCents,
+          notes,
+        }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert("Cuadre semanal fijado exitosamente.");
+        loadWeeklyData();
+      } else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al fijar cuadre: " + err.message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-cream-100 pb-16">
-      <Header
-        title="Cuadre Semanal (Lunes a Domingo)"
-        subtitle="Control de caja, costos de lo vendido (COGS) y resultado operativo semanal"
-      />
+  const isClosed = Boolean(data?.existingClose?.isClosed);
 
-      <div className="p-8 max-w-7xl mx-auto space-y-6">
-        {/* Selector de semana y estado */}
-        <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-plum-100 text-plum-600 flex items-center justify-center font-bold">
-              <CalendarDays className="w-5 h-5" />
+  return (
+    <div className="min-h-screen bg-[#FAF8F6]">
+      <Header />
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
+              <CalendarDays className="w-4 h-4" />
+              <span>Cierre Operativo (Lunes a Domingo)</span>
             </div>
-            <div>
-              <h3 className="font-serif font-bold text-ink text-base">Semana 46 / 2026</h3>
-              <p className="text-xs text-ink-muted">{metrics.period}</p>
-            </div>
+            <h1 className="text-2xl font-serif font-bold text-[#4A3B32]">
+              Cuadre Semanal y Arqueo de Caja
+            </h1>
+            <p className="text-sm text-[#7D6E65] mt-1">
+              Balance de ventas, cobros, costo de mercancía vendida (COGS), gastos operativos y verificación de efectivo físico.
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
             {isClosed ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sage-500/10 text-sage-600 font-semibold text-xs border border-sage-500/20">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#C6F6D5] text-[#22543D] font-bold text-xs">
                 <Lock className="w-3.5 h-3.5" /> Semana Cerrada
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 font-semibold text-xs border border-amber-200">
-                <Clock className="w-3.5 h-3.5" /> En Curso (Abierta)
-              </span>
-            )}
-
-            {!isClosed && (
               <button
-                onClick={handleCloseWeek}
-                className="px-4 py-2 rounded-lg bg-plum-500 hover:bg-plum-600 text-white font-medium text-xs shadow-sm transition-colors"
+                onClick={handleSaveClose}
+                disabled={isSaving || loading}
+                className="px-4 py-2.5 rounded-lg bg-[#9C4266] hover:bg-[#833554] text-white font-medium text-xs shadow-sm transition-colors"
               >
-                Cerrar Semana y Fijar Arqueo
+                {isSaving ? "Guardando..." : "Fijar Arqueo y Cerrar Semana"}
               </button>
             )}
           </div>
         </div>
 
-        {/* Alerta de modificaciones post-cierre (RF-009) */}
-        {alertPostClose && (
-          <div className="p-4 rounded-xl border border-red-300 bg-red-50 text-red-900 flex items-start gap-3 shadow-sm">
-            <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-bold">Advertencia de Modificación Posterior al Cierre:</p>
-              <p className="text-xs text-red-800 mt-0.5">
-                Se detectaron movimientos registrados o editados con fecha de esta semana después de haberse realizado el cierre. La integridad del cuadre histórico ha sido señalada.
-              </p>
+        {loading ? (
+          <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
+            <RefreshCw className="w-8 h-8 text-[#9C4266] animate-spin mx-auto mb-3" />
+            <p className="text-sm font-medium text-[#4A3B32]">Consolidando ventas y gastos de la semana...</p>
+          </div>
+        ) : error || !data ? (
+          <div className="bg-[#FFF5F5] rounded-xl p-8 border border-[#FED7D7] text-center">
+            <AlertTriangle className="w-8 h-8 text-[#E53E3E] mx-auto mb-2" />
+            <p className="text-sm font-semibold text-[#9B2C2C]">{error || "No se pudo cargar el cuadre"}</p>
+            <button onClick={loadWeeklyData} className="mt-4 px-4 py-2 bg-[#E53E3E] text-white text-xs font-semibold rounded-lg">
+              Reintentar
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Panel de Período */}
+            <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm flex items-center justify-between">
+              <div>
+                <span className="text-xs text-[#7D6E65] block font-semibold">Período de Liquidación:</span>
+                <span className="text-sm font-bold text-[#4A3B32]">
+                  {new Date(data.weekStart).toLocaleDateString("es-DO")} al {new Date(data.weekEnd).toLocaleDateString("es-DO")}
+                </span>
+              </div>
+              <div className="text-right text-xs text-[#7D6E65]">
+                <span>{data.salesCount} ventas registradas</span> • <span>{data.expensesCount} gastos registrados</span>
+              </div>
+            </div>
+
+            {/* Cuadrícula de Resultados Financieros */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+                <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Facturación Bruta</span>
+                <span className="text-xl font-bold text-[#4A3B32]">{formatDOP(data.invoicedCents)}</span>
+                <span className="text-[10px] text-[#7D6E65] block mt-1">Total vendido en la semana</span>
+              </div>
+              <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+                <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Costo Ventas (COGS)</span>
+                <span className="text-xl font-bold text-[#9C4266]">{formatDOP(data.costOfGoodsCents)}</span>
+                <span className="text-[10px] text-[#7D6E65] block mt-1">Costos de insumos y empaques</span>
+              </div>
+              <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+                <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Gastos Operativos</span>
+                <span className="text-xl font-bold text-[#7D6E65]">{formatDOP(data.operationalExpCents)}</span>
+                <span className="text-[10px] text-[#7D6E65] block mt-1">Gas, luz, agua y transporte</span>
+              </div>
+              <div className="p-4 bg-white rounded-xl border border-[#E8E2D9] shadow-sm">
+                <span className="text-[11px] text-[#7D6E65] uppercase block font-semibold">Resultado Neto Semanal</span>
+                <span className={`text-xl font-bold ${data.netResultCents >= 0 ? "text-[#22543D]" : "text-[#C53030]"}`}>
+                  {formatDOP(data.netResultCents)}
+                </span>
+                <span className="text-[10px] text-[#7D6E65] block mt-1">Ventas - Costos - Gastos</span>
+              </div>
+            </div>
+
+            {/* SECCIÓN DE ARQUEO FÍSICO DE EFECTIVO */}
+            <div className="p-6 bg-white rounded-2xl border border-[#E8E2D9] shadow-sm space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Coins className="w-5 h-5 text-[#9C4266]" />
+                <h3 className="font-serif font-bold text-base text-[#4A3B32]">
+                  Arqueo de Efectivo Físico en Caja
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                    Fondo Inicial de Caja (RD$)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={cashFundDOP}
+                    onChange={(e) => setCashFundDOP(parseFloat(e.target.value) || 0)}
+                    disabled={isClosed}
+                    className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white"
+                  />
+                  <span className="text-[11px] text-[#7D6E65]">Fondo para cambio en caja</span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                    Efectivo Contado Físico (RD$)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={countedCashDOP}
+                    onChange={(e) => setCountedCashDOP(parseFloat(e.target.value) || 0)}
+                    disabled={isClosed}
+                    className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white text-[#22543D]"
+                  />
+                  <span className="text-[11px] text-[#7D6E65]">Dinero contado en el cajón</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9]">
+                  <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Efectivo Esperado</span>
+                  <span className="text-base font-bold text-[#4A3B32]">{formatDOP(expectedCashCents)}</span>
+                  <span className="text-[10px] text-[#7D6E65] block mt-0.5">
+                    Fondo + Cobros EF ({formatDOP(data.cashCollectedCents)}) − Gastos EF ({formatDOP(data.cashExpensesCents)})
+                  </span>
+                </div>
+              </div>
+
+              {/* Resultado de Diferencia */}
+              <div
+                className={`p-4 rounded-xl border flex items-center justify-between ${
+                  cashDifferenceCents === 0
+                    ? "bg-[#F0FFF4] border-[#9AE6B4] text-[#22543D]"
+                    : cashDifferenceCents > 0
+                    ? "bg-[#FEFCBF] border-[#F6E05E] text-[#744210]"
+                    : "bg-[#FFF5F5] border-[#FEB2B2] text-[#9B2C2C]"
+                }`}
+              >
+                <div>
+                  <span className="text-xs font-bold block">
+                    {cashDifferenceCents === 0
+                      ? "Caja Cuadrada Exacta (Sin diferencia)"
+                      : cashDifferenceCents > 0
+                      ? `Sobrante de Efectivo (+${formatDOP(cashDifferenceCents)})`
+                      : `Faltante de Efectivo (-${formatDOP(Math.abs(cashDifferenceCents))})`}
+                  </span>
+                  <span className="text-[11px]">
+                    Contado: {formatDOP(countedCashCents)} vs Esperado: {formatDOP(expectedCashCents)}
+                  </span>
+                </div>
+                {cashDifferenceCents === 0 && <CheckCircle2 className="w-5 h-5 text-[#22543D]" />}
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                  Notas u Observaciones del Cierre
+                </label>
+                <textarea
+                  rows={2}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  disabled={isClosed}
+                  placeholder="Detalles sobre billetes deteriorados, sobrantes o justificaciones..."
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-[#E8E2D9]"
+                />
+              </div>
             </div>
           </div>
         )}
-
-        {/* Resumen Financiero del Período */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between text-xs font-semibold text-ink-muted uppercase mb-3">
-              <span>Flujo de Ventas</span>
-              <Receipt className="w-4 h-4 text-plum-500" />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-ink">Facturado Total:</span>
-                <span className="font-bold text-ink">{formatDOP(metrics.invoicedCents)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-sage-600">Cobrado Real:</span>
-                <span className="font-semibold text-sage-600">{formatDOP(metrics.collectedCents)}</span>
-              </div>
-              <div className="flex justify-between text-sm pt-2 border-t border-cream-200">
-                <span className="text-amber-600 font-medium">Por Cobrar:</span>
-                <span className="font-bold text-amber-600">{formatDOP(metrics.pendingCents)}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between text-xs font-semibold text-ink-muted uppercase mb-3">
-              <span>Costos & Gastos</span>
-              <DollarSign className="w-4 h-4 text-plum-500" />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-ink">Costo de lo Vendido (COGS):</span>
-                <span className="font-bold text-ink">{formatDOP(metrics.costOfGoodsCents)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-ink">Gastos Operativos:</span>
-                <span className="font-semibold text-ink">{formatDOP(metrics.expensesCents)}</span>
-              </div>
-              <p className="text-[11px] text-ink-muted pt-2 border-t border-cream-200">
-                * Las compras de insumos para stock se aíslan para no duplicar con el costo unitario de recetas.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-xl bg-white border border-sage-500/30 shadow-card bg-gradient-to-br from-white to-sage-500/5">
-            <div className="flex items-center justify-between text-xs font-semibold text-sage-600 uppercase mb-3">
-              <span>Resultado Operativo Estimado</span>
-              <TrendingUp className="w-4 h-4 text-sage-500" />
-            </div>
-            <p className="text-2xl font-bold font-serif text-sage-600">
-              {formatDOP(metrics.netResultCents)}
-            </p>
-            <div className="mt-4 space-y-1 text-xs text-ink-muted">
-              <div className="flex justify-between">
-                <span>Margen Operativo Bruto:</span>
-                <span className="font-semibold text-ink">60.0%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Margen Operativo Neto:</span>
-                <span className="font-semibold text-sage-600">43.9%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Módulo de Arqueo Físico de Efectivo */}
-        <div className="p-6 rounded-xl bg-white border border-cream-300 shadow-card">
-          <h4 className="font-serif font-bold text-ink text-base mb-1">
-            Arqueo de Efectivo Físico
-          </h4>
-          <p className="text-xs text-ink-muted mb-6">
-            Comparativa entre el efectivo esperado en gaveta y el conteo físico de billetes y monedas.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                Fondo Inicial de Caja (RD$)
-              </label>
-              <input
-                type="number"
-                step="100"
-                value={cashFundDOP}
-                disabled={isClosed}
-                onChange={(e) => setCashFundDOP(Number(e.target.value))}
-                className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-semibold"
-              />
-              <span className="text-[11px] text-ink-muted">Monto inicial para dar cambio</span>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                Efectivo Esperado
-              </label>
-              <div className="p-2.5 rounded-lg bg-cream-100 border border-cream-300 font-bold text-ink text-sm">
-                {formatDOP(expectedCashCents)}
-              </div>
-              <span className="text-[11px] text-ink-muted">Fondo + Cobros EF - Gastos EF</span>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                Efectivo Contado Físico (RD$)
-              </label>
-              <input
-                type="number"
-                step="100"
-                value={countedCashDOP}
-                disabled={isClosed}
-                onChange={(e) => setCountedCashDOP(Number(e.target.value))}
-                className="w-full p-2.5 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink font-semibold"
-              />
-              <span className="text-[11px] text-ink-muted">Total del conteo manual de gaveta</span>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">
-                Diferencia de Cuadre
-              </label>
-              <div
-                className={`p-2.5 rounded-lg border font-bold text-sm ${
-                  cashDiffCents === 0
-                    ? "bg-sage-50 border-sage-300 text-sage-600"
-                    : cashDiffCents > 0
-                    ? "bg-blue-50 border-blue-300 text-blue-700"
-                    : "bg-red-50 border-red-300 text-red-600"
-                }`}
-              >
-                {formatDOP(cashDiffCents)}
-                {cashDiffCents === 0 && " (Exacto)"}
-                {cashDiffCents > 0 && " (Sobrante)"}
-                {cashDiffCents < 0 && " (Faltante)"}
-              </div>
-              <span className="text-[11px] text-ink-muted">Contado menos esperado</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

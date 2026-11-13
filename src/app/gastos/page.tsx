@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Receipt,
   Plus,
   Search,
   AlertTriangle,
-  CheckCircle2,
-  Calendar,
   X,
   Info,
+  RefreshCw,
+  Trash2,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
@@ -17,73 +17,33 @@ import { formatDOP } from "@/lib/utils";
 interface ExpenseItem {
   id: string;
   expenseDate: string;
-  category: string;
+  categoryId: string;
+  category: { id: string; name: string };
   concept: string;
   amountCents: number;
   paymentMethod: string;
-  isIngredientPurchase: boolean; // Alerta RF-020
+  isIngredientPurchase: boolean;
   notes?: string;
 }
 
-const INITIAL_EXPENSES: ExpenseItem[] = [
-  {
-    id: "GAS-001",
-    expenseDate: "2026-11-10",
-    category: "Servicios Básicos (Luz/Agua/Gas)",
-    concept: "Recarga de tanque de gas propano para hornos",
-    amountCents: 250000, // RD$ 2,500.00
-    paymentMethod: "EFECTIVO",
-    isIngredientPurchase: false,
-  },
-  {
-    id: "GAS-002",
-    expenseDate: "2026-11-10",
-    category: "Empaque y Embalaje",
-    concept: "Cajas kraft de repostería y lazos rosa ciruela",
-    amountCents: 320000, // RD$ 3,200.00
-    paymentMethod: "TRANSFERENCIA",
-    isIngredientPurchase: false,
-  },
-  {
-    id: "GAS-003",
-    expenseDate: "2026-11-11",
-    category: "Transporte / Delivery",
-    concept: "Envío de pedidos a domicilio en Santo Domingo",
-    amountCents: 110000, // RD$ 1,100.00
-    paymentMethod: "EFECTIVO",
-    isIngredientPurchase: false,
-  },
-  {
-    id: "GAS-004",
-    expenseDate: "2026-11-11",
-    category: "Publicidad y Redes Sociales",
-    concept: "Campaña en Instagram para postres de temporada",
-    amountCents: 100000, // RD$ 1,000.00
-    paymentMethod: "TARJETA",
-    isIngredientPurchase: false,
-  },
-];
-
-const CATEGORIES = [
-  "Servicios Básicos (Luz/Agua/Gas)",
-  "Empaque y Embalaje",
-  "Transporte / Delivery",
-  "Publicidad y Redes Sociales",
-  "Alquiler de Espacio",
-  "Limpieza y Mantenimiento",
-  "Compra de Insumos (Señalar para no duplicar en COGS)",
-  "Otros Gastos Menores",
-];
+interface CategoryItem {
+  id: string;
+  name: string;
+}
 
 export default function GastosPage() {
-  const [expenses, setExpenses] = useState<ExpenseItem[]>(INITIAL_EXPENSES);
+  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Formulario nuevo gasto
-  const [newExpense, setNewExpense] = useState({
+  const [formData, setFormData] = useState({
     expenseDate: new Date().toISOString().slice(0, 10),
-    category: CATEGORIES[0],
+    categoryId: "",
     concept: "",
     amountDOP: 0,
     paymentMethod: "EFECTIVO",
@@ -91,255 +51,349 @@ export default function GastosPage() {
     notes: "",
   });
 
-  const handleCreateExpense = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newExpense.concept.trim()) return;
-
-    const created: ExpenseItem = {
-      id: `GAS-${Date.now().toString(36).toUpperCase()}`,
-      expenseDate: newExpense.expenseDate,
-      category: newExpense.category,
-      concept: newExpense.concept,
-      amountCents: Math.round(Number(newExpense.amountDOP) * 100),
-      paymentMethod: newExpense.paymentMethod,
-      isIngredientPurchase: newExpense.isIngredientPurchase,
-      notes: newExpense.notes || undefined,
-    };
-
-    setExpenses([created, ...expenses]);
-    setIsModalOpen(false);
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/gastos");
+      const json = await res.json();
+      if (json.success) {
+        setExpenses(json.data.expenses);
+        setCategories(json.data.categories);
+        if (json.data.categories.length > 0 && !formData.categoryId) {
+          setFormData((prev) => ({ ...prev, categoryId: json.data.categories[0].id }));
+        }
+      } else throw new Error(json.error);
+    } catch (err: any) {
+      setError(err.message || "Error cargando gastos");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filtered = expenses.filter(
-    (g) =>
-      g.concept.toLowerCase().includes(search.toLowerCase()) ||
-      g.category.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const totalExpensesCents = filtered.reduce((acc, g) => acc + g.amountCents, 0);
-  const operationalOnlyCents = filtered
-    .filter((g) => !g.isIngredientPurchase)
-    .reduce((acc, g) => acc + g.amountCents, 0);
+  const handleCreateExpense = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.concept || formData.amountDOP <= 0 || !formData.categoryId) return;
+
+    try {
+      const res = await fetch("/api/gastos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          categoryId: formData.categoryId,
+          concept: formData.concept,
+          amountCents: Math.round(formData.amountDOP * 100),
+          expenseDate: formData.expenseDate,
+          paymentMethod: formData.paymentMethod,
+          isIngredientPurchase: formData.isIngredientPurchase,
+          notes: formData.notes,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      setIsModalOpen(false);
+      setFormData((prev) => ({ ...prev, concept: "", amountDOP: 0, notes: "", isIngredientPurchase: false }));
+      loadData();
+    } catch (err: any) {
+      alert("Error al registrar gasto: " + err.message);
+    }
+  };
+
+  const handleDeleteExpense = async (id: string) => {
+    if (!confirm("¿Deseas eliminar este gasto?")) return;
+    try {
+      const res = await fetch(`/api/gastos?id=${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) loadData();
+      else throw new Error(json.error);
+    } catch (err: any) {
+      alert("Error al eliminar: " + err.message);
+    }
+  };
+
+  const filteredExpenses = expenses.filter((e) => {
+    const matchesSearch =
+      e.concept.toLowerCase().includes(search.toLowerCase()) ||
+      e.category.name.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === "ALL" || e.categoryId === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const totalExpensesCents = filteredExpenses.reduce((acc, e) => acc + e.amountCents, 0);
 
   return (
-    <div className="min-h-screen bg-cream-100 pb-16">
-      <Header
-        title="Gastos Operativos"
-        subtitle="Registro por categoría, fecha y medio de pago • Exclusión de insumos para no duplicar en costo de lo vendido"
-      />
+    <div className="min-h-screen bg-[#FAF8F6]">
+      <Header />
 
-      <div className="p-8 max-w-7xl mx-auto space-y-6">
-        {/* Banner de Control Anti-Duplicidad (RF-020) */}
-        <div className="p-4 rounded-xl border border-cream-300 bg-white shadow-card flex items-start gap-3">
-          <Info className="w-5 h-5 text-plum-500 shrink-0 mt-0.5" />
-          <div className="text-xs text-ink-light leading-relaxed">
-            <span className="font-semibold text-ink">Protección de Resultados (RF-020):</span> Los ingredientes e
-            insumos de repostería ya son contabilizados a través del costo histórico de las recetas en cada venta
-            (Costo de lo Vendido / COGS). Si registra una factura de compra de harina o azúcar aquí, márquela como{" "}
-            <strong>&quot;Compra de Insumos&quot;</strong> para evitar descontar dos veces el mismo gasto en el resultado semanal.
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
+              <Receipt className="w-4 h-4" />
+              <span>Gastos del Obrador</span>
+            </div>
+            <h1 className="text-2xl font-serif font-bold text-[#4A3B32]">
+              Gastos Operativos
+            </h1>
+            <p className="text-sm text-[#7D6E65] mt-1">
+              Control de servicios básicos, empaques, transporte y gastos fijos para el cuadre semanal.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all self-start md:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Registrar Gasto</span>
+          </button>
+        </div>
+
+        {/* Banner de advertencia RF-020 */}
+        <div className="p-4 rounded-xl bg-white border border-[#E8E2D9] shadow-sm flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-[#FAF5F7] text-[#9C4266] flex items-center justify-center shrink-0">
+            <Info className="w-5 h-5" />
+          </div>
+          <div className="text-xs text-[#7D6E65] space-y-1">
+            <h4 className="font-bold text-[#4A3B32] text-sm">
+              Prevención de Duplicación de Costos (RF-020)
+            </h4>
+            <p>
+              Si registras una <strong>compra de materia prima</strong> aquí, márcala con la casilla especial para advertir que dicho insumo ya es imputado al costo de los postres (COGS) y evitar duplicar el gasto en el resultado semanal.
+            </p>
           </div>
         </div>
 
-        {/* Barra de Acciones y Totales */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-cream-300 shadow-card">
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-ink-muted absolute left-3 top-1/2 -translate-y-1/2" />
+        {/* Filtros */}
+        <div className="bg-white rounded-xl p-4 border border-[#E8E2D9] shadow-sm flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7D6E65]" />
             <input
               type="text"
-              placeholder="Buscar por concepto o categoría..."
+              placeholder="Buscar gasto por concepto o categoría..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-sm bg-cream-50 border border-cream-300 rounded-lg focus:outline-none focus:border-plum-500"
+              className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-[#FAF8F6]"
             />
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <span className="text-[11px] text-ink-muted uppercase block">Total Gastos Operativos</span>
-              <span className="font-serif font-bold text-lg text-ink">{formatDOP(operationalOnlyCents)}</span>
-            </div>
-
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
             <button
-              onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-plum-500 hover:bg-plum-600 text-white font-medium text-sm transition-colors shadow-sm"
+              onClick={() => setSelectedCategory("ALL")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
+                selectedCategory === "ALL" ? "bg-[#9C4266] text-white" : "bg-[#FAF8F6] text-[#7D6E65]"
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Registrar Gasto</span>
+              Todos ({formatDOP(totalExpensesCents)})
+            </button>
+            {categories.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setSelectedCategory(c.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap ${
+                  selectedCategory === c.id ? "bg-[#9C4266] text-white" : "bg-[#FAF8F6] text-[#7D6E65]"
+                }`}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 4 ESTADOS UI */}
+        {loading ? (
+          <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
+            <RefreshCw className="w-8 h-8 text-[#9C4266] animate-spin mx-auto mb-3" />
+            <p className="text-sm font-medium text-[#4A3B32]">Cargando gastos operativos...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-[#FFF5F5] rounded-xl p-8 border border-[#FED7D7] text-center">
+            <AlertTriangle className="w-8 h-8 text-[#E53E3E] mx-auto mb-2" />
+            <p className="text-sm font-semibold text-[#9B2C2C]">{error}</p>
+            <button onClick={loadData} className="mt-4 px-4 py-2 bg-[#E53E3E] text-white text-xs font-semibold rounded-lg">
+              Reintentar
             </button>
           </div>
-        </div>
-
-        {/* Tabla de Gastos */}
-        <div className="bg-white rounded-xl border border-cream-300 shadow-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-cream-50 border-b border-cream-300 text-xs font-semibold text-ink-muted uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Fecha</th>
-                  <th className="py-3 px-4">Categoría</th>
-                  <th className="py-3 px-4">Concepto</th>
-                  <th className="py-3 px-4 text-center">Medio de Pago</th>
-                  <th className="py-3 px-4 text-right">Importe</th>
-                  <th className="py-3 px-4 text-center">Impacto COGS</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-cream-200">
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="py-8 text-center text-ink-muted text-xs">
-                      No se encontraron gastos para la búsqueda ingresada.
-                    </td>
+        ) : filteredExpenses.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
+            <Receipt className="w-10 h-10 text-[#C4B5A5] mx-auto mb-3" />
+            <h3 className="text-base font-semibold text-[#4A3B32]">No hay gastos registrados</h3>
+            <p className="text-xs text-[#7D6E65] max-w-sm mx-auto mt-1">
+              Registra los gastos del obrador para mantener el cuadre semanal al día.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-[#E8E2D9] shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#FAF8F6] border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
+                    <th className="py-3 px-4">Fecha</th>
+                    <th className="py-3 px-4">Categoría</th>
+                    <th className="py-3 px-4">Concepto / Detalle</th>
+                    <th className="py-3 px-4">Método de Pago</th>
+                    <th className="py-3 px-4">Monto (RD$)</th>
+                    <th className="py-3 px-4 text-right">Acción</th>
                   </tr>
-                ) : (
-                  filtered.map((item) => (
-                    <tr key={item.id} className="hover:bg-cream-50/60 transition-colors">
-                      <td className="py-3 px-4 font-mono text-xs text-ink-light">{item.expenseDate}</td>
-                      <td className="py-3 px-4 font-medium text-xs text-ink-light">
-                        <span className="px-2 py-0.5 rounded-full bg-cream-200 text-ink">
-                          {item.category}
+                </thead>
+                <tbody className="divide-y divide-[#E8E2D9] text-sm">
+                  {filteredExpenses.map((exp) => (
+                    <tr key={exp.id} className="hover:bg-[#FAF8F6]/60 transition-colors">
+                      <td className="py-3 px-4 text-xs font-medium text-[#7D6E65]">
+                        {new Date(exp.expenseDate).toLocaleDateString("es-DO")}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#FAF5F7] text-[#9C4266]">
+                          {exp.category.name}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-semibold text-ink">{item.concept}</td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="text-[11px] font-medium text-ink-light">
-                          {item.paymentMethod}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right font-bold text-ink tabular-nums">
-                        {formatDOP(item.amountCents)}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        {item.isIngredientPurchase ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                            <AlertTriangle className="w-3 h-3" /> Aislado (Insumo)
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium text-sage-600">
-                            <CheckCircle2 className="w-3 h-3" /> Gasto Operativo
+                      <td className="py-3 px-4 text-[#4A3B32]">
+                        <div className="font-medium">{exp.concept}</div>
+                        {exp.isIngredientPurchase && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#92400E] bg-[#FEF3C7] px-1.5 py-0.5 rounded mt-0.5">
+                            <AlertTriangle className="w-3 h-3" /> Compra de Insumos (Señalada)
                           </span>
                         )}
+                        {exp.notes && <div className="text-xs text-[#7D6E65]">{exp.notes}</div>}
+                      </td>
+                      <td className="py-3 px-4 text-xs text-[#7D6E65]">
+                        <span className="px-2 py-0.5 rounded bg-[#FAF8F6] border border-[#E8E2D9]">
+                          {exp.paymentMethod}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-bold text-base text-[#4A3B32]">
+                        {formatDOP(exp.amountCents)}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <button
+                          onClick={() => handleDeleteExpense(exp.id)}
+                          className="p-1.5 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#FAF8F6]"
+                          title="Eliminar gasto"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Modal: Registrar Gasto */}
+        {/* MODAL NUEVO GASTO */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-lg w-full border border-cream-300 shadow-xl overflow-hidden">
-              <div className="p-5 border-b border-cream-200 flex items-center justify-between bg-cream-50">
-                <h3 className="font-serif font-bold text-lg text-ink">Registrar Gasto Operativo</h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-8 h-8 rounded-lg hover:bg-cream-200 flex items-center justify-center text-ink-muted"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[90vh] overflow-y-auto">
+              <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-1.5 text-[#7D6E65]">
+                <X className="w-5 h-5" />
+              </button>
 
-              <form onSubmit={handleCreateExpense} className="p-6 space-y-4">
+              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">Registrar Gasto Operativo</h2>
+              <p className="text-xs text-[#7D6E65] mb-4">
+                Ingresa el concepto y el monto para deducirlo del cuadre semanal.
+              </p>
+
+              <form onSubmit={handleCreateExpense} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Fecha</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Fecha</label>
                     <input
                       type="date"
-                      value={newExpense.expenseDate}
-                      onChange={(e) => setNewExpense({ ...newExpense, expenseDate: e.target.value })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
                       required
+                      value={formData.expenseDate}
+                      onChange={(e) => setFormData({ ...formData, expenseDate: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Medio de Pago</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Categoría</label>
                     <select
-                      value={newExpense.paymentMethod}
-                      onChange={(e) => setNewExpense({ ...newExpense, paymentMethod: e.target.value })}
-                      className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
+                      value={formData.categoryId}
+                      onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
                     >
-                      <option value="EFECTIVO">Efectivo</option>
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Concepto del Gasto</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ej. Recarga de gas industrial 100 lbs"
+                    value={formData.concept}
+                    onChange={(e) => setFormData({ ...formData, concept: e.target.value })}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Monto (RD$)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={formData.amountDOP || ""}
+                      onChange={(e) => setFormData({ ...formData, amountDOP: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-base font-bold rounded-lg border border-[#E8E2D9]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Método de Pago</label>
+                    <select
+                      value={formData.paymentMethod}
+                      onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
+                    >
+                      <option value="EFECTIVO">Efectivo (Impacta Arqueo)</option>
                       <option value="TRANSFERENCIA">Transferencia Bancaria</option>
                       <option value="TARJETA">Tarjeta de Débito/Crédito</option>
                     </select>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Categoría</label>
-                  <select
-                    value={newExpense.category}
-                    onChange={(e) => {
-                      const cat = e.target.value;
-                      setNewExpense({
-                        ...newExpense,
-                        category: cat,
-                        isIngredientPurchase: cat.includes("Insumos"),
-                      });
-                    }}
-                    className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg text-ink"
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Concepto / Detalle</label>
-                  <input
-                    type="text"
-                    placeholder="Ej: Pago de cilindro de gas propano"
-                    value={newExpense.concept}
-                    onChange={(e) => setNewExpense({ ...newExpense, concept: e.target.value })}
-                    className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-ink-muted uppercase mb-1">Importe (RD$)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="1"
-                    value={newExpense.amountDOP}
-                    onChange={(e) => setNewExpense({ ...newExpense, amountDOP: Number(e.target.value) })}
-                    className="w-full p-2 text-sm bg-cream-50 border border-cream-300 rounded-lg font-bold"
-                    required
-                  />
-                </div>
-
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    id="isIngCheck"
-                    checked={newExpense.isIngredientPurchase}
-                    onChange={(e) => setNewExpense({ ...newExpense, isIngredientPurchase: e.target.checked })}
-                    className="mt-0.5 accent-plum-500"
-                  />
-                  <label htmlFor="isIngCheck" className="text-xs text-amber-900 leading-snug cursor-pointer">
-                    <strong>¿Es compra de ingredientes o insumos?</strong> Marcar para que el sistema NO descuente
-                    nuevamente este importe en el resultado neto de ventas (evita doble deducción contra el costo de recetas).
+                <div className="p-3 rounded-lg bg-[#FAF8F6] border border-[#E8E2D9]">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.isIngredientPurchase}
+                      onChange={(e) => setFormData({ ...formData, isIngredientPurchase: e.target.checked })}
+                      className="rounded text-[#9C4266] focus:ring-[#9C4266]"
+                    />
+                    <span className="text-xs font-semibold text-[#4A3B32]">
+                      Es compra de insumos/ingredientes (Señalar para evitar duplicación con COGS)
+                    </span>
                   </label>
                 </div>
 
-                <div className="pt-4 border-t border-cream-200 flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 rounded-lg text-sm text-ink-light hover:bg-cream-200"
-                  >
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Notas u observaciones</label>
+                  <textarea
+                    rows={2}
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm text-[#7D6E65]">
                     Cancelar
                   </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-lg text-sm bg-plum-500 hover:bg-plum-600 text-white font-medium shadow-sm"
-                  >
+                  <button type="submit" className="px-4 py-2 text-sm font-medium bg-[#9C4266] text-white rounded-lg">
                     Guardar Gasto
                   </button>
                 </div>
@@ -347,7 +401,7 @@ export default function GastosPage() {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

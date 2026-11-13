@@ -1,144 +1,152 @@
-# PLAN DE IMPLEMENTACIÓN Y CONTRATO DE FASE
-# GEM PROYECTOS SOFTWARE V3.0
-
-# [FASE 1]: Fundación Arquitectónica, Diseño Anti-Slop y Base de Datos
-
-## 1. Contexto y Propósito
-Esta fase establece los cimientos técnicos de `postres-app` tras la conclusión de la Fase 0 (Concepción, Requisitos y Arquitectura). Provee el entorno de ejecución Next.js App Router con TypeScript, configura el sistema de diseño visual con Tailwind CSS bajo el estándar Triple Capa Anti-Slop (tonos cálidos gastronómicos sin tropos de IA), define el esquema relacional en Prisma ORM con SQLite (modelando `Category`, `Product`, `Order`, `OrderItem`, `PaymentRecord`), incorpora los boundaries globales de interfaz (Loading, Error, Not-Found) y establece el arnés de pruebas automatizadas con Vitest.
+# PLAN DE IMPLEMENTACIÓN: K_SWEET V2.0 (ARQUITECTURA DE RECETAS MADRE Y PRESENTACIONES)
+# GEM PROYECTOS SOFTWARE V3.0 — SISTEMA OPERATIVO DE REPOSTERÍA ARTESANAL RD
 
 ---
 
-## 2. User Review Required (Decisiones y Alertas del Supervisor)
-
-> [!IMPORTANT]
-> **Stack Base Aprobado:** Next.js (App Router) + TypeScript + Tailwind CSS + Prisma ORM (SQLite en desarrollo local, migrable a PostgreSQL) + Vitest + Lucide React.
-> Cumple rigurosamente `DEC-003`, `RNF-001` (Anti-Slop), `RNF-004` (Persistencia relacional) y `RNF-006` (Clean Code).
-
-> [!NOTE]
-> **Moneda y Formateo:** Se configurará soporte configurable para moneda local con base en Pesos Dominicanos (`DOP / RD$`) o Dólares (`USD / $`) mediante variables en `src/lib/constants.ts`, permitiendo alternar fácilmente sin tocar código de vistas.
-
----
-
-## 3. Las 6 Capas Modulares de Ingeniería
-
-1. **Máquina de Estados y Ciclo de Vida:**
-   * Enums de dominio tipados:
-     * `OrderState`: `RECIBIDO` ➔ `CONFIRMADO` ➔ `EN_PREPARACION` ➔ `LISTO` ➔ `ENTREGADO` (o `CANCELADO`).
-     * `PaymentState`: `PENDIENTE` ➔ `VERIFICADO` (o `RECHAZADO`) — alineado formalmente con `RN-008`.
-   * Transición ilegal: Prohibido pasar a `EN_PREPARACION` sin orden/pago confirmado.
-
-2. **Casos Borde y Defensa:**
-   * Validación estricta de variables de entorno al iniciar.
-   * Manejo robusto de errores y estados con boundaries globales (`error.tsx`, `not-found.tsx`, `loading.tsx`).
-   * Retornos tipados con manejo de errores sin excepciones no capturadas.
-
-3. **Persistencia e Integridad:**
-   * Modelos Prisma (`prisma/schema.prisma`):
-     * `Category`: `id`, `name`, `slug` (unique), `description`, `icon`, `order`, `createdAt`, `updatedAt`.
-     * `Product`: `id`, `categoryId` (FK), `name`, `slug` (unique), `description`, `price` (Int, en centavos), `imageUrl`, `portions`, `allergens` (String/JSON), `isAvailable`, `prepTimeHours`, `createdAt`, `updatedAt`.
-     * `Order`: `id`, `orderCode` (unique, `PED-YYYYMMDD-XXXX`), `customerName`, `customerPhone`, `deliveryType` (RETIRO / DELIVERY), `deliveryAddress`, `deliveryDate`, `notes`, `state`, `paymentMethod`, `paymentState`, `total` (Int), `createdAt`, `updatedAt`.
-     * `OrderItem`: `id`, `orderId` (FK cascade), `productId` (FK), `quantity`, `unitPrice` (Int), `subtotal` (Int), `notes`.
-     * `PaymentRecord`: `id`, `orderId` (FK cascade), `method` (String), `status` (PaymentState), `reference` (String?), `amount` (Int), `verifiedAt` (DateTime?), `notes` (String?), `createdAt`.
-   * Integridad referencial habilitada con claves foráneas e índices en `orderCode`, `slug` y `orderId`.
-
-4. **Seguridad y Permisos:**
-   * Sanitización de inputs y validación de tipos con Zod en todas las entradas.
-   * Sin exposición de credenciales ni secretos en variables públicas de cliente (`NEXT_PUBLIC_`).
-
-5. **Observabilidad y Errores:**
-   * Estructura de logs en consola con marca de tiempo y contexto.
-   * Manejador centralizado de errores para endpoints y acciones.
-
-6. **Estrategia de Testing:**
-   * Vitest configurado con entorno Node/JSDOM.
-   * Tests unitarios probando la integridad de constantes, enums, formateo monetario y cálculos de precios.
+## 1. Contexto y Objetivos del Reajuste
+Este plan aborda la reestructuración completa de **K_Sweet** para satisfacer los ejes requeridos por el usuario:
+1. **Mantenimiento completo (CRUD)** en todos los módulos desde la interfaz con persistencia en base de datos SQLite/Prisma (Ingredientes, Suplidores, Unidades/Conversiones, Empaques/Materiales, Recetas Madre, Presentaciones, Clientes, Ventas/Abonos, Gastos Operativos y Cuadre Semanal).
+2. **Modelo Bipolar de Recetas (Receta Madre y Presentaciones):**
+   - **Receta Madre:** Rendimiento total del lote ($g$, $ml$, unidades), % mano de obra, % gastos indirectos, ingredientes y subrecetas. Costo total de producción y costo por unidad de rendimiento.
+   - **Presentaciones:** Derivadas de una receta madre sin duplicar ingredientes. Tamaño/contenido, cantidad consumida de receta madre, complementos/subrecetas adicionales, empaques y materiales específicos (vaso, tapa, lazo, etiqueta, caja), rendimiento por lote, costo total unitario, margen deseado (%), precio sugerido ($P = C / (1 - M)$) o recargo ($P = C \times (1 + R)$), precio de venta final editable, ganancia y margen real. Soporte para presentaciones compuestas (ej. caja de 12 uds).
+3. **Cálculos matemáticos rigurosos y recálculo en cascada:**
+   - Separación estricta entre Margen sobre venta y Recargo sobre costo.
+   - No usar precio de venta de receta madre como costo de presentación.
+   - Cascada reactiva: al modificar insumos/receta madre se actualizan los costos de presentaciones dependientes manteniendo el precio de venta final fijado manualmente y recalculando la ganancia y margen real.
+   - Congelación de costos y precios históricos en ventas pasadas.
+4. **Auditoría Forense del Excel Original (`costos_postres_original.xlsx`):**
+   - Incorporación de las tablas auxiliares de porciones (Brownies 15 porciones, Cajas San Valentín 1 y 2, Fresas Bañadas, Galletas Oreo Bañadas, Vasos de Shots, Cajas y Empaques).
+   - Manejo de inconsistencias detectadas: unidades ambiguas ("mm" en grageas, "30mm" en Fresas), preservando coordenadas de celda y hoja de origen sin inventar datos.
+5. **UI Gastronómica Anti-Slop (GEM V3):**
+   - Tonos crema (`#FAF8F6`) y rosa ciruela (`#9C4266`), responsive, español, 4 estados obligatorios (Loading skeleton, Empty State con acción, Error con reintento, y Vista con datos).
+6. **Integridad referencial y desactivación lógica (`isActive`):**
+   - Eliminación segura con soft-delete para no romper históricos de ventas o recetas dependientes.
 
 ---
 
-## 4. Alcance Delimitado
+## 2. Decisiones de Arquitectura y Fórmulas Matemáticas
 
-### INCLUYE
-* [ ] Scaffolding limpio de Next.js con TypeScript y Tailwind CSS.
-* [ ] Sistema de tokens visuales y tema gastronómico (colores vainilla, crema, caramelo, cacao; tipografía Inter/serif; 0 gradientes cliché violeta-azul).
-* [ ] Dependencias clave: `next`, `react`, `react-dom`, `@prisma/client`, `zod`, `lucide-react`, `vitest`, `prisma`, `tsx`.
-* [ ] Configuración de Prisma ORM con schema relacional completo (5 modelos: `Category`, `Product`, `Order`, `OrderItem`, `PaymentRecord`) y cliente tipado generado.
-* [ ] Script de Seed (`prisma/seed.ts`) con categorías y postres iniciales para pruebas.
-* [ ] Boundaries globales Triple Capa Anti-Slop: `loading.tsx` (skeleton), `error.tsx` (recuperable) y `not-found.tsx` (404 estilizado).
-* [ ] Layout principal responsivo (`Navbar` con logo y badge de carrito, `Footer` con datos de contacto y horario).
-* [ ] Configuración de Vitest y suite de pruebas unitarias inicial pasando en terminal.
+### 2.1. Fórmulas de Receta Madre
+* **Costo Ingredientes:** $C_{\text{ing}} = \sum (Q_i \times \text{CostoUnitario}_i)$.
+* **Gastos de Producción (Overhead):** $C_{\text{overhead}} = C_{\text{ing}} \times (\% \text{Overhead} / 100)$.
+* **Mano de Obra:** $C_{\text{labor}} = C_{\text{ing}} \times (\% \text{ManoObra} / 100)$.
+* **Costo Total del Lote:** $C_{\text{lote}} = C_{\text{ing}} + C_{\text{overhead}} + C_{\text{labor}} + C_{\text{empaque\_lote}}$.
+* **Costo por Unidad de Rendimiento:** $C_{\text{unit\_rend}} = \frac{C_{\text{lote}}}{\text{RendimientoLote}}$ (expresado en centavos por $g$, $ml$ o unidad base).
 
-### NO INCLUYE
-* Catálogo interactivo con filtros dinámicos en cliente (Fase 2).
-* Carrito de compras y checkout con WhatsApp (Fase 3).
-* Panel administrativo protegido (Fase 4).
+### 2.2. Fórmulas de Presentación
+* **Costo Preparación Consumida:** $C_{\text{base}} = C_{\text{unit\_rend}} \times Q_{\text{consumida\_madre}}$.
+* **Costo Materiales/Empaques:** $C_{\text{empaques}} = \sum (Q_m \times \text{CostoMaterial}_m)$.
+* **Costo Complementos/Toppings:** $C_{\text{toppings}} = \sum (Q_t \times \text{CostoTopping}_t)$.
+* **Costo Total Unitario de Presentación:** $C_{\text{pres}} = C_{\text{base}} + C_{\text{empaques}} + C_{\text{toppings}}$.
+* **Rendimiento de Presentación por Lote:** $R_{\text{pres}} = \frac{\text{RendimientoLoteMadre}}{Q_{\text{consumida\_madre}}}$.
+* **Fijación de Precios y Validación de Fronteras (PRE-001):**
+  * **Margen sobre Venta ($M \in [0, 100)$):**
+    $$P_{\text{sugerido}} = \left\lceil \frac{C_{\text{pres}}}{1 - (M / 100)} \right\rceil$$
+    *(Si $M \ge 100$ o $M < 0$, se rechaza por validación Zod para evitar asíntotas o precios negativos).*
+  * **Recargo sobre Costo / Markup ($R \ge 0$):**
+    $$P_{\text{recargo}} = \left\lceil C_{\text{pres}} \times (1 + (R / 100)) \right\rceil$$
+  * **Precio Final:** $P_{\text{final}}$ (editable por el usuario; por defecto hereda $P_{\text{sugerido}}$).
+  * **Ganancia Real:** $G = P_{\text{final}} - C_{\text{pres}}$.
+  * **Margen Real Blindado contra División por Cero (PRE-001):**
+    $$M_{\text{real}} = \begin{cases} \frac{P_{\text{final}} - C_{\text{pres}}}{P_{\text{final}}} \times 100 & \text{si } P_{\text{final}} > 0 \\ 0 & \text{si } P_{\text{final}} \le 0 \end{cases}$$
 
----
+### 2.3. Presentaciones Compuestas (Ej. Cajas de Varias Unidades)
+* Para una presentación que empaqueta $N$ unidades de otra presentación o subproducto (ej. Caja x 12 shots o Caja San Valentín con 2 o 6 brownies):
+  $$C_{\text{compuesta}} = (N \times C_{\text{unidad}}) + C_{\text{caja}} + C_{\text{lazo}} + C_{\text{etiqueta}} + C_{\text{mensaje}}$$
 
-## 5. Cambios Físicos Propuestos (Proposed Changes)
-
-### Configuración e Infraestructura
-* [NEW] `package.json` — Dependencias de producción (`lucide-react`, `zod`, `@prisma/client`) y scripts de desarrollo (`dev`, `build`, `test`, `lint`, `db:push`, `db:seed`).
-* [NEW] `tsconfig.json` — Configuración estricta de TypeScript con path alias `@/*`.
-* [NEW] `next.config.mjs` — Configuración de Next.js optimizada para imágenes y Server Actions.
-* [NEW] `tailwind.config.ts` — Sistema de diseño y paleta de repostería artesanal cálida.
-* [NEW] `postcss.config.mjs` — PostCSS para procesamiento de Tailwind CSS.
-* [NEW] `vitest.config.ts` — Arnés de pruebas automatizadas.
-
-### Persistencia y Datos
-* [NEW] `prisma/schema.prisma` — Modelado DDL relacional de `Category`, `Product`, `Order`, `OrderItem` y `PaymentRecord`.
-* [NEW] `src/lib/prisma.ts` — Singleton del cliente Prisma para evitar fugas de conexión en Next.js hot-reload.
-* [NEW] `prisma/seed.ts` — Datos iniciales de postres y categorías para verificación del sistema.
-
-### Dominio y UI (Anti-Slop Boundaries y Layout)
-* [NEW] `src/types/index.ts` — Tipos TypeScript del dominio, enums `OrderState`, `PaymentState` y DTOs.
-* [NEW] `src/lib/constants.ts` — Configuración del negocio (moneda, horarios, estados, alérgenos).
-* [NEW] `src/lib/utils.ts` — Formateadores monetarios y helpers de clases (`cn`).
-* [NEW] `src/app/globals.css` — Estilos globales, variables CSS y tipografía.
-* [NEW] `src/app/layout.tsx` — Root layout con Header, Footer y contenedor responsive.
-* [NEW] `src/app/loading.tsx` — Skeleton gastronómico de carga global (Triple Capa Anti-Slop).
-* [NEW] `src/app/error.tsx` — Error Boundary con botón accesible de recuperación (Triple Capa Anti-Slop).
-* [NEW] `src/app/not-found.tsx` — Vista 404 estilizada con enlace de retorno al catálogo (Triple Capa Anti-Slop).
-* [NEW] `src/app/page.tsx` — Página de bienvenida con presentación del obrador y acceso a las secciones.
-* [NEW] `src/components/layout/Navbar.tsx` — Navegación accesible mobile-first con `lucide-react`.
-* [NEW] `src/components/layout/Footer.tsx` — Pie de página con información del taller artesanal.
-
-### Pruebas Automatizadas
-* [NEW] `tests/unit/domain.test.ts` — Pruebas de invariantes de precios, estados de orden, formato monetario y código de pedido.
+### 2.4. Transaccionalidad y Cascada Reactiva (PRE-002)
+* Toda actualización de costos se propaga en orden topológico estricto:
+  $$\text{Insumo/Empaque} \longrightarrow \text{Subrecetas} \longrightarrow \text{Recetas Madre} \longrightarrow \text{Presentaciones}$$
+* La propagación se ejecuta dentro de un `prisma.$transaction`, actualizando los costos unitarios de las presentaciones hijas, recalculando la ganancia y margen real, y **preservando de forma inmutable el $P_{\text{final}}$ fijado manualmente**.
+* Las ventas pasadas (`SaleItem`) mantienen sus costos y precios históricos congelados de por vida.
 
 ---
 
-## 6. Plan de Verificación Empírica (Verification Plan)
+## 3. Modelo de Datos Prisma (`prisma/schema.prisma`)
 
-### Automated Tests (Comandos de Terminal)
-```bash
-# 1. Verificación de dependencias y tipos
-npm run typecheck
-
-# 2. Generación y sincronización de base de datos Prisma
-npx prisma generate
-npx prisma db push
-npx tsx prisma/seed.ts
-
-# 3. Ejecución de tests automatizados
-npm test
-
-# 4. Build de producción de Next.js
-npm run build
-```
-
-### Manual Verification
-1. Levantar servidor local (`npm run dev`) y verificar en navegador:
-   * La cabecera muestra la identidad de Postres App sin elementos desalineados.
-   * La paleta cromática es cálida y acogedora (cremas, ocres, chocolate), libre de tropos de IA.
-   * Los boundaries (loading skeleton, error, 404) responden de acuerdo a la estética del proyecto.
-   * Responsive comprobado en emulador móvil (375px) y escritorio (1280px).
+### 3.1. Entidades Modificadas y Nuevas
+1. **`Ingredient` (Insumos, Empaques, Decoración):**
+   * Agrega `category String @default("INGREDIENT")` (`INGREDIENT` | `PACKAGING` | `DECORATION` | `UTENSIL`).
+   * Conserva `packagePriceCents`, `packageQty`, `packageUnit`, `baseUnit`, `costPerBaseUnit`, `density`, `isActive`, `supplierId`.
+2. **`Supplier`:**
+   * Agrega `isActive Boolean @default(true)`.
+3. **`Recipe` (Receta Madre / Subreceta):**
+   * `recipeType String @default("MOTHER")` (`MOTHER` | `SUBRECIPE`).
+   * `batchYield Float` (rendimiento real en lote).
+   * `yieldUnit String` (gramos, ml, unidades, porciones).
+   * `laborPercent Float` (% mano de obra sobre costo insumos).
+   * `overheadPercent Float` (% indirectos gas/agua/gastables).
+   * `costPerYieldUnit Float` (costo por unidad de rendimiento).
+   * Relación: `presentations RecipePresentation[]`.
+4. **`RecipePresentation` (Nueva Entidad de Presentaciones):**
+   * `id String @id @default(cuid())`
+   * `recipeId String` (FK a Recipe)
+   * `name String` (ej. "Shot 2 oz", "Caja San Valentín 2 uds", "Completo 8 pulg")
+   * `sizeDescription String?` (ej. "2 oz", "6 unidades")
+   * `motherRecipeQty Float` (cantidad consumida de receta madre)
+   * `motherRecipeUnit String` (g, ml, unidad)
+   * `presentationYield Float` (rendimiento por lote = `batchYield / motherRecipeQty`)
+   * `packagingCostCents Int` (suma de empaques)
+   * `additionalCostCents Int` (suma de toppings/subrecetas)
+   * `totalCostCents Int` (costo total unitario)
+   * `pricingMethod String @default("MARGIN")` (`MARGIN` | `MARKUP`)
+   * `desiredMarginPercent Float @default(40)`
+   * `suggestedPriceCents Int`
+   * `finalPriceCents Int`
+   * `realProfitCents Int`
+   * `realMarginPercent Float`
+   * `isActive Boolean @default(true)`
+   * `notes String?`
+   * Relaciones: `materials PresentationMaterial[]`, `subrecipes PresentationSubrecipe[]`, `saleItems SaleItem[]`.
+5. **`PresentationMaterial`:**
+   * `id`, `presentationId`, `ingredientId?`, `name`, `quantity`, `unit`, `unitCostCents`, `totalCostCents`.
+6. **`PresentationSubrecipe`:**
+   * `id`, `presentationId`, `subRecipeId`, `name`, `quantity`, `unit`, `costCents`.
+7. **`SaleItem`:**
+   * Agrega `presentationId String?` y `presentation RecipePresentation? @relation(...)`.
+   * Conserva `unitPriceCents`, `unitCostCents`, `totalCents`, `totalCostCents` congelados en el momento de la venta.
+8. **`Customer`, `ExpenseCategory`, `UnitConversionRef`:**
+   * Soporte para `isActive: true` y edición completa.
 
 ---
 
-## 7. Criterios de Aceptación Innegociables (`CA-xxx`)
+## 4. Endpoints de API REST para Persistencia Real
+Para garantizar persistencia al recargar o cambiar de dispositivo:
+* `/api/ingredientes` (GET, POST, PUT, DELETE lógico)
+* `/api/proveedores` (GET, POST, PUT, DELETE)
+* `/api/recetas` (GET, POST, PUT, DELETE lógico)
+* `/api/presentaciones` (GET, POST, PUT, DELETE lógico)
+* `/api/clientes` (GET, POST, PUT, DELETE)
+* `/api/ventas` (GET, POST, PUT, DELETE/CANCEL)
+* `/api/abonos` (POST para registrar pagos a ventas)
+* `/api/gastos` (GET, POST, PUT, DELETE)
+* `/api/conversiones` (GET, POST, PUT, DELETE)
+* `/api/cuadre` (GET resumen semanal, POST cierre de semana y arqueo de caja)
 
-* [ ] `CA-F1-01`: `npm run build` completa con exit code 0 sin errores de tipos ni advertencias bloqueantes.
-* [ ] `CA-F1-02`: La base de datos SQLite se genera correctamente con los 5 modelos (`Category`, `Product`, `Order`, `OrderItem`, `PaymentRecord`), claves foráneas e índices.
-* [ ] `CA-F1-03`: El script de seed puebla las categorías y postres iniciales sin colisiones de slug.
-* [ ] `CA-F1-04`: 100% de los tests en Vitest pasan con exit code 0 en terminal.
-* [ ] `CA-F1-05`: Cumplimiento estricto del estándar Triple Capa Cero AI-Slop (diseño cromático con propósito, tipado estricto, 4 estados implementados, 0 librerías fantasma).
+---
+
+## 5. UI y Módulos de Mantenimiento (Triple Capa Anti-Slop)
+Cada módulo incluye:
+- Barra superior con búsqueda en vivo, filtros por estado (`Activo`, `Inactivo`, `Todos`) y categoría.
+- Tabla clara con paginación/scroll y formateo en pesos dominicanos `RD$ X.XX`.
+- Botones de acción: "Nuevo Registro" (abre modal responsivo), "Editar" (modal precargado), "Desactivar/Reactivar" (toggle seguro).
+- 4 Estados UI: Skeleton loading, Empty state informativo con llamada a la acción, Error con botón de recarga, y contenido renderizado.
+- Alertas de revisión de origen para datos importados del Excel que requerían validación.
+
+---
+
+## 6. Plan de Verificación y Pruebas (PRE-003 y PRE-004)
+1. **Tests de Dominio Deterministas (`scripts/run_domain_tests.mjs` - PRE-004):**
+   - Fórmulas de Receta Madre ($C_{\text{lote}}$, $C_{\text{unit\_rend}}$).
+   - Fórmulas de Presentaciones ($P = C / (1 - M)$, $P = C \times (1 + R)$, ganancia y margen real).
+   - Validación de fronteras: $0 \le M < 100$ y protección división por cero en $P_{\text{final}} \le 0$ (PRE-001).
+   - Presentaciones compuestas (Caja x 12 con empaque sumado).
+   - Recálculo en cascada al cambiar costo de insumo conservando $P_{\text{final}}$ e inmutabilidad de ventas pasadas.
+   - Manejo de conversiones y prevención de conversión inválida sin densidad.
+2. **Reconciliación Forense del Excel Real (5 Hojas - PRE-003):**
+   - Importar y sembrar datos de las 5 hojas físicas confirmadas: `Producto precios`, `Brownies Cuadrados`, `Fresas`, `Corazón de Chocolate`, `Galletas Oreo en Chocolate`.
+   - Marcar advertencias de revisión únicamente para unidades ambiguas ("mm" en grageas).
+3. **Verificación de Base de Datos y Servidor:**
+   - Ejecutar `prisma db push` y regenerar cliente Prisma.
+   - Ejecutar script de seed con datos auditados.
+   - Comprobar que el servidor Next.js responde adecuadamente en `http://localhost:3000`.
