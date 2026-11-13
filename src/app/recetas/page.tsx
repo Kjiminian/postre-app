@@ -110,6 +110,7 @@ export default function RecetasPage() {
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
   const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null);
   const [isPresModalOpen, setIsPresModalOpen] = useState(false);
+  const [editingPresRecordId, setEditingPresRecordId] = useState<string | null>(null);
   const [selectedMotherRecipe, setSelectedMotherRecipe] = useState<RecipeItem | null>(null);
 
   // Formulario Receta Madre (Crear / Editar)
@@ -222,6 +223,7 @@ export default function RecetasPage() {
   };
 
   const handleOpenNewPresentation = (mother: RecipeItem) => {
+    setEditingPresRecordId(null);
     setSelectedMotherRecipe(mother);
     setPresForm({
       name: "",
@@ -233,6 +235,29 @@ export default function RecetasPage() {
       finalPriceDOP: 0,
       notes: "",
       materials: [],
+    });
+    setIsPresModalOpen(true);
+  };
+
+  const handleOpenEditPresentation = (mother: RecipeItem, pres: RecipeItem["presentations"][number]) => {
+    setEditingPresRecordId(pres.id);
+    setSelectedMotherRecipe(mother);
+    setPresForm({
+      name: pres.name,
+      sizeDescription: pres.sizeDescription || "",
+      motherRecipeQty: pres.motherRecipeQty,
+      motherRecipeUnit: pres.motherRecipeUnit,
+      pricingMethod: pres.pricingMethod,
+      desiredMarginPercent: pres.desiredMarginPercent,
+      finalPriceDOP: pres.finalPriceCents / 100,
+      notes: "",
+      materials: (pres.materials || []).map((m) => ({
+        name: m.name,
+        quantity: m.quantity,
+        unit: m.unit,
+        unitCostDOP: m.unitCostCents / 100,
+        totalCostCents: m.totalCostCents,
+      })),
     });
     setIsPresModalOpen(true);
   };
@@ -272,7 +297,7 @@ export default function RecetasPage() {
 
     try {
       const payload = {
-        recipeId: selectedMotherRecipe.id,
+        ...(editingPresRecordId ? { id: editingPresRecordId } : { recipeId: selectedMotherRecipe.id }),
         name: presForm.name,
         sizeDescription: presForm.sizeDescription,
         motherRecipeQty: presForm.motherRecipeQty,
@@ -292,7 +317,7 @@ export default function RecetasPage() {
       };
 
       const res = await fetch("/api/presentaciones", {
-        method: "POST",
+        method: editingPresRecordId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -757,13 +782,22 @@ export default function RecetasPage() {
                                           </div>
                                         </div>
 
-                                        <button
-                                          onClick={() => handleDeletePresentation(pres.id, pres.name)}
-                                          title="Desactivar presentación"
-                                          className="p-1 text-[#A89F91] hover:text-[#C53030] rounded transition-colors"
-                                        >
-                                          <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
+                                        <div className="flex items-center gap-1">
+                                          <button
+                                            onClick={() => handleOpenEditPresentation(recipe, pres)}
+                                            title="Editar presentación, materiales, cantidades y costos"
+                                            className="p-1 text-[#7D6E65] hover:text-[#9C4266] hover:bg-white rounded transition-colors"
+                                          >
+                                            <Edit2 className="w-3.5 h-3.5" />
+                                          </button>
+                                          <button
+                                            onClick={() => handleDeletePresentation(pres.id, pres.name)}
+                                            title="Desactivar presentación"
+                                            className="p-1 text-[#A89F91] hover:text-[#C53030] hover:bg-white rounded transition-colors"
+                                          >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                          </button>
+                                        </div>
                                       </div>
 
                                       {/* Tabla estilo Excel de la Presentación */}
@@ -1157,10 +1191,10 @@ export default function RecetasPage() {
           </div>
         )}
 
-        {/* MODAL NUEVA PRESENTACIÓN DERIVADA */}
+        {/* MODAL CREAR / EDITAR PRESENTACIÓN DERIVADA */}
         {isPresModalOpen && selectedMotherRecipe && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
-            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[92vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[92vh] overflow-y-auto">
               <button
                 onClick={() => setIsPresModalOpen(false)}
                 className="absolute top-4 right-4 p-1.5 rounded-full text-[#7D6E65] hover:bg-[#FAF8F6]"
@@ -1169,7 +1203,7 @@ export default function RecetasPage() {
               </button>
 
               <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">
-                Nueva Presentación Derivada
+                {editingPresRecordId ? "Editar Presentación Derivada" : "Nueva Presentación Derivada"}
               </h2>
               <p className="text-xs text-[#7D6E65] mb-4">
                 Derivando de <strong>{selectedMotherRecipe.name}</strong> (Costo Real: RD$ {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}/{selectedMotherRecipe.yieldUnit})
@@ -1235,35 +1269,80 @@ export default function RecetasPage() {
                 </div>
 
                 {/* Materiales y Empaques */}
-                <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#4A3B32]">Empaques, Toppings y Decoración</span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setPresForm({
-                          ...presForm,
-                          materials: [
-                            ...presForm.materials,
-                            { name: "Caja / Envase", quantity: 1, unit: "unidad", unitCostDOP: 50, totalCostCents: 5000 },
-                          ],
-                        })
-                      }
-                      className="text-xs font-semibold text-[#9C4266] hover:underline"
-                    >
-                      + Agregar Material
-                    </button>
+                <div className="p-3.5 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-bold text-[#4A3B32]">
+                      Empaques, Toppings y Productos Adicionales ({presForm.materials.length})
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {availableIngredients.length > 0 && (
+                        <select
+                          value=""
+                          onChange={(e) => {
+                            const found = availableIngredients.find((a) => a.id === e.target.value);
+                            if (!found) return;
+                            const unitCostDOP = Number(found.costPerBaseUnit.toFixed(4));
+                            setPresForm({
+                              ...presForm,
+                              materials: [
+                                ...presForm.materials,
+                                {
+                                  ingredientId: found.id,
+                                  name: found.name,
+                                  quantity: 1,
+                                  unit: found.baseUnit,
+                                  unitCostDOP,
+                                  totalCostCents: Math.round(unitCostDOP * 1 * 100),
+                                },
+                              ],
+                            });
+                          }}
+                          className="px-2 py-1 text-[11px] rounded border border-[#E8E2D9] bg-white text-[#4A3B32] max-w-[170px]"
+                        >
+                          <option value="">+ Del Catálogo...</option>
+                          {availableIngredients.map((ing) => (
+                            <option key={ing.id} value={ing.id}>
+                              {ing.name} (RD$ {ing.costPerBaseUnit.toFixed(2)})
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPresForm({
+                            ...presForm,
+                            materials: [
+                              ...presForm.materials,
+                              { name: "Nuevo Producto", quantity: 1, unit: "unidad", unitCostDOP: 25, totalCostCents: 2500 },
+                            ],
+                          })
+                        }
+                        className="px-2.5 py-1 text-[11px] font-semibold bg-white border border-[#9C4266] text-[#9C4266] rounded hover:bg-[#FAF5F7]"
+                      >
+                        + Producto Manual
+                      </button>
+                    </div>
                   </div>
 
                   {presForm.materials.length === 0 ? (
-                    <p className="text-[11px] text-[#7D6E65] text-center py-1">Sin materiales adicionales.</p>
+                    <p className="text-[11px] text-[#7D6E65] text-center py-2">
+                      Sin materiales adicionales. Agrega del catálogo o crea un producto manual.
+                    </p>
                   ) : (
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                    <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                      <div className="grid grid-cols-12 gap-1.5 text-[10px] font-semibold text-[#7D6E65] uppercase px-0.5">
+                        <span className="col-span-5">Concepto / Producto</span>
+                        <span className="col-span-2 text-right">C. Unit (RD$)</span>
+                        <span className="col-span-2 text-right">Cant.</span>
+                        <span className="col-span-2 text-right">Importe</span>
+                        <span className="col-span-1"></span>
+                      </div>
                       {presForm.materials.map((m, idx) => (
                         <div key={idx} className="grid grid-cols-12 gap-1.5 items-center">
                           <input
                             type="text"
-                            placeholder="Material"
+                            placeholder="Nombre del producto"
                             value={m.name}
                             onChange={(e) => {
                               const next = [...presForm.materials];
@@ -1275,6 +1354,7 @@ export default function RecetasPage() {
                           <input
                             type="number"
                             step="0.01"
+                            min="0"
                             placeholder="C.Unit"
                             value={m.unitCostDOP}
                             onChange={(e) => {
@@ -1284,11 +1364,12 @@ export default function RecetasPage() {
                               next[idx].totalCostCents = Math.round(c * next[idx].quantity * 100);
                               setPresForm({ ...presForm, materials: next });
                             }}
-                            className="col-span-3 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white tabular-nums"
+                            className="col-span-2 px-2 py-1 text-xs text-right rounded border border-[#E8E2D9] bg-white tabular-nums"
                           />
                           <input
                             type="number"
                             step="0.1"
+                            min="0.01"
                             placeholder="Cant"
                             value={m.quantity}
                             onChange={(e) => {
@@ -1298,15 +1379,16 @@ export default function RecetasPage() {
                               next[idx].totalCostCents = Math.round(next[idx].unitCostDOP * q * 100);
                               setPresForm({ ...presForm, materials: next });
                             }}
-                            className="col-span-2 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white tabular-nums"
+                            className="col-span-2 px-2 py-1 text-xs text-right rounded border border-[#E8E2D9] bg-white tabular-nums"
                           />
-                          <div className="col-span-1 text-right text-[11px] font-bold text-[#4A3B32] tabular-nums">
-                            {Math.round(m.totalCostCents / 100)}
+                          <div className="col-span-2 text-right text-xs font-bold text-[#4A3B32] tabular-nums">
+                            RD$ {(m.totalCostCents / 100).toFixed(2)}
                           </div>
                           <button
                             type="button"
                             onClick={() => setPresForm({ ...presForm, materials: presForm.materials.filter((_, i) => i !== idx) })}
-                            className="col-span-1 text-[#C53030] flex justify-center"
+                            className="col-span-1 text-[#C53030] flex justify-center hover:bg-white rounded p-1"
+                            title="Quitar producto"
                           >
                             <X className="w-3.5 h-3.5" />
                           </button>
@@ -1387,7 +1469,7 @@ export default function RecetasPage() {
                     type="submit"
                     className="px-5 py-2 text-sm font-semibold rounded-lg bg-[#9C4266] text-white hover:bg-[#833554]"
                   >
-                    Guardar Presentación
+                    {editingPresRecordId ? "Guardar Cambios" : "Guardar Presentación"}
                   </button>
                 </div>
               </form>
