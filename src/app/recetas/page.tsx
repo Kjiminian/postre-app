@@ -1403,20 +1403,46 @@ export default function RecetasPage() {
                     </div>
                   </div>
 
-                  {presForm.materials.length === 0 ? (
-                    <p className="text-[11px] text-[#7D6E65] text-center py-2">
-                      Sin materiales adicionales. Agrega del catálogo o crea un producto manual.
-                    </p>
-                  ) : (
-                    <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
-                      <div className="grid grid-cols-12 gap-1.5 text-[10px] font-semibold text-[#7D6E65] uppercase px-0.5">
-                        <span className="col-span-5">Concepto / Producto</span>
-                        <span className="col-span-2 text-right">C. Unit (RD$)</span>
-                        <span className="col-span-2 text-right">Cant.</span>
-                        <span className="col-span-2 text-right">Importe</span>
-                        <span className="col-span-1"></span>
+                  <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                    <div className="grid grid-cols-12 gap-1.5 text-[10px] font-semibold text-[#7D6E65] uppercase px-0.5">
+                      <span className="col-span-5">Concepto / Producto</span>
+                      <span className="col-span-2 text-right">C. Unit (RD$)</span>
+                      <span className="col-span-2 text-right">Cant.</span>
+                      <span className="col-span-2 text-right">Importe</span>
+                      <span className="col-span-1"></span>
+                    </div>
+
+                    {/* Fila 1: Producto de la Receta Madre */}
+                    <div className="grid grid-cols-12 gap-1.5 items-center bg-[#FAF5F7] px-1.5 py-1.5 rounded-lg border border-[#F3D5E2]">
+                      <div className="col-span-5 text-xs font-semibold text-[#9C4266] truncate" title={selectedMotherRecipe.name}>
+                        Base: {selectedMotherRecipe.name}
                       </div>
-                      {presForm.materials.map((m, idx) => (
+                      <div className="col-span-2 text-right text-xs text-[#7D6E65] tabular-nums">
+                        {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}
+                      </div>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0.01"
+                        value={presForm.motherRecipeQty}
+                        onChange={(e) => setPresForm({ ...presForm, motherRecipeQty: parseFloat(e.target.value) || 0.01 })}
+                        className="col-span-2 px-2 py-1 text-xs text-right font-bold rounded border border-[#9C4266]/50 bg-white text-[#9C4266] tabular-nums"
+                      />
+                      <div className="col-span-2 text-right text-xs font-bold text-[#9C4266] tabular-nums">
+                        RD$ {presPreview.baseCostDOP.toFixed(2)}
+                      </div>
+                      <div className="col-span-1 text-center text-[10px] font-semibold text-[#9C4266]">
+                        Base
+                      </div>
+                    </div>
+
+                    {/* Filas de Materiales y Adicionales */}
+                    {presForm.materials.length === 0 ? (
+                      <p className="text-[11px] text-[#7D6E65] text-center py-1.5">
+                        Sin empaques o adicionales. Agrega del catálogo o crea un producto manual.
+                      </p>
+                    ) : (
+                      presForm.materials.map((m, idx) => (
                         <div key={idx} className="grid grid-cols-12 gap-1.5 items-center">
                           <input
                             type="text"
@@ -1471,9 +1497,9 @@ export default function RecetasPage() {
                             <X className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      ))
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
@@ -1487,6 +1513,11 @@ export default function RecetasPage() {
                       <option value="MARGIN">Margen sobre Venta</option>
                       <option value="MARKUP">Recargo sobre Costo</option>
                     </select>
+                    <span className="text-[10px] text-[#7D6E65] block mt-1 leading-tight">
+                      {presForm.pricingMethod === "MARGIN"
+                        ? "Costo ÷ (1 − %): % de ganancia del precio final."
+                        : "Costo × (1 + %): % sumado encima del costo."}
+                    </span>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#4A3B32] mb-1">% Deseado</label>
