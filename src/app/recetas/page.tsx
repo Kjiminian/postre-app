@@ -12,6 +12,10 @@ import {
   ChevronRight,
   RefreshCw,
   Gift,
+  Edit2,
+  Trash2,
+  Check,
+  Calculator,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
@@ -35,6 +39,7 @@ interface RecipeItem {
   yieldUnit: string;
   laborPercent: number;
   overheadPercent: number;
+  packageCostCents: number;
   batchCostCents: number;
   unitCostCents: number;
   costPerYieldUnit: number;
@@ -74,7 +79,15 @@ interface RecipeItem {
     realProfitCents: number;
     realMarginPercent: number;
     isActive: boolean;
-    materials?: Array<{ name: string; quantity: number; unit: string; totalCostCents: number }>;
+    isComposite?: boolean;
+    materials?: Array<{
+      id: string;
+      name: string;
+      quantity: number;
+      unit: string;
+      unitCostCents: number;
+      totalCostCents: number;
+    }>;
   }>;
 }
 
@@ -87,23 +100,29 @@ export default function RecetasPage() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
   const [expandedRecipes, setExpandedRecipes] = useState<Record<string, boolean>>({});
+  const [simPortions, setSimPortions] = useState<Record<string, number>>({});
+
+  // Edición en línea de precio de presentación
+  const [editingPresId, setEditingPresId] = useState<string | null>(null);
+  const [editingPresPriceDOP, setEditingPresPriceDOP] = useState<number>(0);
 
   // Modales
   const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
+  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null);
   const [isPresModalOpen, setIsPresModalOpen] = useState(false);
   const [selectedMotherRecipe, setSelectedMotherRecipe] = useState<RecipeItem | null>(null);
 
-  // Formulario Receta Madre
+  // Formulario Receta Madre (Crear / Editar)
   const [recipeForm, setRecipeForm] = useState({
     name: "",
     recipeType: "MOTHER" as RecipeType,
     description: "",
     yieldQty: 15,
     yieldUnit: "porciones",
-    laborPercent: 20,
-    overheadPercent: 10,
+    laborPercent: 40,
+    overheadPercent: 30,
     packageCostDOP: 0,
-    targetMargin: 40,
+    targetMargin: 60,
     notes: "",
     ingredients: [] as Array<{ ingredientId: string; quantity: number; unit: string; costCents: number }>,
   });
@@ -115,37 +134,39 @@ export default function RecetasPage() {
     motherRecipeQty: 1,
     motherRecipeUnit: "porciones",
     pricingMethod: "MARGIN" as PricingMethod,
-    desiredMarginPercent: 40,
+    desiredMarginPercent: 35,
     finalPriceDOP: 0,
     notes: "",
-    materials: [] as Array<{ ingredientId?: string; name: string; quantity: number; unit: string; unitCostCents: number; totalCostCents: number }>,
+    materials: [] as Array<{ ingredientId?: string; name: string; quantity: number; unit: string; unitCostDOP: number; totalCostCents: number }>,
   });
 
   const loadData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const [resRec, resIng] = await Promise.all([
+      const [recRes, ingRes] = await Promise.all([
         fetch("/api/recetas"),
         fetch("/api/ingredientes"),
       ]);
-      const dataRec = await resRec.json();
-      const dataIng = await resIng.json();
+      const recJson = await recRes.json();
+      const ingJson = await ingRes.json();
 
-      if (dataRec.success) {
-        setRecipes(dataRec.data);
-        const initialExpanded: Record<string, boolean> = {};
-        dataRec.data.forEach((r: RecipeItem) => {
-          initialExpanded[r.id] = true;
-        });
-        setExpandedRecipes(initialExpanded);
-      } else throw new Error(dataRec.error);
+      if (recJson.success) {
+        setRecipes(recJson.data);
+        // Expandir la primera receta automáticamente para vista inmediata
+        if (recJson.data.length > 0 && Object.keys(expandedRecipes).length === 0) {
+          const brownieRec = recJson.data.find((r: RecipeItem) => r.name.includes("Modelo Receta 2")) || recJson.data[0];
+          setExpandedRecipes({ [brownieRec.id]: true });
+        }
+      } else {
+        throw new Error(recJson.error);
+      }
 
-      if (dataIng.success) {
-        setAvailableIngredients(dataIng.data);
+      if (ingJson.success) {
+        setAvailableIngredients(ingJson.data);
       }
     } catch (err: any) {
-      setError(err.message || "Error cargando recetas");
+      setError(err.message || "Error al cargar recetas");
     } finally {
       setLoading(false);
     }
@@ -159,6 +180,47 @@ export default function RecetasPage() {
     setExpandedRecipes((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const handleOpenNewRecipe = () => {
+    setEditingRecipeId(null);
+    setRecipeForm({
+      name: "",
+      recipeType: "MOTHER",
+      description: "",
+      yieldQty: 15,
+      yieldUnit: "porciones",
+      laborPercent: 30,
+      overheadPercent: 20,
+      packageCostDOP: 0,
+      targetMargin: 40,
+      notes: "",
+      ingredients: [],
+    });
+    setIsRecipeModalOpen(true);
+  };
+
+  const handleOpenEditRecipe = (recipe: RecipeItem) => {
+    setEditingRecipeId(recipe.id);
+    setRecipeForm({
+      name: recipe.name,
+      recipeType: recipe.recipeType,
+      description: recipe.description || "",
+      yieldQty: recipe.yield,
+      yieldUnit: recipe.yieldUnit,
+      laborPercent: recipe.laborPercent,
+      overheadPercent: recipe.overheadPercent,
+      packageCostDOP: (recipe.packageCostCents || 0) / 100,
+      targetMargin: recipe.targetMargin,
+      notes: recipe.notes || "",
+      ingredients: recipe.ingredients.map((i) => ({
+        ingredientId: i.ingredientId,
+        quantity: i.quantity,
+        unit: i.unit,
+        costCents: i.costCents,
+      })),
+    });
+    setIsRecipeModalOpen(true);
+  };
+
   const handleOpenNewPresentation = (mother: RecipeItem) => {
     setSelectedMotherRecipe(mother);
     setPresForm({
@@ -167,7 +229,7 @@ export default function RecetasPage() {
       motherRecipeQty: 1,
       motherRecipeUnit: mother.yieldUnit,
       pricingMethod: "MARGIN",
-      desiredMarginPercent: 40,
+      desiredMarginPercent: 35,
       finalPriceDOP: 0,
       notes: "",
       materials: [],
@@ -219,7 +281,14 @@ export default function RecetasPage() {
         desiredMarginPercent: presForm.desiredMarginPercent,
         finalPriceCents: presForm.finalPriceDOP > 0 ? Math.round(presForm.finalPriceDOP * 100) : undefined,
         notes: presForm.notes,
-        materials: presForm.materials,
+        materials: presForm.materials.map((m) => ({
+          ingredientId: m.ingredientId || null,
+          name: m.name,
+          quantity: m.quantity,
+          unit: m.unit,
+          unitCostCents: Math.round(m.unitCostDOP * 100),
+          totalCostCents: m.totalCostCents,
+        })),
       };
 
       const res = await fetch("/api/presentaciones", {
@@ -243,12 +312,13 @@ export default function RecetasPage() {
 
     try {
       const payload = {
+        ...(editingRecipeId ? { id: editingRecipeId } : {}),
         ...recipeForm,
         packageCostCents: Math.round(recipeForm.packageCostDOP * 100),
       };
 
       const res = await fetch("/api/recetas", {
-        method: "POST",
+        method: editingRecipeId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -262,11 +332,53 @@ export default function RecetasPage() {
     }
   };
 
+  const handleSaveInlinePresPrice = async (presId: string) => {
+    try {
+      const res = await fetch("/api/presentaciones", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: presId,
+          finalPriceCents: Math.round(editingPresPriceDOP * 100),
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+
+      setEditingPresId(null);
+      loadData();
+    } catch (err: any) {
+      alert("Error al actualizar precio: " + err.message);
+    }
+  };
+
+  const handleDeletePresentation = async (presId: string, name: string) => {
+    if (!confirm(`¿Desactivar la presentación "${name}"? Conservará su historial en ventas pasadas.`)) return;
+    try {
+      const res = await fetch(`/api/presentaciones?id=${presId}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error);
+      loadData();
+    } catch (err: any) {
+      alert("Error al desactivar: " + err.message);
+    }
+  };
+
   const filteredRecipes = recipes.filter((r) => {
-    const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      r.name.toLowerCase().includes(search.toLowerCase()) ||
+      r.presentations.some((p) => p.name.toLowerCase().includes(search.toLowerCase()));
     const matchesType = typeFilter === "ALL" || r.recipeType === typeFilter;
     return matchesSearch && matchesType;
   });
+
+  // Cálculo en vivo para modal de Receta Madre
+  const modalIngTotalCents = recipeForm.ingredients.reduce((s, i) => s + (i.costCents || 0), 0);
+  const modalOverheadCents = Math.round((modalIngTotalCents * recipeForm.overheadPercent) / 100);
+  const modalLaborCents = Math.round((modalIngTotalCents * recipeForm.laborPercent) / 100);
+  const modalBatchRealCents = modalIngTotalCents + modalOverheadCents + modalLaborCents + Math.round(recipeForm.packageCostDOP * 100);
+  const modalGainBaseCents = Math.round((modalBatchRealCents * recipeForm.targetMargin) / 100);
+  const modalTotalWithGainCents = modalBatchRealCents + modalGainBaseCents;
 
   return (
     <div className="min-h-screen bg-[#FAF8F6]">
@@ -277,33 +389,18 @@ export default function RecetasPage() {
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
               <ChefHat className="w-4 h-4" />
-              <span>Arquitectura Bipolar de Producción</span>
+              <span>Hoja de Costeo Maestra (Modelo Bronie Receta 2)</span>
             </div>
             <h1 className="text-2xl font-serif font-bold text-[#4A3B32]">
-              Recetas Madre y Presentaciones
+              Recetas Madre y Presentaciones Derivadas
             </h1>
             <p className="text-sm text-[#7D6E65] mt-1">
-              Costeo base de lote por rendimiento y gestión modular de presentaciones derivadas sin duplicación de ingredientes.
+              Cada receta base calcula su costo real y ganancia por lote, y deriva sus presentaciones (porciones, mini, vasos y cajas) sin duplicar ingredientes.
             </p>
           </div>
 
           <button
-            onClick={() => {
-              setRecipeForm({
-                name: "",
-                recipeType: "MOTHER",
-                description: "",
-                yieldQty: 15,
-                yieldUnit: "porciones",
-                laborPercent: 20,
-                overheadPercent: 10,
-                packageCostDOP: 0,
-                targetMargin: 40,
-                notes: "",
-                ingredients: [],
-              });
-              setIsRecipeModalOpen(true);
-            }}
+            onClick={handleOpenNewRecipe}
             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all self-start md:self-auto"
           >
             <Plus className="w-4 h-4" />
@@ -311,12 +408,13 @@ export default function RecetasPage() {
           </button>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-[#E8E2D9] shadow-sm mb-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        {/* Barra de Búsqueda y Filtros */}
+        <div className="bg-white p-4 rounded-xl border border-[#E8E2D9] shadow-sm mb-6 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7D6E65]" />
             <input
               type="text"
-              placeholder="Buscar receta madre o presentación..."
+              placeholder="Buscar receta madre o presentación derivada (ej. Brownie, Chinola, Quesillo)..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-[#FAF8F6] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
@@ -325,7 +423,7 @@ export default function RecetasPage() {
 
           <div className="flex items-center gap-2">
             {[
-              { id: "ALL", label: "Todas" },
+              { id: "ALL", label: `Todas (${recipes.length})` },
               { id: "MOTHER", label: "Recetas Madre" },
               { id: "SUBRECIPE", label: "Subrecetas" },
             ].map((t) => (
@@ -345,7 +443,7 @@ export default function RecetasPage() {
         {loading ? (
           <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
             <RefreshCw className="w-8 h-8 text-[#9C4266] animate-spin mx-auto mb-3" />
-            <p className="text-sm font-medium text-[#4A3B32]">Cargando recetas y presentaciones...</p>
+            <p className="text-sm font-medium text-[#4A3B32]">Cargando hojas de costeo y presentaciones...</p>
           </div>
         ) : error ? (
           <div className="bg-[#FFF5F5] rounded-xl p-8 border border-[#FED7D7] text-center">
@@ -361,23 +459,37 @@ export default function RecetasPage() {
         ) : filteredRecipes.length === 0 ? (
           <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">
             <ChefHat className="w-10 h-10 text-[#C4B5A5] mx-auto mb-3" />
-            <h3 className="text-base font-semibold text-[#4A3B32]">No hay recetas registradas</h3>
+            <h3 className="text-base font-semibold text-[#4A3B32]">No se encontraron recetas</h3>
             <p className="text-xs text-[#7D6E65] max-w-sm mx-auto mt-1">
-              Comienza registrando tu primera receta madre de bizcocho, mousse o brownie.
+              Ajusta tu búsqueda o registra una nueva receta madre para empezar.
             </p>
           </div>
         ) : (
           <div className="space-y-6">
             {filteredRecipes.map((recipe) => {
-              const isExpanded = expandedRecipes[recipe.id] !== false;
+              const isExpanded = Boolean(expandedRecipes[recipe.id]);
+
+              // Cálculo detallado estilo Excel Bronie Receta 2
+              const ingTotalCents = recipe.ingredients.reduce((acc, i) => acc + i.costCents, 0);
+              const overheadCents = Math.round((ingTotalCents * recipe.overheadPercent) / 100);
+              const laborCents = Math.round((ingTotalCents * recipe.laborPercent) / 100);
+              const subTotalRealCents = recipe.batchCostCents;
+              const baseGainCents = Math.round((subTotalRealCents * recipe.targetMargin) / 100);
+              const totalWithBaseGainCents = subTotalRealCents + baseGainCents;
+
+              const currentSimPortions = simPortions[recipe.id] || recipe.yield;
+              const simCostPerPortion = currentSimPortions > 0 ? subTotalRealCents / currentSimPortions : subTotalRealCents;
+              const simValWithGainPerPortion = currentSimPortions > 0 ? totalWithBaseGainCents / currentSimPortions : totalWithBaseGainCents;
+
               return (
                 <div key={recipe.id} className="bg-white rounded-2xl border border-[#E8E2D9] shadow-sm overflow-hidden">
-                  <div className="p-6 bg-[#FAF8F6]/60 border-b border-[#E8E2D9]">
+                  {/* CABECERA DE RECETA MADRE */}
+                  <div className="p-5 sm:p-6 bg-[#FAF8F6]/70 border-b border-[#E8E2D9]">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                               recipe.recipeType === "MOTHER"
                                 ? "bg-[#FAF5F7] text-[#9C4266] border border-[#F3D5E2]"
                                 : "bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]"
@@ -386,10 +498,13 @@ export default function RecetasPage() {
                             {recipe.recipeType === "MOTHER" ? "Receta Madre" : "Subreceta Base"}
                           </span>
                           {recipe.importedFrom && (
-                            <span className="text-[11px] text-[#A89F91]">
-                              Origen: {recipe.importedFrom}
+                            <span className="text-[11px] text-[#7D6E65] bg-white px-2 py-0.5 rounded border border-[#E8E2D9]">
+                              Hoja: {recipe.importedFrom}
                             </span>
                           )}
+                          <span className="text-[11px] text-[#7D6E65]">
+                            {recipe.ingredients.length} ingredientes · {recipe.presentations.length} presentaciones
+                          </span>
                         </div>
                         <h2 className="text-xl font-serif font-bold text-[#4A3B32]">{recipe.name}</h2>
                         {recipe.description && (
@@ -397,164 +512,391 @@ export default function RecetasPage() {
                         )}
                       </div>
 
+                      {/* KPIs de Lote */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white p-3 rounded-xl border border-[#E8E2D9]">
                         <div>
-                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Rendimiento</span>
+                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Rendimiento Base</span>
                           <span className="text-sm font-bold text-[#4A3B32] tabular-nums">
                             {recipe.yield} {recipe.yieldUnit}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Costo Total Lote</span>
+                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Costo Real Lote</span>
                           <span className="text-sm font-bold text-[#4A3B32] tabular-nums">
-                            {formatDOP(recipe.batchCostCents)}
+                            {formatDOP(subTotalRealCents)}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Costo x Unidad Rend.</span>
+                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Costo x Porción</span>
                           <span className="text-sm font-bold text-[#9C4266] tabular-nums">
                             RD$ {(recipe.costPerYieldUnit / 100).toFixed(2)}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Overhead / MO</span>
-                          <span className="text-xs font-medium text-[#7D6E65] tabular-nums">
-                            {recipe.overheadPercent}% / {recipe.laborPercent}%
+                          <span className="text-[10px] text-[#7D6E65] uppercase block font-semibold">Gas / MO / Gan.</span>
+                          <span className="text-xs font-semibold text-[#4A3B32] tabular-nums">
+                            {recipe.overheadPercent}% / {recipe.laborPercent}% / {recipe.targetMargin}%
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#E8E2D9]/70 text-xs text-[#7D6E65]">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#E8E2D9]/70 text-xs">
                       <button
                         onClick={() => toggleExpand(recipe.id)}
-                        className="inline-flex items-center gap-1 font-semibold text-[#9C4266] hover:underline"
+                        className="inline-flex items-center gap-1.5 font-semibold text-[#9C4266] hover:underline"
                       >
                         {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                         <span>
-                          {isExpanded ? "Ocultar Presentaciones y Detalles" : `Ver ${recipe.presentations.length} Presentaciones`}
+                          {isExpanded
+                            ? "Ocultar Hoja de Costeo y Presentaciones"
+                            : `Abrir Hoja de Costeo (${recipe.ingredients.length} ing. → ${recipe.presentations.length} presentaciones)`}
                         </span>
                       </button>
 
-                      <button
-                        onClick={() => handleOpenNewPresentation(recipe)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#9C4266] text-white rounded-lg font-medium hover:bg-[#833554] shadow-sm transition-all"
-                      >
-                        <Gift className="w-3.5 h-3.5" />
-                        <span>Agregar Presentación</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEditRecipe(recipe)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E8E2D9] text-[#4A3B32] rounded-lg font-medium hover:bg-[#FAF8F6] transition-all"
+                        >
+                          <Edit2 className="w-3.5 h-3.5 text-[#7D6E65]" />
+                          <span>Editar Receta Madre</span>
+                        </button>
+                        <button
+                          onClick={() => handleOpenNewPresentation(recipe)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#9C4266] text-white rounded-lg font-medium hover:bg-[#833554] shadow-sm transition-all"
+                        >
+                          <Gift className="w-3.5 h-3.5" />
+                          <span>Agregar Presentación</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
+                  {/* CUERPO EXPANDIDO: DISEÑO EXCEL BRONIE RECETA 2 (RECETA MADRE + DERIVACIONES) */}
                   {isExpanded && (
-                    <div className="p-6 space-y-6">
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="text-sm font-serif font-bold text-[#4A3B32] flex items-center gap-2">
-                            <Package className="w-4 h-4 text-[#9C4266]" />
-                            <span>Presentaciones de Venta Derivadas ({recipe.presentations.length})</span>
-                          </h3>
-                        </div>
-
-                        {recipe.presentations.length === 0 ? (
-                          <div className="p-6 rounded-xl border border-dashed border-[#E8E2D9] text-center bg-[#FAF8F6]">
-                            <p className="text-xs text-[#7D6E65]">
-                              Esta receta madre aún no tiene presentaciones registradas (porciones, vasos, cajas o shots).
-                            </p>
+                    <div className="p-5 sm:p-6 bg-white">
+                      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                        {/* COLUMNA IZQUIERDA (5 cols): RECETA MADRE / COSTEO DEL LOTE */}
+                        <div className="xl:col-span-5 rounded-xl border border-[#E8E2D9] bg-[#FAF8F6]/40 overflow-hidden">
+                          <div className="px-4 py-3 bg-[#4A3B32] text-white flex items-center justify-between">
+                            <div>
+                              <span className="text-[10px] uppercase tracking-wider text-[#F3D5E2] font-semibold block">
+                                Paso 1 · Receta Base
+                              </span>
+                              <h3 className="text-sm font-serif font-bold">
+                                Liquidación del Lote ({recipe.yield} {recipe.yieldUnit})
+                              </h3>
+                            </div>
                             <button
-                              onClick={() => handleOpenNewPresentation(recipe)}
-                              className="mt-2 text-xs font-semibold text-[#9C4266] hover:underline"
+                              onClick={() => handleOpenEditRecipe(recipe)}
+                              className="text-[11px] bg-white/15 hover:bg-white/25 px-2.5 py-1 rounded text-white font-medium transition-colors"
                             >
-                              + Crear la primera presentación
+                              Editar Insumos
                             </button>
                           </div>
-                        ) : (
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {recipe.presentations.map((pres) => (
-                              <div
-                                key={pres.id}
-                                className="p-4 rounded-xl border border-[#E8E2D9] bg-white hover:border-[#9C4266]/40 transition-all shadow-sm flex flex-col justify-between"
-                              >
-                                <div>
-                                  <div className="flex items-start justify-between gap-2 mb-2">
-                                    <h4 className="text-base font-semibold text-[#4A3B32]">{pres.name}</h4>
-                                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FAF5F7] text-[#9C4266]">
-                                      {pres.pricingMethod === "MARGIN" ? "Margen Venta" : "Markup Costo"}
-                                    </span>
-                                  </div>
-                                  {pres.sizeDescription && (
-                                    <p className="text-xs text-[#7D6E65] mb-3">{pres.sizeDescription}</p>
-                                  )}
 
-                                  <div className="space-y-1.5 text-xs text-[#7D6E65] border-t border-b border-[#FAF8F6] py-2 mb-3">
-                                    <div className="flex justify-between">
-                                      <span>Consumo Receta Madre:</span>
-                                      <span className="font-semibold text-[#4A3B32] tabular-nums">
-                                        {pres.motherRecipeQty} {pres.motherRecipeUnit}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span>Rendimiento x Lote:</span>
-                                      <span className="font-semibold text-[#4A3B32] tabular-nums">
-                                        {pres.presentationYield.toFixed(1)} unidades
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span>Costo Empaques / Extras:</span>
-                                      <span className="font-medium text-[#4A3B32] tabular-nums">
-                                        {formatDOP(pres.packagingCostCents + pres.additionalCostCents)}
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between pt-1 border-t border-[#FAF8F6]">
-                                      <span className="font-semibold text-[#4A3B32]">Costo Total Unitario:</span>
-                                      <span className="font-bold text-[#9C4266] tabular-nums">
-                                        {formatDOP(pres.totalCostCents)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="pt-2 bg-[#FAF8F6] p-2.5 rounded-lg">
-                                  <div className="flex items-baseline justify-between mb-1">
-                                    <span className="text-[11px] text-[#7D6E65]">Precio Final Venta:</span>
-                                    <span className="text-base font-bold text-[#4A3B32] tabular-nums">
-                                      {formatDOP(pres.finalPriceCents)}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center justify-between text-xs">
-                                    <span className="text-[#22543D] font-semibold tabular-nums">
-                                      Ganancia: {formatDOP(pres.realProfitCents)}
-                                    </span>
-                                    <span className="text-[#9C4266] font-bold tabular-nums">
-                                      {pres.realMarginPercent.toFixed(1)}% Margen
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
+                          {/* Tabla de Ingredientes */}
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse text-xs">
+                              <thead>
+                                <tr className="bg-[#F3EFEA] text-[#7D6E65] border-b border-[#E8E2D9] font-semibold">
+                                  <th className="py-2 px-3">Ingrediente</th>
+                                  <th className="py-2 px-2 text-right">Precio Unit.</th>
+                                  <th className="py-2 px-2 text-right">Cant.</th>
+                                  <th className="py-2 px-3 text-right">Importe</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-[#E8E2D9]/60 bg-white">
+                                {recipe.ingredients.length === 0 ? (
+                                  <tr>
+                                    <td colSpan={4} className="py-4 px-3 text-center text-[#7D6E65]">
+                                      Sin ingredientes registrados. Haz clic en &ldquo;Editar Insumos&rdquo;.
+                                    </td>
+                                  </tr>
+                                ) : (
+                                  recipe.ingredients.map((item) => (
+                                    <tr key={item.id} className="hover:bg-[#FAF8F6]/60">
+                                      <td className="py-2 px-3 font-medium text-[#4A3B32]">
+                                        {item.ingredient?.name || "Ingrediente"}
+                                      </td>
+                                      <td className="py-2 px-2 text-right text-[#7D6E65] tabular-nums">
+                                        {item.ingredient ? `RD$ ${item.ingredient.costPerBaseUnit.toFixed(2)}` : "-"}
+                                      </td>
+                                      <td className="py-2 px-2 text-right text-[#4A3B32] tabular-nums">
+                                        {item.quantity} <span className="text-[10px] text-[#7D6E65]">{item.unit}</span>
+                                      </td>
+                                      <td className="py-2 px-3 text-right font-semibold text-[#4A3B32] tabular-nums">
+                                        {formatDOP(item.costCents)}
+                                      </td>
+                                    </tr>
+                                  ))
+                                )}
+                              </tbody>
+                            </table>
                           </div>
-                        )}
-                      </div>
 
-                      <div className="pt-4 border-t border-[#E8E2D9]">
-                        <h4 className="text-xs font-semibold text-[#7D6E65] uppercase tracking-wider mb-2">
-                          Ingredientes que componen el lote ({recipe.ingredients.length})
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {recipe.ingredients.map((ing) => (
-                            <span
-                              key={ing.id}
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs bg-[#FAF8F6] border border-[#E8E2D9] text-[#4A3B32]"
-                            >
-                              <span className="font-medium">{ing.ingredient.name}:</span>
-                              <span>
-                                {ing.quantity} {ing.unit}
-                              </span>
-                              <span className="text-[#9C4266] font-semibold">
-                                ({formatDOP(ing.costCents)})
-                              </span>
-                            </span>
-                          ))}
+                          {/* Bloque de Costos, Mano de Obra y Ganancia Base (Tal cual Bronie receta 2) */}
+                          <div className="p-4 bg-[#FAF8F6] border-t border-[#E8E2D9] space-y-2 text-xs">
+                            <div className="flex justify-between text-[#4A3B32]">
+                              <span>Costo de Producción (Ingredientes)</span>
+                              <span className="font-semibold tabular-nums">{formatDOP(ingTotalCents)}</span>
+                            </div>
+                            <div className="flex justify-between text-[#7D6E65]">
+                              <span>Gas, Agua, Luz, Mat. gastables ({recipe.overheadPercent}%)</span>
+                              <span className="tabular-nums">{formatDOP(overheadCents)}</span>
+                            </div>
+                            <div className="flex justify-between text-[#7D6E65]">
+                              <span>Mano de Obra ({recipe.laborPercent}%)</span>
+                              <span className="tabular-nums">{formatDOP(laborCents)}</span>
+                            </div>
+
+                            <div className="pt-2 border-t border-[#E8E2D9] flex justify-between items-center font-bold text-[#4A3B32]">
+                              <span>SubTotal (Costo Real del Lote)</span>
+                              <span className="text-sm tabular-nums">{formatDOP(subTotalRealCents)}</span>
+                            </div>
+
+                            <div className="flex justify-between text-[#22543D] font-medium">
+                              <span>Ganancia Receta Base ({recipe.targetMargin}%)</span>
+                              <span className="tabular-nums">{formatDOP(baseGainCents)}</span>
+                            </div>
+
+                            <div className="pt-2 border-t border-[#E8E2D9] flex justify-between items-center font-bold text-[#9C4266]">
+                              <span>Total Lote (con Ganancia Base)</span>
+                              <span className="text-sm tabular-nums">{formatDOP(totalWithBaseGainCents)}</span>
+                            </div>
+
+                            {/* Simulador de Porciones del Lote */}
+                            <div className="mt-3 p-3 rounded-lg bg-white border border-[#E8E2D9] space-y-1.5">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-[11px] font-semibold text-[#4A3B32] flex items-center gap-1">
+                                  <Calculator className="w-3.5 h-3.5 text-[#9C4266]" />
+                                  Porciones a extraer del lote:
+                                </span>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  step="1"
+                                  value={currentSimPortions}
+                                  onChange={(e) =>
+                                    setSimPortions((prev) => ({
+                                      ...prev,
+                                      [recipe.id]: Math.max(1, parseFloat(e.target.value) || 1),
+                                    }))
+                                  }
+                                  className="w-16 px-2 py-0.5 text-right text-xs font-bold rounded border border-[#9C4266] text-[#9C4266] tabular-nums"
+                                />
+                              </div>
+                              <div className="flex justify-between text-[11px] text-[#7D6E65]">
+                                <span>Costo real por unidad ({currentSimPortions} uds):</span>
+                                <span className="font-bold text-[#4A3B32] tabular-nums">
+                                  RD$ {(simCostPerPortion / 100).toFixed(2)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between text-[11px] text-[#7D6E65]">
+                                <span>Valor c/ ganancia base por unidad:</span>
+                                <span className="font-semibold text-[#9C4266] tabular-nums">
+                                  RD$ {(simValWithGainPerPortion / 100).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+
+                            <p className="text-[10px] text-[#7D6E65] leading-relaxed pt-1">
+                              * Las presentaciones derivadas toman el <strong>Costo Real</strong> (SubTotal) para no duplicar ganancias al aplicar su propio margen.
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* COLUMNA DERECHA (7 cols): PRESENTACIONES DERIVADAS */}
+                        <div className="xl:col-span-7 space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-serif font-bold text-[#4A3B32] flex items-center gap-2">
+                              <Package className="w-4 h-4 text-[#9C4266]" />
+                              <span>Paso 2 · Presentaciones Derivadas de esta Receta ({recipe.presentations.length})</span>
+                            </h3>
+                          </div>
+
+                          {recipe.presentations.length === 0 ? (
+                            <div className="p-8 rounded-xl border border-dashed border-[#E8E2D9] text-center bg-[#FAF8F6]">
+                              <p className="text-xs text-[#7D6E65]">
+                                Esta receta madre aún no tiene presentaciones derivadas (porciones, mini, cajas o shots).
+                              </p>
+                              <button
+                                onClick={() => handleOpenNewPresentation(recipe)}
+                                className="mt-2 text-xs font-semibold text-[#9C4266] hover:underline"
+                              >
+                                + Crear primera presentación derivada
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {recipe.presentations.map((pres) => {
+                                const baseConsumedCents = Math.round(recipe.costPerYieldUnit * pres.motherRecipeQty);
+                                const isEditingThisPrice = editingPresId === pres.id;
+
+                                return (
+                                  <div
+                                    key={pres.id}
+                                    className="rounded-xl border border-[#E8E2D9] bg-white shadow-sm overflow-hidden flex flex-col justify-between"
+                                  >
+                                    <div>
+                                      {/* Cabecera de la presentación */}
+                                      <div className="px-4 py-3 bg-[#FAF5F7] border-b border-[#F3D5E2] flex items-start justify-between gap-2">
+                                        <div>
+                                          <h4 className="text-sm font-bold text-[#4A3B32]">{pres.name}</h4>
+                                          {pres.sizeDescription && (
+                                            <p className="text-[11px] text-[#7D6E65] mt-0.5">{pres.sizeDescription}</p>
+                                          )}
+                                          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded bg-white border border-[#F3D5E2] text-[10px] font-semibold text-[#9C4266] tabular-nums">
+                                              Consume {pres.motherRecipeQty} {pres.motherRecipeUnit}
+                                            </span>
+                                            <span className="text-[10px] text-[#7D6E65] tabular-nums">
+                                              ({pres.presentationYield.toFixed(1)} pres/lote)
+                                            </span>
+                                          </div>
+                                        </div>
+
+                                        <button
+                                          onClick={() => handleDeletePresentation(pres.id, pres.name)}
+                                          title="Desactivar presentación"
+                                          className="p-1 text-[#A89F91] hover:text-[#C53030] rounded transition-colors"
+                                        >
+                                          <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+
+                                      {/* Tabla estilo Excel de la Presentación */}
+                                      <div className="overflow-x-auto">
+                                        <table className="w-full text-left border-collapse text-[11px]">
+                                          <thead>
+                                            <tr className="bg-[#FAF8F6] text-[#7D6E65] border-b border-[#E8E2D9] font-semibold">
+                                              <th className="py-1.5 px-3">Concepto</th>
+                                              <th className="py-1.5 px-2 text-right">C. Unit</th>
+                                              <th className="py-1.5 px-2 text-right">Cant.</th>
+                                              <th className="py-1.5 px-3 text-right">Importe</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody className="divide-y divide-[#E8E2D9]/60">
+                                            {/* Fila base derivada de la receta madre */}
+                                            <tr className="bg-[#FAF5F7]/30 font-medium">
+                                              <td className="py-1.5 px-3 text-[#9C4266]">Base: {recipe.name.split(" ")[0]}</td>
+                                              <td className="py-1.5 px-2 text-right text-[#7D6E65] tabular-nums">
+                                                RD$ {(recipe.costPerYieldUnit / 100).toFixed(2)}
+                                              </td>
+                                              <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
+                                                {pres.motherRecipeQty}
+                                              </td>
+                                              <td className="py-1.5 px-3 text-right font-semibold text-[#4A3B32] tabular-nums">
+                                                {formatDOP(baseConsumedCents)}
+                                              </td>
+                                            </tr>
+
+                                            {/* Materiales / Empaques específicos */}
+                                            {pres.materials && pres.materials.length > 0 ? (
+                                              pres.materials.map((mat) => (
+                                                <tr key={mat.id}>
+                                                  <td className="py-1.5 px-3 text-[#4A3B32]">{mat.name}</td>
+                                                  <td className="py-1.5 px-2 text-right text-[#7D6E65] tabular-nums">
+                                                    RD$ {(mat.unitCostCents / 100).toFixed(2)}
+                                                  </td>
+                                                  <td className="py-1.5 px-2 text-right text-[#4A3B32] tabular-nums">
+                                                    {mat.quantity}
+                                                  </td>
+                                                  <td className="py-1.5 px-3 text-right text-[#4A3B32] tabular-nums">
+                                                    {formatDOP(mat.totalCostCents)}
+                                                  </td>
+                                                </tr>
+                                              ))
+                                            ) : pres.packagingCostCents > 0 ? (
+                                              <tr>
+                                                <td className="py-1.5 px-3 text-[#4A3B32]">Empaques / Materiales</td>
+                                                <td className="py-1.5 px-2 text-right text-[#7D6E65]">-</td>
+                                                <td className="py-1.5 px-2 text-right text-[#4A3B32]">1</td>
+                                                <td className="py-1.5 px-3 text-right text-[#4A3B32] tabular-nums">
+                                                  {formatDOP(pres.packagingCostCents)}
+                                                </td>
+                                              </tr>
+                                            ) : null}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+
+                                    {/* Pie Financiero de la Presentación */}
+                                    <div className="p-3 bg-[#FAF8F6] border-t border-[#E8E2D9] space-y-1.5 text-xs">
+                                      <div className="flex justify-between text-[#4A3B32]">
+                                        <span className="font-semibold">Costo Total Presentación:</span>
+                                        <span className="font-bold tabular-nums">{formatDOP(pres.totalCostCents)}</span>
+                                      </div>
+
+                                      <div className="flex justify-between text-[11px] text-[#7D6E65]">
+                                        <span>
+                                          Sugerido ({pres.desiredMarginPercent}% {pres.pricingMethod === "MARKUP" ? "Recargo" : "Margen"}):
+                                        </span>
+                                        <span className="tabular-nums">{formatDOP(pres.suggestedPriceCents)}</span>
+                                      </div>
+
+                                      <div className="pt-1.5 border-t border-[#E8E2D9] flex items-center justify-between gap-2">
+                                        <span className="font-semibold text-[#4A3B32]">Precio Venta:</span>
+                                        {isEditingThisPrice ? (
+                                          <div className="flex items-center gap-1">
+                                            <input
+                                              type="number"
+                                              step="5"
+                                              min="1"
+                                              value={editingPresPriceDOP}
+                                              onChange={(e) => setEditingPresPriceDOP(parseFloat(e.target.value) || 0)}
+                                              className="w-20 px-1.5 py-0.5 text-right text-xs font-bold rounded border border-[#9C4266] bg-white tabular-nums"
+                                            />
+                                            <button
+                                              onClick={() => handleSaveInlinePresPrice(pres.id)}
+                                              className="p-1 bg-[#22543D] text-white rounded hover:bg-[#1A4331]"
+                                            >
+                                              <Check className="w-3 h-3" />
+                                            </button>
+                                            <button
+                                              onClick={() => setEditingPresId(null)}
+                                              className="p-1 bg-[#E8E2D9] text-[#7D6E65] rounded"
+                                            >
+                                              <X className="w-3 h-3" />
+                                            </button>
+                                          </div>
+                                        ) : (
+                                          <button
+                                            onClick={() => {
+                                              setEditingPresId(pres.id);
+                                              setEditingPresPriceDOP(pres.finalPriceCents / 100);
+                                            }}
+                                            className="inline-flex items-center gap-1 text-sm font-bold text-[#9C4266] hover:underline tabular-nums"
+                                            title="Clic para ajustar precio final de venta"
+                                          >
+                                            <span>{formatDOP(pres.finalPriceCents)}</span>
+                                            <Edit2 className="w-3 h-3 opacity-60" />
+                                          </button>
+                                        )}
+                                      </div>
+
+                                      <div className="flex justify-between items-center text-[11px] pt-0.5">
+                                        <span className="text-[#22543D] font-semibold tabular-nums">
+                                          Ganancia: {formatDOP(pres.realProfitCents)}
+                                        </span>
+                                        <span
+                                          className={`font-bold px-1.5 py-0.5 rounded tabular-nums ${
+                                            pres.realMarginPercent < 25
+                                              ? "bg-[#FED7D7] text-[#9B2C2C]"
+                                              : "bg-[#C6F6D5]/60 text-[#22543D]"
+                                          }`}
+                                        >
+                                          {pres.realMarginPercent.toFixed(1)}% Margen Real
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -565,220 +907,10 @@ export default function RecetasPage() {
           </div>
         )}
 
-        {isPresModalOpen && selectedMotherRecipe && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150">
-            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[90vh] overflow-y-auto">
-              <button
-                onClick={() => setIsPresModalOpen(false)}
-                className="absolute top-4 right-4 p-1.5 rounded-full text-[#7D6E65] hover:bg-[#FAF8F6]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9C4266] mb-1">
-                <Gift className="w-4 h-4" />
-                <span>Nueva Presentación Derivada</span>
-              </div>
-              <h2 className="text-xl font-serif font-bold text-[#4A3B32]">
-                {selectedMotherRecipe.name}
-              </h2>
-              <p className="text-xs text-[#7D6E65] mb-4">
-                Define el tamaño, consumo de preparación base, empaques y margen deseado.
-              </p>
-
-              <form onSubmit={handleSavePresentation} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Nombre de la Presentación</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ej. Shot 2 oz, Caja x 12, Completo 8 pulg"
-                      value={presForm.name}
-                      onChange={(e) => setPresForm({ ...presForm, name: e.target.value })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Descripción / Tamaño</label>
-                    <input
-                      type="text"
-                      placeholder="Ej. Vaso shot con cuchara mini"
-                      value={presForm.sizeDescription}
-                      onChange={(e) => setPresForm({ ...presForm, sizeDescription: e.target.value })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
-                      Consume de Receta Madre
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0.01"
-                      required
-                      value={presForm.motherRecipeQty}
-                      onChange={(e) => setPresForm({ ...presForm, motherRecipeQty: parseFloat(e.target.value) || 0.1 })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Unidad Consumida</label>
-                    <input
-                      type="text"
-                      disabled
-                      value={presForm.motherRecipeUnit}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-[#F3EFEA] text-[#7D6E65]"
-                    />
-                  </div>
-                </div>
-
-                <div className="border border-[#E8E2D9] rounded-xl p-3.5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#4A3B32]">
-                      Empaques y Materiales Específicos ({presForm.materials.length})
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPresForm({
-                          ...presForm,
-                          materials: [
-                            ...presForm.materials,
-                            { name: "Caja / Vaso", quantity: 1, unit: "unidad", unitCostCents: 1500, totalCostCents: 1500 },
-                          ],
-                        });
-                      }}
-                      className="text-xs font-semibold text-[#9C4266] hover:underline"
-                    >
-                      + Añadir material
-                    </button>
-                  </div>
-
-                  {presForm.materials.map((mat, idx) => (
-                    <div key={idx} className="flex items-center gap-2 pt-1">
-                      <input
-                        type="text"
-                        placeholder="Material (Vaso, Tapa, Lazo)"
-                        value={mat.name}
-                        onChange={(e) => {
-                          const updated = [...presForm.materials];
-                          updated[idx].name = e.target.value;
-                          setPresForm({ ...presForm, materials: updated });
-                        }}
-                        className="flex-1 px-2.5 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
-                      />
-                      <input
-                        type="number"
-                        placeholder="RD$ Costo"
-                        value={mat.totalCostCents / 100}
-                        onChange={(e) => {
-                          const updated = [...presForm.materials];
-                          const val = parseFloat(e.target.value) || 0;
-                          updated[idx].totalCostCents = Math.round(val * 100);
-                          setPresForm({ ...presForm, materials: updated });
-                        }}
-                        className="w-24 px-2.5 py-1.5 text-xs rounded-lg border border-[#E8E2D9]"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = presForm.materials.filter((_, i) => i !== idx);
-                          setPresForm({ ...presForm, materials: updated });
-                        }}
-                        className="p-1 text-[#E53E3E]"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Método de Precios</label>
-                    <select
-                      value={presForm.pricingMethod}
-                      onChange={(e) => setPresForm({ ...presForm, pricingMethod: e.target.value as PricingMethod })}
-                      className="w-full px-2 py-2 text-xs rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
-                    >
-                      <option value="MARGIN">Margen s/ Venta</option>
-                      <option value="MARKUP">Recargo s/ Costo</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">% Deseado</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="99.9"
-                      step="0.5"
-                      value={presForm.desiredMarginPercent}
-                      onChange={(e) => setPresForm({ ...presForm, desiredMarginPercent: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Precio Final (RD$)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      placeholder={`Sugerido: ${presPreview.suggestedPriceDOP.toFixed(2)}`}
-                      value={presForm.finalPriceDOP || ""}
-                      onChange={(e) => setPresForm({ ...presForm, finalPriceDOP: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] font-bold text-[#4A3B32]"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[#FAF5F7] border border-[#F3D5E2] flex items-center justify-between">
-                  <div>
-                    <span className="text-[11px] text-[#7D6E65] block font-medium">Costo Total Unitario:</span>
-                    <span className="text-sm font-bold text-[#9C4266]">
-                      RD$ {presPreview.totalCostDOP.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[11px] text-[#7D6E65] block font-medium">Precio Sugerido:</span>
-                    <span className="text-sm font-bold text-[#4A3B32]">
-                      RD$ {presPreview.suggestedPriceDOP.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[11px] text-[#7D6E65] block font-medium">Ganancia Real:</span>
-                    <span className="text-sm font-bold text-[#22543D]">
-                      RD$ {presPreview.profitDOP.toFixed(2)} ({presPreview.realMargin.toFixed(1)}%)
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-3">
-                  <button
-                    type="button"
-                    onClick={() => setIsPresModalOpen(false)}
-                    className="px-4 py-2 text-sm font-medium text-[#7D6E65]"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 text-sm font-medium bg-[#9C4266] text-white rounded-lg hover:bg-[#833554] shadow-sm"
-                  >
-                    Guardar Presentación
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
+        {/* MODAL CREAR / EDITAR RECETA MADRE */}
         {isRecipeModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150">
-            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[92vh] overflow-y-auto">
               <button
                 onClick={() => setIsRecipeModalOpen(false)}
                 className="absolute top-4 right-4 p-1.5 rounded-full text-[#7D6E65] hover:bg-[#FAF8F6]"
@@ -786,101 +918,476 @@ export default function RecetasPage() {
                 <X className="w-5 h-5" />
               </button>
 
-              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">Nueva Receta Madre</h2>
+              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">
+                {editingRecipeId ? "Editar Receta Madre" : "Nueva Receta Madre / Base"}
+              </h2>
               <p className="text-xs text-[#7D6E65] mb-4">
-                Define el rendimiento del lote y porcentajes de mano de obra y gastos de producción.
+                Define ingredientes, gastos de producción, mano de obra, ganancia base y rendimiento. Al guardar se recalcularán todas las presentaciones derivadas.
               </p>
 
               <form onSubmit={handleSaveRecipe} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Nombre de la Receta</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ej. Receta Base de Mousse de Chocolate"
-                    value={recipeForm.name}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, name: e.target.value })}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Rendimiento Real del Lote</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Nombre de la Receta *</label>
                     <input
-                      type="number"
-                      step="0.1"
-                      min="0.1"
+                      type="text"
                       required
-                      value={recipeForm.yieldQty}
-                      onChange={(e) => setRecipeForm({ ...recipeForm, yieldQty: parseFloat(e.target.value) || 1 })}
+                      placeholder="Ej. Producción de Brownie"
+                      value={recipeForm.name}
+                      onChange={(e) => setRecipeForm({ ...recipeForm, name: e.target.value })}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Unidad de Rendimiento</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Tipo</label>
+                    <select
+                      value={recipeForm.recipeType}
+                      onChange={(e) => setRecipeForm({ ...recipeForm, recipeType: e.target.value as RecipeType })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
+                    >
+                      <option value="MOTHER">Receta Madre</option>
+                      <option value="SUBRECIPE">Subreceta (Crema/Tope)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Descripción</label>
+                  <input
+                    type="text"
+                    placeholder="Notas sobre el rendimiento o preparación..."
+                    value={recipeForm.description}
+                    onChange={(e) => setRecipeForm({ ...recipeForm, description: e.target.value })}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Rendimiento *</label>
+                    <input
+                      type="number"
+                      step="0.5"
+                      min="0.1"
+                      required
+                      value={recipeForm.yieldQty}
+                      onChange={(e) => setRecipeForm({ ...recipeForm, yieldQty: parseFloat(e.target.value) || 1 })}
+                      className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Unidad</label>
                     <select
                       value={recipeForm.yieldUnit}
                       onChange={(e) => setRecipeForm({ ...recipeForm, yieldUnit: e.target.value })}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white"
                     >
-                      <option value="porciones">porciones</option>
-                      <option value="unidades">unidades</option>
-                      <option value="gramos">gramos</option>
-                      <option value="ml">mililitros</option>
+                      <option value="porciones">Porciones</option>
+                      <option value="unidades">Unidades</option>
+                      <option value="g">Gramos (g)</option>
+                      <option value="ml">Mililitros (ml)</option>
                     </select>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Mano de Obra (% sobre insumos)</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Gas/Mat. (%)</label>
                     <input
                       type="number"
                       min="0"
-                      step="1"
-                      value={recipeForm.laborPercent}
-                      onChange={(e) => setRecipeForm({ ...recipeForm, laborPercent: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Gastos Producción / Gas / Luz (%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
                       value={recipeForm.overheadPercent}
                       onChange={(e) => setRecipeForm({ ...recipeForm, overheadPercent: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Mano Obra (%)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={recipeForm.laborPercent}
+                      onChange={(e) => setRecipeForm({ ...recipeForm, laborPercent: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Gan. Base (%)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={recipeForm.targetMargin}
+                      onChange={(e) => setRecipeForm({ ...recipeForm, targetMargin: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Notas del Obrador</label>
-                  <textarea
-                    rows={2}
-                    value={recipeForm.notes}
-                    onChange={(e) => setRecipeForm({ ...recipeForm, notes: e.target.value })}
-                    placeholder="Instrucciones clave de horneado o temperatura..."
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
-                  />
+                {/* Lista de Ingredientes */}
+                <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#4A3B32]">Ingredientes de la Receta Madre</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (availableIngredients.length === 0) return;
+                        const first = availableIngredients[0];
+                        setRecipeForm({
+                          ...recipeForm,
+                          ingredients: [
+                            ...recipeForm.ingredients,
+                            {
+                              ingredientId: first.id,
+                              quantity: 1,
+                              unit: first.baseUnit,
+                              costCents: Math.round(first.costPerBaseUnit * 1 * 100),
+                            },
+                          ],
+                        });
+                      }}
+                      className="text-xs font-semibold text-[#9C4266] hover:underline"
+                    >
+                      + Agregar Ingrediente
+                    </button>
+                  </div>
+
+                  {recipeForm.ingredients.length === 0 ? (
+                    <p className="text-[11px] text-[#7D6E65] text-center py-2">
+                      Haz clic en &ldquo;+ Agregar Ingrediente&rdquo; para componer la receta.
+                    </p>
+                  ) : (
+                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                      {recipeForm.ingredients.map((item, idx) => (
+                        <div key={idx} className="grid grid-cols-12 gap-2 items-center">
+                          <select
+                            value={item.ingredientId}
+                            onChange={(e) => {
+                              const found = availableIngredients.find((a) => a.id === e.target.value);
+                              if (!found) return;
+                              const next = [...recipeForm.ingredients];
+                              next[idx] = {
+                                ...next[idx],
+                                ingredientId: found.id,
+                                unit: found.baseUnit,
+                                costCents: Math.round(found.costPerBaseUnit * next[idx].quantity * 100),
+                              };
+                              setRecipeForm({ ...recipeForm, ingredients: next });
+                            }}
+                            className="col-span-6 px-2 py-1.5 text-xs rounded border border-[#E8E2D9] bg-white"
+                          >
+                            {availableIngredients.map((ing) => (
+                              <option key={ing.id} value={ing.id}>
+                                {ing.name} (RD$ {ing.costPerBaseUnit.toFixed(2)}/{ing.baseUnit})
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const q = parseFloat(e.target.value) || 0;
+                              const found = availableIngredients.find((a) => a.id === item.ingredientId);
+                              const next = [...recipeForm.ingredients];
+                              next[idx] = {
+                                ...next[idx],
+                                quantity: q,
+                                costCents: found ? Math.round(found.costPerBaseUnit * q * 100) : item.costCents,
+                              };
+                              setRecipeForm({ ...recipeForm, ingredients: next });
+                            }}
+                            className="col-span-3 px-2 py-1.5 text-xs rounded border border-[#E8E2D9] tabular-nums"
+                          />
+                          <div className="col-span-2 text-right text-xs font-bold text-[#4A3B32] tabular-nums">
+                            {formatDOP(item.costCents)}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = recipeForm.ingredients.filter((_, i) => i !== idx);
+                              setRecipeForm({ ...recipeForm, ingredients: next });
+                            }}
+                            className="col-span-1 text-[#C53030] flex justify-center"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Resumen en vivo estilo Excel */}
+                  <div className="pt-3 mt-2 border-t border-[#E8E2D9] grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                    <div>
+                      <span className="text-[#7D6E65] block">Ingredientes:</span>
+                      <strong className="text-[#4A3B32] tabular-nums">{formatDOP(modalIngTotalCents)}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[#7D6E65] block">SubTotal Real:</span>
+                      <strong className="text-[#4A3B32] tabular-nums">{formatDOP(modalBatchRealCents)}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[#7D6E65] block">Costo x {recipeForm.yieldUnit}:</span>
+                      <strong className="text-[#9C4266] tabular-nums">
+                        RD$ {((modalBatchRealCents / Math.max(recipeForm.yieldQty, 0.1)) / 100).toFixed(2)}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-[#7D6E65] block">Total c/ Gan. Base:</span>
+                      <strong className="text-[#22543D] tabular-nums">{formatDOP(modalTotalWithGainCents)}</strong>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E8E2D9]">
                   <button
                     type="button"
                     onClick={() => setIsRecipeModalOpen(false)}
-                    className="px-4 py-2 text-sm font-medium text-[#7D6E65]"
+                    className="px-4 py-2 text-sm text-[#7D6E65]"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 text-sm font-medium bg-[#9C4266] text-white rounded-lg hover:bg-[#833554] shadow-sm"
+                    className="px-5 py-2 text-sm font-semibold rounded-lg bg-[#9C4266] text-white hover:bg-[#833554]"
                   >
-                    Guardar Receta Madre
+                    {editingRecipeId ? "Guardar y Recalcular Cascada" : "Guardar Receta Madre"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL NUEVA PRESENTACIÓN DERIVADA */}
+        {isPresModalOpen && selectedMotherRecipe && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in duration-150">
+            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-[#E8E2D9] relative max-h-[92vh] overflow-y-auto">
+              <button
+                onClick={() => setIsPresModalOpen(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full text-[#7D6E65] hover:bg-[#FAF8F6]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">
+                Nueva Presentación Derivada
+              </h2>
+              <p className="text-xs text-[#7D6E65] mb-4">
+                Derivando de <strong>{selectedMotherRecipe.name}</strong> (Costo Real: RD$ {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}/{selectedMotherRecipe.yieldUnit})
+              </p>
+
+              <form onSubmit={handleSavePresentation} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Nombre Presentación *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Mini Brownies (Caja 25)"
+                      value={presForm.name}
+                      onChange={(e) => setPresForm({ ...presForm, name: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Tamaño / Contenido</label>
+                    <input
+                      type="text"
+                      placeholder="Ej. Caja con 25 mini porciones"
+                      value={presForm.sizeDescription}
+                      onChange={(e) => setPresForm({ ...presForm, sizeDescription: e.target.value })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9]">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                      Cantidad Receta Madre que consume ({selectedMotherRecipe.yieldUnit})
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={presForm.motherRecipeQty}
+                      onChange={(e) => setPresForm({ ...presForm, motherRecipeQty: parseFloat(e.target.value) || 1 })}
+                      className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#7D6E65] mb-1">
+                      O calcular por división del lote:
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[1, 2, 6, 12, selectedMotherRecipe.yield].map((q, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setPresForm({ ...presForm, motherRecipeQty: q })}
+                          className="px-2 py-1 text-[11px] bg-white border border-[#E8E2D9] rounded hover:border-[#9C4266] text-[#4A3B32] font-medium tabular-nums"
+                        >
+                          {q === selectedMotherRecipe.yield ? `1 Lote (${q})` : `${q} ${selectedMotherRecipe.yieldUnit.slice(0, 4)}`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Materiales y Empaques */}
+                <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#4A3B32]">Empaques, Toppings y Decoración</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPresForm({
+                          ...presForm,
+                          materials: [
+                            ...presForm.materials,
+                            { name: "Caja / Envase", quantity: 1, unit: "unidad", unitCostDOP: 50, totalCostCents: 5000 },
+                          ],
+                        })
+                      }
+                      className="text-xs font-semibold text-[#9C4266] hover:underline"
+                    >
+                      + Agregar Material
+                    </button>
+                  </div>
+
+                  {presForm.materials.length === 0 ? (
+                    <p className="text-[11px] text-[#7D6E65] text-center py-1">Sin materiales adicionales.</p>
+                  ) : (
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      {presForm.materials.map((m, idx) => (
+                        <div key={idx} className="grid grid-cols-12 gap-1.5 items-center">
+                          <input
+                            type="text"
+                            placeholder="Material"
+                            value={m.name}
+                            onChange={(e) => {
+                              const next = [...presForm.materials];
+                              next[idx].name = e.target.value;
+                              setPresForm({ ...presForm, materials: next });
+                            }}
+                            className="col-span-5 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white"
+                          />
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="C.Unit"
+                            value={m.unitCostDOP}
+                            onChange={(e) => {
+                              const c = parseFloat(e.target.value) || 0;
+                              const next = [...presForm.materials];
+                              next[idx].unitCostDOP = c;
+                              next[idx].totalCostCents = Math.round(c * next[idx].quantity * 100);
+                              setPresForm({ ...presForm, materials: next });
+                            }}
+                            className="col-span-3 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white tabular-nums"
+                          />
+                          <input
+                            type="number"
+                            step="0.1"
+                            placeholder="Cant"
+                            value={m.quantity}
+                            onChange={(e) => {
+                              const q = parseFloat(e.target.value) || 0;
+                              const next = [...presForm.materials];
+                              next[idx].quantity = q;
+                              next[idx].totalCostCents = Math.round(next[idx].unitCostDOP * q * 100);
+                              setPresForm({ ...presForm, materials: next });
+                            }}
+                            className="col-span-2 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white tabular-nums"
+                          />
+                          <div className="col-span-1 text-right text-[11px] font-bold text-[#4A3B32] tabular-nums">
+                            {Math.round(m.totalCostCents / 100)}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setPresForm({ ...presForm, materials: presForm.materials.filter((_, i) => i !== idx) })}
+                            className="col-span-1 text-[#C53030] flex justify-center"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Método</label>
+                    <select
+                      value={presForm.pricingMethod}
+                      onChange={(e) => setPresForm({ ...presForm, pricingMethod: e.target.value as PricingMethod })}
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-[#E8E2D9] bg-white"
+                    >
+                      <option value="MARGIN">Margen sobre Venta</option>
+                      <option value="MARKUP">Recargo sobre Costo</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">% Deseado</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="95"
+                      value={presForm.desiredMarginPercent}
+                      onChange={(e) => setPresForm({ ...presForm, desiredMarginPercent: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Precio Final (Opcional)</label>
+                    <input
+                      type="number"
+                      step="1"
+                      min="0"
+                      placeholder={presPreview.suggestedPriceDOP.toFixed(0)}
+                      value={presForm.finalPriceDOP || ""}
+                      onChange={(e) => setPresForm({ ...presForm, finalPriceDOP: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                </div>
+
+                {/* PREVIEW EN VIVO */}
+                <div className="p-3.5 rounded-xl bg-[#FAF5F7] border border-[#F3D5E2] grid grid-cols-3 gap-2 text-center">
+                  <div>
+                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Costo Total</span>
+                    <span className="text-sm font-bold text-[#4A3B32] tabular-nums">
+                      RD$ {presPreview.totalCostDOP.toFixed(2)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Precio Sugerido</span>
+                    <span className="text-sm font-bold text-[#9C4266] tabular-nums">
+                      RD$ {presPreview.suggestedPriceDOP.toFixed(2)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-[#7D6E65] block uppercase font-semibold">Ganancia / Margen</span>
+                    <span className="text-sm font-bold text-[#22543D] tabular-nums">
+                      RD$ {presPreview.profitDOP.toFixed(2)} ({presPreview.realMargin.toFixed(1)}%)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E8E2D9]">
+                  <button
+                    type="button"
+                    onClick={() => setIsPresModalOpen(false)}
+                    className="px-4 py-2 text-sm text-[#7D6E65]"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 text-sm font-semibold rounded-lg bg-[#9C4266] text-white hover:bg-[#833554]"
+                  >
+                    Guardar Presentación
                   </button>
                 </div>
               </form>
