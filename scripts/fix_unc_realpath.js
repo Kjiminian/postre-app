@@ -3,7 +3,9 @@ process.env.NEXT_IGNORE_INCORRECT_LOCKFILE = "1";
 const fs = require("node:fs");
 
 const originalRealpathSync = fs.realpathSync;
-fs.realpathSync = function (p, options) {
+const originalNative = originalRealpathSync.native;
+
+const patchedRealpathSync = function (p, options) {
   try {
     return originalRealpathSync(p, options);
   } catch (err) {
@@ -14,16 +16,17 @@ fs.realpathSync = function (p, options) {
   }
 };
 
-const originalNative = fs.realpathSync.native;
-if (originalNative) {
-  fs.realpathSync.native = function (p, options) {
-    try {
-      return originalNative(p, options);
-    } catch (err) {
-      if (err && (err.code === "EPERM" || err.code === "EACCES")) {
-        return typeof p === "string" ? p : String(p);
+patchedRealpathSync.native = originalNative
+  ? function (p, options) {
+      try {
+        return originalNative(p, options);
+      } catch (err) {
+        if (err && (err.code === "EPERM" || err.code === "EACCES")) {
+          return typeof p === "string" ? p : String(p);
+        }
+        throw err;
       }
-      throw err;
     }
-  };
-}
+  : patchedRealpathSync;
+
+fs.realpathSync = patchedRealpathSync;

@@ -36,7 +36,7 @@ export type UserRole = "ADMIN" | "STAFF";
 // ─── Unidades soportadas ──────────────────────────────────────────────────────
 
 export type MassUnit = "g" | "kg" | "lb" | "oz";
-export type VolumeUnit = "ml" | "l" | "taza" | "cda" | "cdita";
+export type VolumeUnit = "ml" | "l" | "fl_oz" | "taza" | "cda" | "cdita";
 export type Unit = MassUnit | VolumeUnit | "unidad";
 
 // ─── DTOs de Negocio ──────────────────────────────────────────────────────────
@@ -191,6 +191,7 @@ export const MASS_TO_GRAMS: Record<MassUnit, number> = {
 export const VOL_TO_ML: Record<VolumeUnit, number> = {
   ml: 1,
   l: 1000,
+  fl_oz: 29.5735295625, // 1 fl oz US
   taza: 236.5882365,    // 1 taza US estándar
   cda: 14.7867648,      // 1 cucharada US
   cdita: 4.92892159,    // 1 cucharadita US

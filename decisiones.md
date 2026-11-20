@@ -71,3 +71,34 @@ Seleccionar la arquitectura y el stack tecnológico que mejor cumpla con:
 ### Consecuencias
 * Monorepo / solución unificada donde la UI pública y el panel administrativo comparten tipos, esquemas de validación y base de datos.
 * Cero latencia en llamadas internas y despliegue simple y económico.
+
+---
+
+## DEC-004: Módulo de Actualización de Precios desde Portales RD con Aprobación Previa
+
+* **Estado:** APROBADA
+* **Fecha:** 2026-11-20
+* **Autor:** Antigravity (Arquitecto)
+* **Aprobador:** Supervisor (Katherine Jiminian)
+
+### Problema
+Los precios de ingredientes y empaques fluctúan en supermercados y suplidores locales de República Dominicana (`La Sirena`, `NTD Ingredientes`, `Empaketería RD`, `Dumé Papelería`, suplidores de Santiago), haciendo costoso mantener al día los costos de recetas madre, variantes y presentaciones agrupadas sin alterar registros históricos ni aceptar cambios de empaque silenciosos.
+
+### Decisión
+1. **Arquitectura Híbrida de Captura (Adaptadores + Plan B Asistido):**
+   - Soportar fuentes configurables (`VTEX_IO`, `SHOPIFY_JSON`, `WOOCOMMERCE_HTML`, `GENERIC_HTML`, `MANUAL_ASSISTED`) y enlaces `ProductSourceLink` por producto/ingrediente.
+   - Integrar **Carga Asistida (Plan B)** para cotizaciones por WhatsApp/CSV/facturas y suplidores sin catálogo público, con registro opcional de `OperationalExpense` (`isIngredientPurchase = true` en categoría `"Compra de Insumos"`) respetando el anti-doble conteo (`RF-020`).
+2. **Seguridad SSRF y Política Anti-WAF/CAPTCHA:**
+   - Validación estricta HTTPS, bloqueo de hosts locales, rangos IP privados/reservados (`RFC1918`, loopback, link-local) y verificación DNS antes de cada solicitud con redirecciones manuales verificadas (máx. 3 saltos) y tope de respuesta de 2 MB.
+   - Prohibido cualquier intento de evasión ante Cloudflare/WAF/CAPTCHA (`403`/`429` o challenges HTML degradan a estado `BLOCKED` derivando al Plan B).
+3. **Guardrails de Empaque e ITBIS RD:**
+   - Verificación previa de compatibilidad de empaque (`MATCH`, `UNIT_CONVERTED`, `PACK_MISMATCH`, `UNIT_INCOMPATIBLE`, `UNKNOWN`) y soporte de estrategias explícitas (`STRICT_SAME_PACK`, `REBASE_UNIT_COST`, `ADOPT_SOURCE_PACK`), exigiendo confirmación ante alertas críticas y conversión con `fl_oz` / densidad.
+   - Soporte fiscal por fuente (`INCLUDED` vs `PLUS_ITBIS` con tasas RD `0%`, `16%`, `18%`).
+4. **Simulador Read-Only y Aprobación Transaccional Única:**
+   - Previsualización de impacto (`ImpactSimulationReport`) sin mutar la base de datos antes de aprobar.
+   - Aprobación atómica bajo `$transaction` con bloqueo optimista CAS (`PENDING -> APPROVED`), *drift check* contra `Ingredient.updatedAt`, expiración automática de propuestas competidoras, recálculo topológico de recetas y presentaciones y trazabilidad en `RecipePriceHistory` (`reason = "portal_price_approval"`).
+   - Preservación absoluta de precios manuales (`finalPriceCents`, `currentPriceCents`) y ventas/cuadres históricos (`Sale`, `SaleItem`, `WeeklyClose`).
+
+### Consecuencias
+* Eliminación de sobrescrituras silenciosas de empaque o costo en recetas.
+* Resiliencia operativa ante bloqueos anti-bot o suplidores locales no digitalizados mediante Plan B unificado en la misma bandeja de aprobación.

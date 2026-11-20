@@ -287,6 +287,7 @@ exports.Prisma.SubRecipeUseScalarFieldEnum = {
 exports.Prisma.RecipePriceHistoryScalarFieldEnum = {
   id: 'id',
   recipeId: 'recipeId',
+  proposalId: 'proposalId',
   batchCostCents: 'batchCostCents',
   unitCostCents: 'unitCostCents',
   priceCents: 'priceCents',
@@ -433,6 +434,100 @@ exports.Prisma.ImportRowScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PriceSourceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  baseUrl: 'baseUrl',
+  supplierId: 'supplierId',
+  adapterType: 'adapterType',
+  captureMode: 'captureMode',
+  taxMode: 'taxMode',
+  currency: 'currency',
+  rateLimitMs: 'rateLimitMs',
+  timeoutMs: 'timeoutMs',
+  proposalTtlHours: 'proposalTtlHours',
+  priceAlertThresholdPct: 'priceAlertThresholdPct',
+  configJson: 'configJson',
+  isActive: 'isActive',
+  lastSyncedAt: 'lastSyncedAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductSourceLinkScalarFieldEnum = {
+  id: 'id',
+  ingredientId: 'ingredientId',
+  sourceId: 'sourceId',
+  isPrimary: 'isPrimary',
+  externalSku: 'externalSku',
+  externalUrl: 'externalUrl',
+  externalName: 'externalName',
+  expectedPackageQty: 'expectedPackageQty',
+  expectedPackageUnit: 'expectedPackageUnit',
+  expectedConversionFactor: 'expectedConversionFactor',
+  expectedBaseQty: 'expectedBaseQty',
+  packTolerancePct: 'packTolerancePct',
+  applyStrategy: 'applyStrategy',
+  taxRatePct: 'taxRatePct',
+  lastCheckedAt: 'lastCheckedAt',
+  lastSeenPriceCents: 'lastSeenPriceCents',
+  lastSeenInStock: 'lastSeenInStock',
+  lastError: 'lastError',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PriceSyncRunScalarFieldEnum = {
+  id: 'id',
+  sourceId: 'sourceId',
+  triggerType: 'triggerType',
+  status: 'status',
+  totalChecked: 'totalChecked',
+  proposalsCreated: 'proposalsCreated',
+  errorsCount: 'errorsCount',
+  summaryJson: 'summaryJson',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+};
+
+exports.Prisma.PriceUpdateProposalScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  runId: 'runId',
+  linkId: 'linkId',
+  ingredientId: 'ingredientId',
+  sourceId: 'sourceId',
+  status: 'status',
+  applyStrategyUsed: 'applyStrategyUsed',
+  currentPriceCents: 'currentPriceCents',
+  currentCostPerBaseUnit: 'currentCostPerBaseUnit',
+  currentIngredientUpdatedAt: 'currentIngredientUpdatedAt',
+  detectedPriceCents: 'detectedPriceCents',
+  detectedInStock: 'detectedInStock',
+  detectedPackQty: 'detectedPackQty',
+  detectedPackUnit: 'detectedPackUnit',
+  detectedRawTitle: 'detectedRawTitle',
+  proposedPriceCents: 'proposedPriceCents',
+  proposedCostPerBaseUnit: 'proposedCostPerBaseUnit',
+  proposedPackageQty: 'proposedPackageQty',
+  proposedPackageUnit: 'proposedPackageUnit',
+  proposedConversionFactor: 'proposedConversionFactor',
+  diffPriceCents: 'diffPriceCents',
+  diffPercent: 'diffPercent',
+  packCheckStatus: 'packCheckStatus',
+  alertsJson: 'alertsJson',
+  evidenceUrl: 'evidenceUrl',
+  reviewNote: 'reviewNote',
+  reviewedAt: 'reviewedAt',
+  expiresAt: 'expiresAt',
+  appliedSnapshotJson: 'appliedSnapshotJson',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -466,7 +561,11 @@ exports.Prisma.ModelName = {
   OperationalExpense: 'OperationalExpense',
   UnitConversionRef: 'UnitConversionRef',
   ImportSession: 'ImportSession',
-  ImportRow: 'ImportRow'
+  ImportRow: 'ImportRow',
+  PriceSource: 'PriceSource',
+  ProductSourceLink: 'ProductSourceLink',
+  PriceSyncRun: 'PriceSyncRun',
+  PriceUpdateProposal: 'PriceUpdateProposal'
 };
 
 /**

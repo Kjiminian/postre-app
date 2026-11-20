@@ -29,15 +29,16 @@ model User {
 // ─── Módulo 3: Ingredientes e Insumos ────────────────────────────────────────
 
 model Supplier {
-  id          String       @id @default(cuid())
-  code        String?      @unique
-  name        String
-  phone       String?
-  notes       String?
-  isActive    Boolean      @default(true)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  ingredients Ingredient[]
+  id           String        @id @default(cuid())
+  code         String?       @unique
+  name         String
+  phone        String?
+  notes        String?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ingredients  Ingredient[]
+  priceSources PriceSource[]
 
   @@map("suppliers")
 }
@@ -88,9 +89,12 @@ model Ingredient {
   notes            String?
   importedFrom     String?         // Nombre de la hoja/fila del Excel de origen
   reviewFlag       Boolean         @default(false) // true = importado, requiere revisión
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  recipeIngredients RecipeIngredient[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  recipeIngredients     RecipeIngredient[]
+  presentationMaterials PresentationMaterial[]
+  sourceLinks           ProductSourceLink[]
+  priceProposals        PriceUpdateProposal[]
 
   @@index([name])
   @@index([category])
@@ -126,12 +130,13 @@ model Recipe {
   importedFrom      String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  ingredients       RecipeIngredient[]
-  subRecipeUses     SubRecipeUse[]   @relation("ParentRecipe")
-  usedInRecipes     SubRecipeUse[]   @relation("ChildRecipe")
-  presentations     RecipePresentation[]
-  saleItems         SaleItem[]
-  priceHistory      RecipePriceHistory[]
+  ingredients            RecipeIngredient[]
+  subRecipeUses          SubRecipeUse[]          @relation("ParentRecipe")
+  usedInRecipes          SubRecipeUse[]          @relation("ChildRecipe")
+  presentations          RecipePresentation[]
+  presentationSubrecipes PresentationSubrecipe[] @relation("PresentationSubrecipeRef")
+  saleItems              SaleItem[]
+  priceHistory           RecipePriceHistory[]
 
   @@index([status])
   @@index([recipeType])
@@ -184,6 +189,7 @@ model PresentationMaterial {
   presentationId  String
   presentation    RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   ingredientId    String?
+  ingredient      Ingredient?        @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
   materialType    String             @default("PACKAGING") // PACKAGING | DECORATION
   name            String             // Vaso, Domo, Caja, Capacillo, Cinta, Etiqueta, Mensaje
   quantity        Float
@@ -192,6 +198,7 @@ model PresentationMaterial {
   totalCostCents  Int
 
   @@index([presentationId])
+  @@index([ingredientId])
   @@map("presentation_materials")
 }
 
@@ -200,12 +207,14 @@ model PresentationSubrecipe {
   presentationId  String
   presentation    RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   subRecipeId     String?
+  subRecipe       Recipe?            @relation("PresentationSubrecipeRef", fields: [subRecipeId], references: [id], onDelete: SetNull)
   name            String             // Topping, Crema adicional, Dulce de leche
   quantity        Float
   unit            String
   costCents       Int
 
   @@index([presentationId])
+  @@index([subRecipeId])
   @@map("presentation_subrecipes")
 }
 
@@ -235,21 +244,25 @@ model SubRecipeUse {
   costCents     Int    // Costo calculado
 
   @@index([parentId])
+  @@index([childId])
   @@map("sub_recipe_uses")
 }
 
 model RecipePriceHistory {
-  id              String   @id @default(cuid())
+  id              String               @id @default(cuid())
   recipeId        String
-  recipe          Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe          Recipe               @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  proposalId      String?
+  proposal        PriceUpdateProposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
   batchCostCents  Int
   unitCostCents   Int
   priceCents      Int
   margin          Float
-  recordedAt      DateTime @default(now())
-  reason          String?  // "ingredient_update" | "manual" | "import"
+  recordedAt      DateTime             @default(now())
+  reason          String?              // "ingredient_update" | "manual" | "import" | "portal_price_approval"
 
   @@index([recipeId])
+  @@index([proposalId])
   @@map("recipe_price_history")
 }
 
@@ -447,4 +460,134 @@ model ImportRow {
 
   @@index([sessionId])
   @@map("import_rows")
+}
+
+
+// ─── Módulo 9: Actualización de Precios desde Portales RD ────────────────────
+
+model PriceSource {
+  id                     String                @id @default(cuid())
+  code                   String                @unique
+  name                   String
+  baseUrl                String?
+  supplierId             String?
+  supplier               Supplier?             @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  adapterType            String                // VTEX_IO | SHOPIFY_JSON | WOOCOMMERCE_HTML | GENERIC_HTML | MANUAL_ASSISTED
+  captureMode            String                @default("AUTO") // AUTO | ASSISTED | MANUAL
+  taxMode                String                @default("INCLUDED") // INCLUDED | PLUS_ITBIS
+  currency               String                @default("DOP")
+  rateLimitMs            Int                   @default(2000)
+  timeoutMs              Int                   @default(10000)
+  proposalTtlHours       Int                   @default(168) // 7 días
+  priceAlertThresholdPct Float                 @default(20)
+  configJson             String?
+  isActive               Boolean               @default(true)
+  lastSyncedAt           DateTime?
+  lastStatus             String?               // OK | DEGRADED | BLOCKED | ERROR
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+  links                  ProductSourceLink[]
+  syncRuns               PriceSyncRun[]
+  proposals              PriceUpdateProposal[]
+
+  @@index([isActive])
+  @@index([supplierId])
+  @@map("price_sources")
+}
+
+model ProductSourceLink {
+  id                       String                @id @default(cuid())
+  ingredientId             String
+  ingredient               Ingredient            @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  sourceId                 String
+  source                   PriceSource           @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  isPrimary                Boolean               @default(false)
+  externalSku              String?
+  externalUrl              String?
+  externalName             String?
+  expectedPackageQty       Float
+  expectedPackageUnit      String
+  expectedConversionFactor Float                 @default(1)
+  expectedBaseQty          Float
+  packTolerancePct         Float                 @default(5)
+  applyStrategy            String                @default("STRICT_SAME_PACK") // STRICT_SAME_PACK | REBASE_UNIT_COST | ADOPT_SOURCE_PACK
+  taxRatePct               Float                 @default(0) // 0 | 16 | 18 (ITBIS RD Ley 253-12)
+  lastCheckedAt            DateTime?
+  lastSeenPriceCents       Int?
+  lastSeenInStock          Boolean?
+  lastError                String?
+  isActive                 Boolean               @default(true)
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+  proposals                PriceUpdateProposal[]
+
+  @@index([ingredientId])
+  @@index([sourceId])
+  @@index([isActive])
+  @@map("product_source_links")
+}
+
+model PriceSyncRun {
+  id               String                @id @default(cuid())
+  sourceId         String?
+  source           PriceSource?          @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  triggerType      String                // MANUAL_ALL | MANUAL_SOURCE | MANUAL_RECIPE | ASSISTED_TEXT | ASSISTED_CSV | ASSISTED_INVOICE
+  status           String                @default("RUNNING") // RUNNING | OK | DEGRADED | BLOCKED | ERROR
+  totalChecked     Int                   @default(0)
+  proposalsCreated Int                   @default(0)
+  errorsCount      Int                   @default(0)
+  summaryJson      String?
+  startedAt        DateTime              @default(now())
+  finishedAt       DateTime?
+  proposals        PriceUpdateProposal[]
+
+  @@index([sourceId, startedAt])
+  @@index([status])
+  @@map("price_sync_runs")
+}
+
+model PriceUpdateProposal {
+  id                         String               @id @default(cuid())
+  code                       String               @unique // PRP-001
+  runId                      String?
+  run                        PriceSyncRun?        @relation(fields: [runId], references: [id], onDelete: SetNull)
+  linkId                     String?
+  link                       ProductSourceLink?   @relation(fields: [linkId], references: [id], onDelete: SetNull)
+  ingredientId               String
+  ingredient                 Ingredient           @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  sourceId                   String
+  source                     PriceSource          @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  status                     String               @default("PENDING") // PENDING | APPROVED | REJECTED | EXPIRED
+  applyStrategyUsed          String               @default("STRICT_SAME_PACK")
+  currentPriceCents          Int
+  currentCostPerBaseUnit     Float
+  currentIngredientUpdatedAt DateTime
+  detectedPriceCents         Int
+  detectedInStock            Boolean              @default(true)
+  detectedPackQty            Float?
+  detectedPackUnit           String?
+  detectedRawTitle           String?
+  proposedPriceCents         Int
+  proposedCostPerBaseUnit    Float
+  proposedPackageQty         Float?
+  proposedPackageUnit        String?
+  proposedConversionFactor   Float?
+  diffPriceCents             Int
+  diffPercent                Float
+  packCheckStatus            String               @default("UNKNOWN") // MATCH | UNIT_CONVERTED | PACK_MISMATCH | UNIT_INCOMPATIBLE | UNKNOWN
+  alertsJson                 String?
+  evidenceUrl                String?
+  reviewNote                 String?
+  reviewedAt                 DateTime?
+  expiresAt                  DateTime
+  appliedSnapshotJson        String?
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @updatedAt
+  priceHistoryEntries        RecipePriceHistory[]
+
+  @@index([status, expiresAt])
+  @@index([ingredientId, status])
+  @@index([runId])
+  @@index([linkId])
+  @@map("price_update_proposals")
 }

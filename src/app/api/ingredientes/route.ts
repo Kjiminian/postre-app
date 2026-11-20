@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createWithSequentialCode, ENTITY_CODE_PREFIX } from "@/lib/codes";
 import { calculateIngredientBaseCost } from "@/lib/ingredient-cost";
+import { recalculateFromIngredientsInTx } from "@/lib/services/price-approval";
 import { handleApiError } from "@/lib/api-errors";
 
 function mapIngredientDto(i: any) {
@@ -128,7 +129,7 @@ export async function POST(request: Request) {
             packageUnit,
             baseUnit,
             factorId,
-            conversionFactor: resolvedFactor,
+            conversionFactor: costResult.appliedFactor,
             costPerBaseUnit: costResult.costPerBaseUnit,
             density,
             notes,
@@ -239,12 +240,19 @@ export async function PUT(request: Request) {
         return NextResponse.json({ success: false, error: costResult.error }, { status: 400 });
       }
       data.costPerBaseUnit = costResult.costPerBaseUnit;
+      data.conversionFactor = costResult.appliedFactor;
     }
 
-    const updated = await prisma.ingredient.update({
-      where: { id },
-      data,
-      include: { supplier: true, factorRef: true },
+    const updated = await prisma.$transaction(async (tx: any) => {
+      const saved = await tx.ingredient.update({
+        where: { id },
+        data,
+        include: { supplier: true, factorRef: true },
+      });
+      if (costFieldsChanged) {
+        await recalculateFromIngredientsInTx(tx, [id]);
+      }
+      return saved;
     });
 
     return NextResponse.json({ success: true, data: mapIngredientDto(updated) });

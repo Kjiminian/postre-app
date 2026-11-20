@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   UtensilsCrossed,
   Plus,
@@ -16,6 +17,7 @@ import {
   RefreshCw,
   ChevronDown,
   ChevronRight,
+  TrendingUp,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
@@ -345,13 +347,22 @@ export default function IngredientesPage() {
             </p>
           </div>
 
-          <button
-            onClick={handleOpenCreate}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all self-start md:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Nuevo Registro</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
+            <Link
+              href="/actualizacion-precios"
+              className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-white border border-[#E8E2D9] text-[#4A3B32] text-sm font-medium hover:bg-[#FAF8F6] hover:border-[#9C4266]/40 shadow-sm transition-all"
+            >
+              <TrendingUp className="w-4 h-4 text-[#9C4266]" />
+              <span>Actualizar precios</span>
+            </Link>
+            <button
+              onClick={handleOpenCreate}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#9C4266] text-white text-sm font-medium hover:bg-[#833554] shadow-sm transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Nuevo Registro</span>
+            </button>
+          </div>
         </div>
 
         {/* Barra de Filtros y Búsqueda */}

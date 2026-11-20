@@ -9,6 +9,7 @@ export const ENTITY_CODE_PREFIX = {
   FACTOR: "FAC",
   CUSTOMER: "CLI",
   PRODUCT: "PROD",
+  PROPOSAL: "PRP",
 } as const;
 
 export function formatSequentialCode(prefix: string, sequenceNumber: number): string {

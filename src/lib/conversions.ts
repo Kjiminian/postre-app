@@ -4,6 +4,78 @@ export type ConversionResult =
   | { ok: true; value: number; fromUnit: string; toUnit: string }
   | { ok: false; error: string };
 
+const UNIT_ALIASES: Record<string, string> = {
+  g: "g",
+  gr: "g",
+  grs: "g",
+  gramo: "g",
+  gramos: "g",
+  gracmos: "g",
+  kg: "kg",
+  kilo: "kg",
+  kilos: "kg",
+  kilogramo: "kg",
+  kilogramos: "kg",
+  lb: "lb",
+  lbs: "lb",
+  libra: "lb",
+  libras: "lb",
+  oz: "oz",
+  onza: "oz",
+  onzas: "oz",
+  "fl oz": "fl_oz",
+  "fl. oz": "fl_oz",
+  "fl.oz": "fl_oz",
+  fl_oz: "fl_oz",
+  floz: "fl_oz",
+  "onza liquida": "fl_oz",
+  "onzas liquidas": "fl_oz",
+  ml: "ml",
+  mililitro: "ml",
+  mililitros: "ml",
+  l: "l",
+  lt: "l",
+  litro: "l",
+  litros: "l",
+  taza: "taza",
+  tazas: "taza",
+  cda: "cda",
+  cdas: "cda",
+  cucharada: "cda",
+  cucharadas: "cda",
+  cdita: "cdita",
+  cditas: "cdita",
+  cucharadita: "cdita",
+  cucharaditas: "cdita",
+  unidad: "unidad",
+  unidades: "unidad",
+  ud: "unidad",
+  uds: "unidad",
+  und: "unidad",
+  unds: "unidad",
+  pieza: "unidad",
+  piezas: "unidad",
+  paquete: "paquete",
+  paquetes: "paquete",
+  pack: "paquete",
+  yarda: "yarda",
+  yardas: "yarda",
+};
+
+/**
+ * Normaliza alias comunes de unidades en español sin inventar densidades.
+ */
+export function normalizeUnitAlias(raw: string | null | undefined): string {
+  const cleaned = String(raw || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleaned) return "unidad";
+  return UNIT_ALIASES[cleaned] || cleaned;
+}
+
 /**
  * Convierte entre unidades de masa (RF-021)
  * 1 lb = 453.59237 g exacto
@@ -59,8 +131,8 @@ export function convertMassToVolume(
   return { ok: true, value: result, fromUnit: from, toUnit: to };
 }
 
-const MASS_UNITS: MassUnit[] = ["g", "kg", "lb", "oz"];
-const VOL_UNITS: VolumeUnit[] = ["ml", "l", "taza", "cda", "cdita"];
+export const MASS_UNITS: MassUnit[] = ["g", "kg", "lb", "oz"];
+export const VOL_UNITS: VolumeUnit[] = ["ml", "l", "fl_oz", "taza", "cda", "cdita"];
 
 /**
  * Convierte entre cualquier par de unidades, requiriendo densidad si hay
@@ -72,24 +144,27 @@ export function convertUnit(
   to: string,
   density?: number
 ): ConversionResult {
-  if (from === to) return { ok: true, value, fromUnit: from, toUnit: to };
+  const normFrom = normalizeUnitAlias(from);
+  const normTo = normalizeUnitAlias(to);
 
-  const fromIsMass = MASS_UNITS.includes(from as MassUnit);
-  const toIsMass = MASS_UNITS.includes(to as MassUnit);
-  const fromIsVol = VOL_UNITS.includes(from as VolumeUnit);
-  const toIsVol = VOL_UNITS.includes(to as VolumeUnit);
+  if (normFrom === normTo) return { ok: true, value, fromUnit: normFrom, toUnit: normTo };
+
+  const fromIsMass = MASS_UNITS.includes(normFrom as MassUnit);
+  const toIsMass = MASS_UNITS.includes(normTo as MassUnit);
+  const fromIsVol = VOL_UNITS.includes(normFrom as VolumeUnit);
+  const toIsVol = VOL_UNITS.includes(normTo as VolumeUnit);
 
   if (fromIsMass && toIsMass) {
-    return { ok: true, value: convertMass(value, from as MassUnit, to as MassUnit), fromUnit: from, toUnit: to };
+    return { ok: true, value: convertMass(value, normFrom as MassUnit, normTo as MassUnit), fromUnit: normFrom, toUnit: normTo };
   }
   if (fromIsVol && toIsVol) {
-    return { ok: true, value: convertVolume(value, from as VolumeUnit, to as VolumeUnit), fromUnit: from, toUnit: to };
+    return { ok: true, value: convertVolume(value, normFrom as VolumeUnit, normTo as VolumeUnit), fromUnit: normFrom, toUnit: normTo };
   }
   if (fromIsVol && toIsMass) {
-    return convertVolumeToMass(value, from as VolumeUnit, to as MassUnit, density ?? 0);
+    return convertVolumeToMass(value, normFrom as VolumeUnit, normTo as MassUnit, density ?? 0);
   }
   if (fromIsMass && toIsVol) {
-    return convertMassToVolume(value, from as MassUnit, to as VolumeUnit, density ?? 0);
+    return convertMassToVolume(value, normFrom as MassUnit, normTo as VolumeUnit, density ?? 0);
   }
 
   return { ok: false, error: `No se puede convertir de "${from}" a "${to}".` };

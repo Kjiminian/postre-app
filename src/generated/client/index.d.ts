@@ -123,6 +123,26 @@ export type ImportSession = $Result.DefaultSelection<Prisma.$ImportSessionPayloa
  * 
  */
 export type ImportRow = $Result.DefaultSelection<Prisma.$ImportRowPayload>
+/**
+ * Model PriceSource
+ * 
+ */
+export type PriceSource = $Result.DefaultSelection<Prisma.$PriceSourcePayload>
+/**
+ * Model ProductSourceLink
+ * 
+ */
+export type ProductSourceLink = $Result.DefaultSelection<Prisma.$ProductSourceLinkPayload>
+/**
+ * Model PriceSyncRun
+ * 
+ */
+export type PriceSyncRun = $Result.DefaultSelection<Prisma.$PriceSyncRunPayload>
+/**
+ * Model PriceUpdateProposal
+ * 
+ */
+export type PriceUpdateProposal = $Result.DefaultSelection<Prisma.$PriceUpdateProposalPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -466,6 +486,46 @@ export class PrismaClient<
     * ```
     */
   get importRow(): Prisma.ImportRowDelegate<ExtArgs>;
+
+  /**
+   * `prisma.priceSource`: Exposes CRUD operations for the **PriceSource** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PriceSources
+    * const priceSources = await prisma.priceSource.findMany()
+    * ```
+    */
+  get priceSource(): Prisma.PriceSourceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.productSourceLink`: Exposes CRUD operations for the **ProductSourceLink** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductSourceLinks
+    * const productSourceLinks = await prisma.productSourceLink.findMany()
+    * ```
+    */
+  get productSourceLink(): Prisma.ProductSourceLinkDelegate<ExtArgs>;
+
+  /**
+   * `prisma.priceSyncRun`: Exposes CRUD operations for the **PriceSyncRun** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PriceSyncRuns
+    * const priceSyncRuns = await prisma.priceSyncRun.findMany()
+    * ```
+    */
+  get priceSyncRun(): Prisma.PriceSyncRunDelegate<ExtArgs>;
+
+  /**
+   * `prisma.priceUpdateProposal`: Exposes CRUD operations for the **PriceUpdateProposal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PriceUpdateProposals
+    * const priceUpdateProposals = await prisma.priceUpdateProposal.findMany()
+    * ```
+    */
+  get priceUpdateProposal(): Prisma.PriceUpdateProposalDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -928,7 +988,11 @@ export namespace Prisma {
     OperationalExpense: 'OperationalExpense',
     UnitConversionRef: 'UnitConversionRef',
     ImportSession: 'ImportSession',
-    ImportRow: 'ImportRow'
+    ImportRow: 'ImportRow',
+    PriceSource: 'PriceSource',
+    ProductSourceLink: 'ProductSourceLink',
+    PriceSyncRun: 'PriceSyncRun',
+    PriceUpdateProposal: 'PriceUpdateProposal'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -944,7 +1008,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "supplier" | "productCategory" | "measureUnit" | "ingredient" | "recipe" | "recipePresentation" | "presentationMaterial" | "presentationSubrecipe" | "recipeIngredient" | "subRecipeUse" | "recipePriceHistory" | "customer" | "sale" | "saleItem" | "payment" | "weeklyClose" | "expenseCategory" | "operationalExpense" | "unitConversionRef" | "importSession" | "importRow"
+      modelProps: "user" | "supplier" | "productCategory" | "measureUnit" | "ingredient" | "recipe" | "recipePresentation" | "presentationMaterial" | "presentationSubrecipe" | "recipeIngredient" | "subRecipeUse" | "recipePriceHistory" | "customer" | "sale" | "saleItem" | "payment" | "weeklyClose" | "expenseCategory" | "operationalExpense" | "unitConversionRef" | "importSession" | "importRow" | "priceSource" | "productSourceLink" | "priceSyncRun" | "priceUpdateProposal"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2488,6 +2552,286 @@ export namespace Prisma {
           }
         }
       }
+      PriceSource: {
+        payload: Prisma.$PriceSourcePayload<ExtArgs>
+        fields: Prisma.PriceSourceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PriceSourceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PriceSourceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          findFirst: {
+            args: Prisma.PriceSourceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PriceSourceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          findMany: {
+            args: Prisma.PriceSourceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>[]
+          }
+          create: {
+            args: Prisma.PriceSourceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          createMany: {
+            args: Prisma.PriceSourceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PriceSourceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>[]
+          }
+          delete: {
+            args: Prisma.PriceSourceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          update: {
+            args: Prisma.PriceSourceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          deleteMany: {
+            args: Prisma.PriceSourceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PriceSourceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PriceSourceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSourcePayload>
+          }
+          aggregate: {
+            args: Prisma.PriceSourceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePriceSource>
+          }
+          groupBy: {
+            args: Prisma.PriceSourceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PriceSourceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PriceSourceCountArgs<ExtArgs>
+            result: $Utils.Optional<PriceSourceCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductSourceLink: {
+        payload: Prisma.$ProductSourceLinkPayload<ExtArgs>
+        fields: Prisma.ProductSourceLinkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductSourceLinkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductSourceLinkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductSourceLinkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductSourceLinkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          findMany: {
+            args: Prisma.ProductSourceLinkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>[]
+          }
+          create: {
+            args: Prisma.ProductSourceLinkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          createMany: {
+            args: Prisma.ProductSourceLinkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductSourceLinkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductSourceLinkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          update: {
+            args: Prisma.ProductSourceLinkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductSourceLinkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductSourceLinkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProductSourceLinkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductSourceLinkPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductSourceLinkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductSourceLink>
+          }
+          groupBy: {
+            args: Prisma.ProductSourceLinkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductSourceLinkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductSourceLinkCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductSourceLinkCountAggregateOutputType> | number
+          }
+        }
+      }
+      PriceSyncRun: {
+        payload: Prisma.$PriceSyncRunPayload<ExtArgs>
+        fields: Prisma.PriceSyncRunFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PriceSyncRunFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PriceSyncRunFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          findFirst: {
+            args: Prisma.PriceSyncRunFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PriceSyncRunFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          findMany: {
+            args: Prisma.PriceSyncRunFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>[]
+          }
+          create: {
+            args: Prisma.PriceSyncRunCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          createMany: {
+            args: Prisma.PriceSyncRunCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PriceSyncRunCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>[]
+          }
+          delete: {
+            args: Prisma.PriceSyncRunDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          update: {
+            args: Prisma.PriceSyncRunUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          deleteMany: {
+            args: Prisma.PriceSyncRunDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PriceSyncRunUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PriceSyncRunUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceSyncRunPayload>
+          }
+          aggregate: {
+            args: Prisma.PriceSyncRunAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePriceSyncRun>
+          }
+          groupBy: {
+            args: Prisma.PriceSyncRunGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PriceSyncRunGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PriceSyncRunCountArgs<ExtArgs>
+            result: $Utils.Optional<PriceSyncRunCountAggregateOutputType> | number
+          }
+        }
+      }
+      PriceUpdateProposal: {
+        payload: Prisma.$PriceUpdateProposalPayload<ExtArgs>
+        fields: Prisma.PriceUpdateProposalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PriceUpdateProposalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PriceUpdateProposalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          findFirst: {
+            args: Prisma.PriceUpdateProposalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PriceUpdateProposalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          findMany: {
+            args: Prisma.PriceUpdateProposalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>[]
+          }
+          create: {
+            args: Prisma.PriceUpdateProposalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          createMany: {
+            args: Prisma.PriceUpdateProposalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PriceUpdateProposalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>[]
+          }
+          delete: {
+            args: Prisma.PriceUpdateProposalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          update: {
+            args: Prisma.PriceUpdateProposalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          deleteMany: {
+            args: Prisma.PriceUpdateProposalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PriceUpdateProposalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PriceUpdateProposalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PriceUpdateProposalPayload>
+          }
+          aggregate: {
+            args: Prisma.PriceUpdateProposalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePriceUpdateProposal>
+          }
+          groupBy: {
+            args: Prisma.PriceUpdateProposalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PriceUpdateProposalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PriceUpdateProposalCountArgs<ExtArgs>
+            result: $Utils.Optional<PriceUpdateProposalCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2650,10 +2994,12 @@ export namespace Prisma {
 
   export type SupplierCountOutputType = {
     ingredients: number
+    priceSources: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ingredients?: boolean | SupplierCountOutputTypeCountIngredientsArgs
+    priceSources?: boolean | SupplierCountOutputTypeCountPriceSourcesArgs
   }
 
   // Custom InputTypes
@@ -2674,6 +3020,13 @@ export namespace Prisma {
     where?: IngredientWhereInput
   }
 
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountPriceSourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceSourceWhereInput
+  }
+
 
   /**
    * Count Type IngredientCountOutputType
@@ -2681,10 +3034,16 @@ export namespace Prisma {
 
   export type IngredientCountOutputType = {
     recipeIngredients: number
+    presentationMaterials: number
+    sourceLinks: number
+    priceProposals: number
   }
 
   export type IngredientCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipeIngredients?: boolean | IngredientCountOutputTypeCountRecipeIngredientsArgs
+    presentationMaterials?: boolean | IngredientCountOutputTypeCountPresentationMaterialsArgs
+    sourceLinks?: boolean | IngredientCountOutputTypeCountSourceLinksArgs
+    priceProposals?: boolean | IngredientCountOutputTypeCountPriceProposalsArgs
   }
 
   // Custom InputTypes
@@ -2705,6 +3064,27 @@ export namespace Prisma {
     where?: RecipeIngredientWhereInput
   }
 
+  /**
+   * IngredientCountOutputType without action
+   */
+  export type IngredientCountOutputTypeCountPresentationMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PresentationMaterialWhereInput
+  }
+
+  /**
+   * IngredientCountOutputType without action
+   */
+  export type IngredientCountOutputTypeCountSourceLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductSourceLinkWhereInput
+  }
+
+  /**
+   * IngredientCountOutputType without action
+   */
+  export type IngredientCountOutputTypeCountPriceProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceUpdateProposalWhereInput
+  }
+
 
   /**
    * Count Type RecipeCountOutputType
@@ -2715,6 +3095,7 @@ export namespace Prisma {
     subRecipeUses: number
     usedInRecipes: number
     presentations: number
+    presentationSubrecipes: number
     saleItems: number
     priceHistory: number
   }
@@ -2724,6 +3105,7 @@ export namespace Prisma {
     subRecipeUses?: boolean | RecipeCountOutputTypeCountSubRecipeUsesArgs
     usedInRecipes?: boolean | RecipeCountOutputTypeCountUsedInRecipesArgs
     presentations?: boolean | RecipeCountOutputTypeCountPresentationsArgs
+    presentationSubrecipes?: boolean | RecipeCountOutputTypeCountPresentationSubrecipesArgs
     saleItems?: boolean | RecipeCountOutputTypeCountSaleItemsArgs
     priceHistory?: boolean | RecipeCountOutputTypeCountPriceHistoryArgs
   }
@@ -2765,6 +3147,13 @@ export namespace Prisma {
    */
   export type RecipeCountOutputTypeCountPresentationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RecipePresentationWhereInput
+  }
+
+  /**
+   * RecipeCountOutputType without action
+   */
+  export type RecipeCountOutputTypeCountPresentationSubrecipesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PresentationSubrecipeWhereInput
   }
 
   /**
@@ -3041,6 +3430,148 @@ export namespace Prisma {
    */
   export type ImportSessionCountOutputTypeCountRowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ImportRowWhereInput
+  }
+
+
+  /**
+   * Count Type PriceSourceCountOutputType
+   */
+
+  export type PriceSourceCountOutputType = {
+    links: number
+    syncRuns: number
+    proposals: number
+  }
+
+  export type PriceSourceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    links?: boolean | PriceSourceCountOutputTypeCountLinksArgs
+    syncRuns?: boolean | PriceSourceCountOutputTypeCountSyncRunsArgs
+    proposals?: boolean | PriceSourceCountOutputTypeCountProposalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PriceSourceCountOutputType without action
+   */
+  export type PriceSourceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSourceCountOutputType
+     */
+    select?: PriceSourceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PriceSourceCountOutputType without action
+   */
+  export type PriceSourceCountOutputTypeCountLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductSourceLinkWhereInput
+  }
+
+  /**
+   * PriceSourceCountOutputType without action
+   */
+  export type PriceSourceCountOutputTypeCountSyncRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceSyncRunWhereInput
+  }
+
+  /**
+   * PriceSourceCountOutputType without action
+   */
+  export type PriceSourceCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceUpdateProposalWhereInput
+  }
+
+
+  /**
+   * Count Type ProductSourceLinkCountOutputType
+   */
+
+  export type ProductSourceLinkCountOutputType = {
+    proposals: number
+  }
+
+  export type ProductSourceLinkCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    proposals?: boolean | ProductSourceLinkCountOutputTypeCountProposalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductSourceLinkCountOutputType without action
+   */
+  export type ProductSourceLinkCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLinkCountOutputType
+     */
+    select?: ProductSourceLinkCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductSourceLinkCountOutputType without action
+   */
+  export type ProductSourceLinkCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceUpdateProposalWhereInput
+  }
+
+
+  /**
+   * Count Type PriceSyncRunCountOutputType
+   */
+
+  export type PriceSyncRunCountOutputType = {
+    proposals: number
+  }
+
+  export type PriceSyncRunCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    proposals?: boolean | PriceSyncRunCountOutputTypeCountProposalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PriceSyncRunCountOutputType without action
+   */
+  export type PriceSyncRunCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRunCountOutputType
+     */
+    select?: PriceSyncRunCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PriceSyncRunCountOutputType without action
+   */
+  export type PriceSyncRunCountOutputTypeCountProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceUpdateProposalWhereInput
+  }
+
+
+  /**
+   * Count Type PriceUpdateProposalCountOutputType
+   */
+
+  export type PriceUpdateProposalCountOutputType = {
+    priceHistoryEntries: number
+  }
+
+  export type PriceUpdateProposalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    priceHistoryEntries?: boolean | PriceUpdateProposalCountOutputTypeCountPriceHistoryEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PriceUpdateProposalCountOutputType without action
+   */
+  export type PriceUpdateProposalCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposalCountOutputType
+     */
+    select?: PriceUpdateProposalCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PriceUpdateProposalCountOutputType without action
+   */
+  export type PriceUpdateProposalCountOutputTypeCountPriceHistoryEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecipePriceHistoryWhereInput
   }
 
 
@@ -4149,6 +4680,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     ingredients?: boolean | Supplier$ingredientsArgs<ExtArgs>
+    priceSources?: boolean | Supplier$priceSourcesArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -4176,6 +4708,7 @@ export namespace Prisma {
 
   export type SupplierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ingredients?: boolean | Supplier$ingredientsArgs<ExtArgs>
+    priceSources?: boolean | Supplier$priceSourcesArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4184,6 +4717,7 @@ export namespace Prisma {
     name: "Supplier"
     objects: {
       ingredients: Prisma.$IngredientPayload<ExtArgs>[]
+      priceSources: Prisma.$PriceSourcePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4559,6 +5093,7 @@ export namespace Prisma {
   export interface Prisma__SupplierClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ingredients<T extends Supplier$ingredientsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$ingredientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IngredientPayload<ExtArgs>, T, "findMany"> | Null>
+    priceSources<T extends Supplier$priceSourcesArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$priceSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4925,6 +5460,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IngredientScalarFieldEnum | IngredientScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.priceSources
+   */
+  export type Supplier$priceSourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    where?: PriceSourceWhereInput
+    orderBy?: PriceSourceOrderByWithRelationInput | PriceSourceOrderByWithRelationInput[]
+    cursor?: PriceSourceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceSourceScalarFieldEnum | PriceSourceScalarFieldEnum[]
   }
 
   /**
@@ -7095,6 +7650,9 @@ export namespace Prisma {
     supplier?: boolean | Ingredient$supplierArgs<ExtArgs>
     factorRef?: boolean | Ingredient$factorRefArgs<ExtArgs>
     recipeIngredients?: boolean | Ingredient$recipeIngredientsArgs<ExtArgs>
+    presentationMaterials?: boolean | Ingredient$presentationMaterialsArgs<ExtArgs>
+    sourceLinks?: boolean | Ingredient$sourceLinksArgs<ExtArgs>
+    priceProposals?: boolean | Ingredient$priceProposalsArgs<ExtArgs>
     _count?: boolean | IngredientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ingredient"]>
 
@@ -7148,6 +7706,9 @@ export namespace Prisma {
     supplier?: boolean | Ingredient$supplierArgs<ExtArgs>
     factorRef?: boolean | Ingredient$factorRefArgs<ExtArgs>
     recipeIngredients?: boolean | Ingredient$recipeIngredientsArgs<ExtArgs>
+    presentationMaterials?: boolean | Ingredient$presentationMaterialsArgs<ExtArgs>
+    sourceLinks?: boolean | Ingredient$sourceLinksArgs<ExtArgs>
+    priceProposals?: boolean | Ingredient$priceProposalsArgs<ExtArgs>
     _count?: boolean | IngredientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type IngredientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7161,6 +7722,9 @@ export namespace Prisma {
       supplier: Prisma.$SupplierPayload<ExtArgs> | null
       factorRef: Prisma.$UnitConversionRefPayload<ExtArgs> | null
       recipeIngredients: Prisma.$RecipeIngredientPayload<ExtArgs>[]
+      presentationMaterials: Prisma.$PresentationMaterialPayload<ExtArgs>[]
+      sourceLinks: Prisma.$ProductSourceLinkPayload<ExtArgs>[]
+      priceProposals: Prisma.$PriceUpdateProposalPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7549,6 +8113,9 @@ export namespace Prisma {
     supplier<T extends Ingredient$supplierArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     factorRef<T extends Ingredient$factorRefArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$factorRefArgs<ExtArgs>>): Prisma__UnitConversionRefClient<$Result.GetResult<Prisma.$UnitConversionRefPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     recipeIngredients<T extends Ingredient$recipeIngredientsArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$recipeIngredientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipeIngredientPayload<ExtArgs>, T, "findMany"> | Null>
+    presentationMaterials<T extends Ingredient$presentationMaterialsArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$presentationMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PresentationMaterialPayload<ExtArgs>, T, "findMany"> | Null>
+    sourceLinks<T extends Ingredient$sourceLinksArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$sourceLinksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findMany"> | Null>
+    priceProposals<T extends Ingredient$priceProposalsArgs<ExtArgs> = {}>(args?: Subset<T, Ingredient$priceProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7960,6 +8527,66 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecipeIngredientScalarFieldEnum | RecipeIngredientScalarFieldEnum[]
+  }
+
+  /**
+   * Ingredient.presentationMaterials
+   */
+  export type Ingredient$presentationMaterialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PresentationMaterial
+     */
+    select?: PresentationMaterialSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PresentationMaterialInclude<ExtArgs> | null
+    where?: PresentationMaterialWhereInput
+    orderBy?: PresentationMaterialOrderByWithRelationInput | PresentationMaterialOrderByWithRelationInput[]
+    cursor?: PresentationMaterialWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PresentationMaterialScalarFieldEnum | PresentationMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * Ingredient.sourceLinks
+   */
+  export type Ingredient$sourceLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    where?: ProductSourceLinkWhereInput
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    cursor?: ProductSourceLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductSourceLinkScalarFieldEnum | ProductSourceLinkScalarFieldEnum[]
+  }
+
+  /**
+   * Ingredient.priceProposals
+   */
+  export type Ingredient$priceProposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    where?: PriceUpdateProposalWhereInput
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
   }
 
   /**
@@ -8399,6 +9026,7 @@ export namespace Prisma {
     subRecipeUses?: boolean | Recipe$subRecipeUsesArgs<ExtArgs>
     usedInRecipes?: boolean | Recipe$usedInRecipesArgs<ExtArgs>
     presentations?: boolean | Recipe$presentationsArgs<ExtArgs>
+    presentationSubrecipes?: boolean | Recipe$presentationSubrecipesArgs<ExtArgs>
     saleItems?: boolean | Recipe$saleItemsArgs<ExtArgs>
     priceHistory?: boolean | Recipe$priceHistoryArgs<ExtArgs>
     _count?: boolean | RecipeCountOutputTypeDefaultArgs<ExtArgs>
@@ -8467,6 +9095,7 @@ export namespace Prisma {
     subRecipeUses?: boolean | Recipe$subRecipeUsesArgs<ExtArgs>
     usedInRecipes?: boolean | Recipe$usedInRecipesArgs<ExtArgs>
     presentations?: boolean | Recipe$presentationsArgs<ExtArgs>
+    presentationSubrecipes?: boolean | Recipe$presentationSubrecipesArgs<ExtArgs>
     saleItems?: boolean | Recipe$saleItemsArgs<ExtArgs>
     priceHistory?: boolean | Recipe$priceHistoryArgs<ExtArgs>
     _count?: boolean | RecipeCountOutputTypeDefaultArgs<ExtArgs>
@@ -8480,6 +9109,7 @@ export namespace Prisma {
       subRecipeUses: Prisma.$SubRecipeUsePayload<ExtArgs>[]
       usedInRecipes: Prisma.$SubRecipeUsePayload<ExtArgs>[]
       presentations: Prisma.$RecipePresentationPayload<ExtArgs>[]
+      presentationSubrecipes: Prisma.$PresentationSubrecipePayload<ExtArgs>[]
       saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
       priceHistory: Prisma.$RecipePriceHistoryPayload<ExtArgs>[]
     }
@@ -8878,6 +9508,7 @@ export namespace Prisma {
     subRecipeUses<T extends Recipe$subRecipeUsesArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$subRecipeUsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubRecipeUsePayload<ExtArgs>, T, "findMany"> | Null>
     usedInRecipes<T extends Recipe$usedInRecipesArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$usedInRecipesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubRecipeUsePayload<ExtArgs>, T, "findMany"> | Null>
     presentations<T extends Recipe$presentationsArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$presentationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipePresentationPayload<ExtArgs>, T, "findMany"> | Null>
+    presentationSubrecipes<T extends Recipe$presentationSubrecipesArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$presentationSubrecipesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PresentationSubrecipePayload<ExtArgs>, T, "findMany"> | Null>
     saleItems<T extends Recipe$saleItemsArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany"> | Null>
     priceHistory<T extends Recipe$priceHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Recipe$priceHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipePriceHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     /**
@@ -9324,6 +9955,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecipePresentationScalarFieldEnum | RecipePresentationScalarFieldEnum[]
+  }
+
+  /**
+   * Recipe.presentationSubrecipes
+   */
+  export type Recipe$presentationSubrecipesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PresentationSubrecipe
+     */
+    select?: PresentationSubrecipeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PresentationSubrecipeInclude<ExtArgs> | null
+    where?: PresentationSubrecipeWhereInput
+    orderBy?: PresentationSubrecipeOrderByWithRelationInput | PresentationSubrecipeOrderByWithRelationInput[]
+    cursor?: PresentationSubrecipeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PresentationSubrecipeScalarFieldEnum | PresentationSubrecipeScalarFieldEnum[]
   }
 
   /**
@@ -11020,6 +11671,7 @@ export namespace Prisma {
     unitCostCents?: boolean
     totalCostCents?: boolean
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    ingredient?: boolean | PresentationMaterial$ingredientArgs<ExtArgs>
   }, ExtArgs["result"]["presentationMaterial"]>
 
   export type PresentationMaterialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11033,6 +11685,7 @@ export namespace Prisma {
     unitCostCents?: boolean
     totalCostCents?: boolean
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    ingredient?: boolean | PresentationMaterial$ingredientArgs<ExtArgs>
   }, ExtArgs["result"]["presentationMaterial"]>
 
   export type PresentationMaterialSelectScalar = {
@@ -11049,15 +11702,18 @@ export namespace Prisma {
 
   export type PresentationMaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    ingredient?: boolean | PresentationMaterial$ingredientArgs<ExtArgs>
   }
   export type PresentationMaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    ingredient?: boolean | PresentationMaterial$ingredientArgs<ExtArgs>
   }
 
   export type $PresentationMaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PresentationMaterial"
     objects: {
       presentation: Prisma.$RecipePresentationPayload<ExtArgs>
+      ingredient: Prisma.$IngredientPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11434,6 +12090,7 @@ export namespace Prisma {
   export interface Prisma__PresentationMaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     presentation<T extends RecipePresentationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentationDefaultArgs<ExtArgs>>): Prisma__RecipePresentationClient<$Result.GetResult<Prisma.$RecipePresentationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    ingredient<T extends PresentationMaterial$ingredientArgs<ExtArgs> = {}>(args?: Subset<T, PresentationMaterial$ingredientArgs<ExtArgs>>): Prisma__IngredientClient<$Result.GetResult<Prisma.$IngredientPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11788,6 +12445,21 @@ export namespace Prisma {
   }
 
   /**
+   * PresentationMaterial.ingredient
+   */
+  export type PresentationMaterial$ingredientArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ingredient
+     */
+    select?: IngredientSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IngredientInclude<ExtArgs> | null
+    where?: IngredientWhereInput
+  }
+
+  /**
    * PresentationMaterial without action
    */
   export type PresentationMaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12021,6 +12693,7 @@ export namespace Prisma {
     unit?: boolean
     costCents?: boolean
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    subRecipe?: boolean | PresentationSubrecipe$subRecipeArgs<ExtArgs>
   }, ExtArgs["result"]["presentationSubrecipe"]>
 
   export type PresentationSubrecipeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12032,6 +12705,7 @@ export namespace Prisma {
     unit?: boolean
     costCents?: boolean
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    subRecipe?: boolean | PresentationSubrecipe$subRecipeArgs<ExtArgs>
   }, ExtArgs["result"]["presentationSubrecipe"]>
 
   export type PresentationSubrecipeSelectScalar = {
@@ -12046,15 +12720,18 @@ export namespace Prisma {
 
   export type PresentationSubrecipeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    subRecipe?: boolean | PresentationSubrecipe$subRecipeArgs<ExtArgs>
   }
   export type PresentationSubrecipeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     presentation?: boolean | RecipePresentationDefaultArgs<ExtArgs>
+    subRecipe?: boolean | PresentationSubrecipe$subRecipeArgs<ExtArgs>
   }
 
   export type $PresentationSubrecipePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PresentationSubrecipe"
     objects: {
       presentation: Prisma.$RecipePresentationPayload<ExtArgs>
+      subRecipe: Prisma.$RecipePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12429,6 +13106,7 @@ export namespace Prisma {
   export interface Prisma__PresentationSubrecipeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     presentation<T extends RecipePresentationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentationDefaultArgs<ExtArgs>>): Prisma__RecipePresentationClient<$Result.GetResult<Prisma.$RecipePresentationPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    subRecipe<T extends PresentationSubrecipe$subRecipeArgs<ExtArgs> = {}>(args?: Subset<T, PresentationSubrecipe$subRecipeArgs<ExtArgs>>): Prisma__RecipeClient<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12778,6 +13456,21 @@ export namespace Prisma {
      * Filter which PresentationSubrecipes to delete
      */
     where?: PresentationSubrecipeWhereInput
+  }
+
+  /**
+   * PresentationSubrecipe.subRecipe
+   */
+  export type PresentationSubrecipe$subRecipeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recipe
+     */
+    select?: RecipeSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipeInclude<ExtArgs> | null
+    where?: RecipeWhereInput
   }
 
   /**
@@ -14798,6 +15491,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMinAggregateOutputType = {
     id: string | null
     recipeId: string | null
+    proposalId: string | null
     batchCostCents: number | null
     unitCostCents: number | null
     priceCents: number | null
@@ -14809,6 +15503,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMaxAggregateOutputType = {
     id: string | null
     recipeId: string | null
+    proposalId: string | null
     batchCostCents: number | null
     unitCostCents: number | null
     priceCents: number | null
@@ -14820,6 +15515,7 @@ export namespace Prisma {
   export type RecipePriceHistoryCountAggregateOutputType = {
     id: number
     recipeId: number
+    proposalId: number
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -14847,6 +15543,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMinAggregateInputType = {
     id?: true
     recipeId?: true
+    proposalId?: true
     batchCostCents?: true
     unitCostCents?: true
     priceCents?: true
@@ -14858,6 +15555,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMaxAggregateInputType = {
     id?: true
     recipeId?: true
+    proposalId?: true
     batchCostCents?: true
     unitCostCents?: true
     priceCents?: true
@@ -14869,6 +15567,7 @@ export namespace Prisma {
   export type RecipePriceHistoryCountAggregateInputType = {
     id?: true
     recipeId?: true
+    proposalId?: true
     batchCostCents?: true
     unitCostCents?: true
     priceCents?: true
@@ -14967,6 +15666,7 @@ export namespace Prisma {
   export type RecipePriceHistoryGroupByOutputType = {
     id: string
     recipeId: string
+    proposalId: string | null
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -14997,6 +15697,7 @@ export namespace Prisma {
   export type RecipePriceHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     recipeId?: boolean
+    proposalId?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
     priceCents?: boolean
@@ -15004,11 +15705,13 @@ export namespace Prisma {
     recordedAt?: boolean
     reason?: boolean
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    proposal?: boolean | RecipePriceHistory$proposalArgs<ExtArgs>
   }, ExtArgs["result"]["recipePriceHistory"]>
 
   export type RecipePriceHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     recipeId?: boolean
+    proposalId?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
     priceCents?: boolean
@@ -15016,11 +15719,13 @@ export namespace Prisma {
     recordedAt?: boolean
     reason?: boolean
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    proposal?: boolean | RecipePriceHistory$proposalArgs<ExtArgs>
   }, ExtArgs["result"]["recipePriceHistory"]>
 
   export type RecipePriceHistorySelectScalar = {
     id?: boolean
     recipeId?: boolean
+    proposalId?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
     priceCents?: boolean
@@ -15031,19 +15736,23 @@ export namespace Prisma {
 
   export type RecipePriceHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    proposal?: boolean | RecipePriceHistory$proposalArgs<ExtArgs>
   }
   export type RecipePriceHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    proposal?: boolean | RecipePriceHistory$proposalArgs<ExtArgs>
   }
 
   export type $RecipePriceHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RecipePriceHistory"
     objects: {
       recipe: Prisma.$RecipePayload<ExtArgs>
+      proposal: Prisma.$PriceUpdateProposalPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       recipeId: string
+      proposalId: string | null
       batchCostCents: number
       unitCostCents: number
       priceCents: number
@@ -15415,6 +16124,7 @@ export namespace Prisma {
   export interface Prisma__RecipePriceHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     recipe<T extends RecipeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipeDefaultArgs<ExtArgs>>): Prisma__RecipeClient<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    proposal<T extends RecipePriceHistory$proposalArgs<ExtArgs> = {}>(args?: Subset<T, RecipePriceHistory$proposalArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15446,6 +16156,7 @@ export namespace Prisma {
   interface RecipePriceHistoryFieldRefs {
     readonly id: FieldRef<"RecipePriceHistory", 'String'>
     readonly recipeId: FieldRef<"RecipePriceHistory", 'String'>
+    readonly proposalId: FieldRef<"RecipePriceHistory", 'String'>
     readonly batchCostCents: FieldRef<"RecipePriceHistory", 'Int'>
     readonly unitCostCents: FieldRef<"RecipePriceHistory", 'Int'>
     readonly priceCents: FieldRef<"RecipePriceHistory", 'Int'>
@@ -15765,6 +16476,21 @@ export namespace Prisma {
      * Filter which RecipePriceHistories to delete
      */
     where?: RecipePriceHistoryWhereInput
+  }
+
+  /**
+   * RecipePriceHistory.proposal
+   */
+  export type RecipePriceHistory$proposalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    where?: PriceUpdateProposalWhereInput
   }
 
   /**
@@ -26385,6 +27111,4922 @@ export namespace Prisma {
 
 
   /**
+   * Model PriceSource
+   */
+
+  export type AggregatePriceSource = {
+    _count: PriceSourceCountAggregateOutputType | null
+    _avg: PriceSourceAvgAggregateOutputType | null
+    _sum: PriceSourceSumAggregateOutputType | null
+    _min: PriceSourceMinAggregateOutputType | null
+    _max: PriceSourceMaxAggregateOutputType | null
+  }
+
+  export type PriceSourceAvgAggregateOutputType = {
+    rateLimitMs: number | null
+    timeoutMs: number | null
+    proposalTtlHours: number | null
+    priceAlertThresholdPct: number | null
+  }
+
+  export type PriceSourceSumAggregateOutputType = {
+    rateLimitMs: number | null
+    timeoutMs: number | null
+    proposalTtlHours: number | null
+    priceAlertThresholdPct: number | null
+  }
+
+  export type PriceSourceMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    baseUrl: string | null
+    supplierId: string | null
+    adapterType: string | null
+    captureMode: string | null
+    taxMode: string | null
+    currency: string | null
+    rateLimitMs: number | null
+    timeoutMs: number | null
+    proposalTtlHours: number | null
+    priceAlertThresholdPct: number | null
+    configJson: string | null
+    isActive: boolean | null
+    lastSyncedAt: Date | null
+    lastStatus: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PriceSourceMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    baseUrl: string | null
+    supplierId: string | null
+    adapterType: string | null
+    captureMode: string | null
+    taxMode: string | null
+    currency: string | null
+    rateLimitMs: number | null
+    timeoutMs: number | null
+    proposalTtlHours: number | null
+    priceAlertThresholdPct: number | null
+    configJson: string | null
+    isActive: boolean | null
+    lastSyncedAt: Date | null
+    lastStatus: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PriceSourceCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    baseUrl: number
+    supplierId: number
+    adapterType: number
+    captureMode: number
+    taxMode: number
+    currency: number
+    rateLimitMs: number
+    timeoutMs: number
+    proposalTtlHours: number
+    priceAlertThresholdPct: number
+    configJson: number
+    isActive: number
+    lastSyncedAt: number
+    lastStatus: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PriceSourceAvgAggregateInputType = {
+    rateLimitMs?: true
+    timeoutMs?: true
+    proposalTtlHours?: true
+    priceAlertThresholdPct?: true
+  }
+
+  export type PriceSourceSumAggregateInputType = {
+    rateLimitMs?: true
+    timeoutMs?: true
+    proposalTtlHours?: true
+    priceAlertThresholdPct?: true
+  }
+
+  export type PriceSourceMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    baseUrl?: true
+    supplierId?: true
+    adapterType?: true
+    captureMode?: true
+    taxMode?: true
+    currency?: true
+    rateLimitMs?: true
+    timeoutMs?: true
+    proposalTtlHours?: true
+    priceAlertThresholdPct?: true
+    configJson?: true
+    isActive?: true
+    lastSyncedAt?: true
+    lastStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PriceSourceMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    baseUrl?: true
+    supplierId?: true
+    adapterType?: true
+    captureMode?: true
+    taxMode?: true
+    currency?: true
+    rateLimitMs?: true
+    timeoutMs?: true
+    proposalTtlHours?: true
+    priceAlertThresholdPct?: true
+    configJson?: true
+    isActive?: true
+    lastSyncedAt?: true
+    lastStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PriceSourceCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    baseUrl?: true
+    supplierId?: true
+    adapterType?: true
+    captureMode?: true
+    taxMode?: true
+    currency?: true
+    rateLimitMs?: true
+    timeoutMs?: true
+    proposalTtlHours?: true
+    priceAlertThresholdPct?: true
+    configJson?: true
+    isActive?: true
+    lastSyncedAt?: true
+    lastStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PriceSourceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceSource to aggregate.
+     */
+    where?: PriceSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSources to fetch.
+     */
+    orderBy?: PriceSourceOrderByWithRelationInput | PriceSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PriceSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PriceSources
+    **/
+    _count?: true | PriceSourceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PriceSourceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PriceSourceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PriceSourceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PriceSourceMaxAggregateInputType
+  }
+
+  export type GetPriceSourceAggregateType<T extends PriceSourceAggregateArgs> = {
+        [P in keyof T & keyof AggregatePriceSource]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePriceSource[P]>
+      : GetScalarType<T[P], AggregatePriceSource[P]>
+  }
+
+
+
+
+  export type PriceSourceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceSourceWhereInput
+    orderBy?: PriceSourceOrderByWithAggregationInput | PriceSourceOrderByWithAggregationInput[]
+    by: PriceSourceScalarFieldEnum[] | PriceSourceScalarFieldEnum
+    having?: PriceSourceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PriceSourceCountAggregateInputType | true
+    _avg?: PriceSourceAvgAggregateInputType
+    _sum?: PriceSourceSumAggregateInputType
+    _min?: PriceSourceMinAggregateInputType
+    _max?: PriceSourceMaxAggregateInputType
+  }
+
+  export type PriceSourceGroupByOutputType = {
+    id: string
+    code: string
+    name: string
+    baseUrl: string | null
+    supplierId: string | null
+    adapterType: string
+    captureMode: string
+    taxMode: string
+    currency: string
+    rateLimitMs: number
+    timeoutMs: number
+    proposalTtlHours: number
+    priceAlertThresholdPct: number
+    configJson: string | null
+    isActive: boolean
+    lastSyncedAt: Date | null
+    lastStatus: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PriceSourceCountAggregateOutputType | null
+    _avg: PriceSourceAvgAggregateOutputType | null
+    _sum: PriceSourceSumAggregateOutputType | null
+    _min: PriceSourceMinAggregateOutputType | null
+    _max: PriceSourceMaxAggregateOutputType | null
+  }
+
+  type GetPriceSourceGroupByPayload<T extends PriceSourceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PriceSourceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PriceSourceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PriceSourceGroupByOutputType[P]>
+            : GetScalarType<T[P], PriceSourceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PriceSourceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    baseUrl?: boolean
+    supplierId?: boolean
+    adapterType?: boolean
+    captureMode?: boolean
+    taxMode?: boolean
+    currency?: boolean
+    rateLimitMs?: boolean
+    timeoutMs?: boolean
+    proposalTtlHours?: boolean
+    priceAlertThresholdPct?: boolean
+    configJson?: boolean
+    isActive?: boolean
+    lastSyncedAt?: boolean
+    lastStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    supplier?: boolean | PriceSource$supplierArgs<ExtArgs>
+    links?: boolean | PriceSource$linksArgs<ExtArgs>
+    syncRuns?: boolean | PriceSource$syncRunsArgs<ExtArgs>
+    proposals?: boolean | PriceSource$proposalsArgs<ExtArgs>
+    _count?: boolean | PriceSourceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["priceSource"]>
+
+  export type PriceSourceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    baseUrl?: boolean
+    supplierId?: boolean
+    adapterType?: boolean
+    captureMode?: boolean
+    taxMode?: boolean
+    currency?: boolean
+    rateLimitMs?: boolean
+    timeoutMs?: boolean
+    proposalTtlHours?: boolean
+    priceAlertThresholdPct?: boolean
+    configJson?: boolean
+    isActive?: boolean
+    lastSyncedAt?: boolean
+    lastStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    supplier?: boolean | PriceSource$supplierArgs<ExtArgs>
+  }, ExtArgs["result"]["priceSource"]>
+
+  export type PriceSourceSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    baseUrl?: boolean
+    supplierId?: boolean
+    adapterType?: boolean
+    captureMode?: boolean
+    taxMode?: boolean
+    currency?: boolean
+    rateLimitMs?: boolean
+    timeoutMs?: boolean
+    proposalTtlHours?: boolean
+    priceAlertThresholdPct?: boolean
+    configJson?: boolean
+    isActive?: boolean
+    lastSyncedAt?: boolean
+    lastStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PriceSourceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | PriceSource$supplierArgs<ExtArgs>
+    links?: boolean | PriceSource$linksArgs<ExtArgs>
+    syncRuns?: boolean | PriceSource$syncRunsArgs<ExtArgs>
+    proposals?: boolean | PriceSource$proposalsArgs<ExtArgs>
+    _count?: boolean | PriceSourceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PriceSourceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    supplier?: boolean | PriceSource$supplierArgs<ExtArgs>
+  }
+
+  export type $PriceSourcePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PriceSource"
+    objects: {
+      supplier: Prisma.$SupplierPayload<ExtArgs> | null
+      links: Prisma.$ProductSourceLinkPayload<ExtArgs>[]
+      syncRuns: Prisma.$PriceSyncRunPayload<ExtArgs>[]
+      proposals: Prisma.$PriceUpdateProposalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      name: string
+      baseUrl: string | null
+      supplierId: string | null
+      adapterType: string
+      captureMode: string
+      taxMode: string
+      currency: string
+      rateLimitMs: number
+      timeoutMs: number
+      proposalTtlHours: number
+      priceAlertThresholdPct: number
+      configJson: string | null
+      isActive: boolean
+      lastSyncedAt: Date | null
+      lastStatus: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["priceSource"]>
+    composites: {}
+  }
+
+  type PriceSourceGetPayload<S extends boolean | null | undefined | PriceSourceDefaultArgs> = $Result.GetResult<Prisma.$PriceSourcePayload, S>
+
+  type PriceSourceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PriceSourceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PriceSourceCountAggregateInputType | true
+    }
+
+  export interface PriceSourceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PriceSource'], meta: { name: 'PriceSource' } }
+    /**
+     * Find zero or one PriceSource that matches the filter.
+     * @param {PriceSourceFindUniqueArgs} args - Arguments to find a PriceSource
+     * @example
+     * // Get one PriceSource
+     * const priceSource = await prisma.priceSource.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PriceSourceFindUniqueArgs>(args: SelectSubset<T, PriceSourceFindUniqueArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PriceSource that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PriceSourceFindUniqueOrThrowArgs} args - Arguments to find a PriceSource
+     * @example
+     * // Get one PriceSource
+     * const priceSource = await prisma.priceSource.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PriceSourceFindUniqueOrThrowArgs>(args: SelectSubset<T, PriceSourceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PriceSource that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceFindFirstArgs} args - Arguments to find a PriceSource
+     * @example
+     * // Get one PriceSource
+     * const priceSource = await prisma.priceSource.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PriceSourceFindFirstArgs>(args?: SelectSubset<T, PriceSourceFindFirstArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PriceSource that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceFindFirstOrThrowArgs} args - Arguments to find a PriceSource
+     * @example
+     * // Get one PriceSource
+     * const priceSource = await prisma.priceSource.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PriceSourceFindFirstOrThrowArgs>(args?: SelectSubset<T, PriceSourceFindFirstOrThrowArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PriceSources that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PriceSources
+     * const priceSources = await prisma.priceSource.findMany()
+     * 
+     * // Get first 10 PriceSources
+     * const priceSources = await prisma.priceSource.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const priceSourceWithIdOnly = await prisma.priceSource.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PriceSourceFindManyArgs>(args?: SelectSubset<T, PriceSourceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PriceSource.
+     * @param {PriceSourceCreateArgs} args - Arguments to create a PriceSource.
+     * @example
+     * // Create one PriceSource
+     * const PriceSource = await prisma.priceSource.create({
+     *   data: {
+     *     // ... data to create a PriceSource
+     *   }
+     * })
+     * 
+     */
+    create<T extends PriceSourceCreateArgs>(args: SelectSubset<T, PriceSourceCreateArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PriceSources.
+     * @param {PriceSourceCreateManyArgs} args - Arguments to create many PriceSources.
+     * @example
+     * // Create many PriceSources
+     * const priceSource = await prisma.priceSource.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PriceSourceCreateManyArgs>(args?: SelectSubset<T, PriceSourceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PriceSources and returns the data saved in the database.
+     * @param {PriceSourceCreateManyAndReturnArgs} args - Arguments to create many PriceSources.
+     * @example
+     * // Create many PriceSources
+     * const priceSource = await prisma.priceSource.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PriceSources and only return the `id`
+     * const priceSourceWithIdOnly = await prisma.priceSource.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PriceSourceCreateManyAndReturnArgs>(args?: SelectSubset<T, PriceSourceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PriceSource.
+     * @param {PriceSourceDeleteArgs} args - Arguments to delete one PriceSource.
+     * @example
+     * // Delete one PriceSource
+     * const PriceSource = await prisma.priceSource.delete({
+     *   where: {
+     *     // ... filter to delete one PriceSource
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PriceSourceDeleteArgs>(args: SelectSubset<T, PriceSourceDeleteArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PriceSource.
+     * @param {PriceSourceUpdateArgs} args - Arguments to update one PriceSource.
+     * @example
+     * // Update one PriceSource
+     * const priceSource = await prisma.priceSource.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PriceSourceUpdateArgs>(args: SelectSubset<T, PriceSourceUpdateArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PriceSources.
+     * @param {PriceSourceDeleteManyArgs} args - Arguments to filter PriceSources to delete.
+     * @example
+     * // Delete a few PriceSources
+     * const { count } = await prisma.priceSource.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PriceSourceDeleteManyArgs>(args?: SelectSubset<T, PriceSourceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PriceSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PriceSources
+     * const priceSource = await prisma.priceSource.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PriceSourceUpdateManyArgs>(args: SelectSubset<T, PriceSourceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PriceSource.
+     * @param {PriceSourceUpsertArgs} args - Arguments to update or create a PriceSource.
+     * @example
+     * // Update or create a PriceSource
+     * const priceSource = await prisma.priceSource.upsert({
+     *   create: {
+     *     // ... data to create a PriceSource
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PriceSource we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PriceSourceUpsertArgs>(args: SelectSubset<T, PriceSourceUpsertArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PriceSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceCountArgs} args - Arguments to filter PriceSources to count.
+     * @example
+     * // Count the number of PriceSources
+     * const count = await prisma.priceSource.count({
+     *   where: {
+     *     // ... the filter for the PriceSources we want to count
+     *   }
+     * })
+    **/
+    count<T extends PriceSourceCountArgs>(
+      args?: Subset<T, PriceSourceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PriceSourceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PriceSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PriceSourceAggregateArgs>(args: Subset<T, PriceSourceAggregateArgs>): Prisma.PrismaPromise<GetPriceSourceAggregateType<T>>
+
+    /**
+     * Group by PriceSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSourceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PriceSourceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PriceSourceGroupByArgs['orderBy'] }
+        : { orderBy?: PriceSourceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PriceSourceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPriceSourceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PriceSource model
+   */
+  readonly fields: PriceSourceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PriceSource.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PriceSourceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    supplier<T extends PriceSource$supplierArgs<ExtArgs> = {}>(args?: Subset<T, PriceSource$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    links<T extends PriceSource$linksArgs<ExtArgs> = {}>(args?: Subset<T, PriceSource$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findMany"> | Null>
+    syncRuns<T extends PriceSource$syncRunsArgs<ExtArgs> = {}>(args?: Subset<T, PriceSource$syncRunsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findMany"> | Null>
+    proposals<T extends PriceSource$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, PriceSource$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PriceSource model
+   */ 
+  interface PriceSourceFieldRefs {
+    readonly id: FieldRef<"PriceSource", 'String'>
+    readonly code: FieldRef<"PriceSource", 'String'>
+    readonly name: FieldRef<"PriceSource", 'String'>
+    readonly baseUrl: FieldRef<"PriceSource", 'String'>
+    readonly supplierId: FieldRef<"PriceSource", 'String'>
+    readonly adapterType: FieldRef<"PriceSource", 'String'>
+    readonly captureMode: FieldRef<"PriceSource", 'String'>
+    readonly taxMode: FieldRef<"PriceSource", 'String'>
+    readonly currency: FieldRef<"PriceSource", 'String'>
+    readonly rateLimitMs: FieldRef<"PriceSource", 'Int'>
+    readonly timeoutMs: FieldRef<"PriceSource", 'Int'>
+    readonly proposalTtlHours: FieldRef<"PriceSource", 'Int'>
+    readonly priceAlertThresholdPct: FieldRef<"PriceSource", 'Float'>
+    readonly configJson: FieldRef<"PriceSource", 'String'>
+    readonly isActive: FieldRef<"PriceSource", 'Boolean'>
+    readonly lastSyncedAt: FieldRef<"PriceSource", 'DateTime'>
+    readonly lastStatus: FieldRef<"PriceSource", 'String'>
+    readonly createdAt: FieldRef<"PriceSource", 'DateTime'>
+    readonly updatedAt: FieldRef<"PriceSource", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PriceSource findUnique
+   */
+  export type PriceSourceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSource to fetch.
+     */
+    where: PriceSourceWhereUniqueInput
+  }
+
+  /**
+   * PriceSource findUniqueOrThrow
+   */
+  export type PriceSourceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSource to fetch.
+     */
+    where: PriceSourceWhereUniqueInput
+  }
+
+  /**
+   * PriceSource findFirst
+   */
+  export type PriceSourceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSource to fetch.
+     */
+    where?: PriceSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSources to fetch.
+     */
+    orderBy?: PriceSourceOrderByWithRelationInput | PriceSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceSources.
+     */
+    cursor?: PriceSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceSources.
+     */
+    distinct?: PriceSourceScalarFieldEnum | PriceSourceScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource findFirstOrThrow
+   */
+  export type PriceSourceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSource to fetch.
+     */
+    where?: PriceSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSources to fetch.
+     */
+    orderBy?: PriceSourceOrderByWithRelationInput | PriceSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceSources.
+     */
+    cursor?: PriceSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceSources.
+     */
+    distinct?: PriceSourceScalarFieldEnum | PriceSourceScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource findMany
+   */
+  export type PriceSourceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSources to fetch.
+     */
+    where?: PriceSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSources to fetch.
+     */
+    orderBy?: PriceSourceOrderByWithRelationInput | PriceSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PriceSources.
+     */
+    cursor?: PriceSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSources.
+     */
+    skip?: number
+    distinct?: PriceSourceScalarFieldEnum | PriceSourceScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource create
+   */
+  export type PriceSourceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PriceSource.
+     */
+    data: XOR<PriceSourceCreateInput, PriceSourceUncheckedCreateInput>
+  }
+
+  /**
+   * PriceSource createMany
+   */
+  export type PriceSourceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PriceSources.
+     */
+    data: PriceSourceCreateManyInput | PriceSourceCreateManyInput[]
+  }
+
+  /**
+   * PriceSource createManyAndReturn
+   */
+  export type PriceSourceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PriceSources.
+     */
+    data: PriceSourceCreateManyInput | PriceSourceCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PriceSource update
+   */
+  export type PriceSourceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PriceSource.
+     */
+    data: XOR<PriceSourceUpdateInput, PriceSourceUncheckedUpdateInput>
+    /**
+     * Choose, which PriceSource to update.
+     */
+    where: PriceSourceWhereUniqueInput
+  }
+
+  /**
+   * PriceSource updateMany
+   */
+  export type PriceSourceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PriceSources.
+     */
+    data: XOR<PriceSourceUpdateManyMutationInput, PriceSourceUncheckedUpdateManyInput>
+    /**
+     * Filter which PriceSources to update
+     */
+    where?: PriceSourceWhereInput
+  }
+
+  /**
+   * PriceSource upsert
+   */
+  export type PriceSourceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PriceSource to update in case it exists.
+     */
+    where: PriceSourceWhereUniqueInput
+    /**
+     * In case the PriceSource found by the `where` argument doesn't exist, create a new PriceSource with this data.
+     */
+    create: XOR<PriceSourceCreateInput, PriceSourceUncheckedCreateInput>
+    /**
+     * In case the PriceSource was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PriceSourceUpdateInput, PriceSourceUncheckedUpdateInput>
+  }
+
+  /**
+   * PriceSource delete
+   */
+  export type PriceSourceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    /**
+     * Filter which PriceSource to delete.
+     */
+    where: PriceSourceWhereUniqueInput
+  }
+
+  /**
+   * PriceSource deleteMany
+   */
+  export type PriceSourceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceSources to delete
+     */
+    where?: PriceSourceWhereInput
+  }
+
+  /**
+   * PriceSource.supplier
+   */
+  export type PriceSource$supplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    where?: SupplierWhereInput
+  }
+
+  /**
+   * PriceSource.links
+   */
+  export type PriceSource$linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    where?: ProductSourceLinkWhereInput
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    cursor?: ProductSourceLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductSourceLinkScalarFieldEnum | ProductSourceLinkScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource.syncRuns
+   */
+  export type PriceSource$syncRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    where?: PriceSyncRunWhereInput
+    orderBy?: PriceSyncRunOrderByWithRelationInput | PriceSyncRunOrderByWithRelationInput[]
+    cursor?: PriceSyncRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceSyncRunScalarFieldEnum | PriceSyncRunScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource.proposals
+   */
+  export type PriceSource$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    where?: PriceUpdateProposalWhereInput
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSource without action
+   */
+  export type PriceSourceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductSourceLink
+   */
+
+  export type AggregateProductSourceLink = {
+    _count: ProductSourceLinkCountAggregateOutputType | null
+    _avg: ProductSourceLinkAvgAggregateOutputType | null
+    _sum: ProductSourceLinkSumAggregateOutputType | null
+    _min: ProductSourceLinkMinAggregateOutputType | null
+    _max: ProductSourceLinkMaxAggregateOutputType | null
+  }
+
+  export type ProductSourceLinkAvgAggregateOutputType = {
+    expectedPackageQty: number | null
+    expectedConversionFactor: number | null
+    expectedBaseQty: number | null
+    packTolerancePct: number | null
+    taxRatePct: number | null
+    lastSeenPriceCents: number | null
+  }
+
+  export type ProductSourceLinkSumAggregateOutputType = {
+    expectedPackageQty: number | null
+    expectedConversionFactor: number | null
+    expectedBaseQty: number | null
+    packTolerancePct: number | null
+    taxRatePct: number | null
+    lastSeenPriceCents: number | null
+  }
+
+  export type ProductSourceLinkMinAggregateOutputType = {
+    id: string | null
+    ingredientId: string | null
+    sourceId: string | null
+    isPrimary: boolean | null
+    externalSku: string | null
+    externalUrl: string | null
+    externalName: string | null
+    expectedPackageQty: number | null
+    expectedPackageUnit: string | null
+    expectedConversionFactor: number | null
+    expectedBaseQty: number | null
+    packTolerancePct: number | null
+    applyStrategy: string | null
+    taxRatePct: number | null
+    lastCheckedAt: Date | null
+    lastSeenPriceCents: number | null
+    lastSeenInStock: boolean | null
+    lastError: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductSourceLinkMaxAggregateOutputType = {
+    id: string | null
+    ingredientId: string | null
+    sourceId: string | null
+    isPrimary: boolean | null
+    externalSku: string | null
+    externalUrl: string | null
+    externalName: string | null
+    expectedPackageQty: number | null
+    expectedPackageUnit: string | null
+    expectedConversionFactor: number | null
+    expectedBaseQty: number | null
+    packTolerancePct: number | null
+    applyStrategy: string | null
+    taxRatePct: number | null
+    lastCheckedAt: Date | null
+    lastSeenPriceCents: number | null
+    lastSeenInStock: boolean | null
+    lastError: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductSourceLinkCountAggregateOutputType = {
+    id: number
+    ingredientId: number
+    sourceId: number
+    isPrimary: number
+    externalSku: number
+    externalUrl: number
+    externalName: number
+    expectedPackageQty: number
+    expectedPackageUnit: number
+    expectedConversionFactor: number
+    expectedBaseQty: number
+    packTolerancePct: number
+    applyStrategy: number
+    taxRatePct: number
+    lastCheckedAt: number
+    lastSeenPriceCents: number
+    lastSeenInStock: number
+    lastError: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductSourceLinkAvgAggregateInputType = {
+    expectedPackageQty?: true
+    expectedConversionFactor?: true
+    expectedBaseQty?: true
+    packTolerancePct?: true
+    taxRatePct?: true
+    lastSeenPriceCents?: true
+  }
+
+  export type ProductSourceLinkSumAggregateInputType = {
+    expectedPackageQty?: true
+    expectedConversionFactor?: true
+    expectedBaseQty?: true
+    packTolerancePct?: true
+    taxRatePct?: true
+    lastSeenPriceCents?: true
+  }
+
+  export type ProductSourceLinkMinAggregateInputType = {
+    id?: true
+    ingredientId?: true
+    sourceId?: true
+    isPrimary?: true
+    externalSku?: true
+    externalUrl?: true
+    externalName?: true
+    expectedPackageQty?: true
+    expectedPackageUnit?: true
+    expectedConversionFactor?: true
+    expectedBaseQty?: true
+    packTolerancePct?: true
+    applyStrategy?: true
+    taxRatePct?: true
+    lastCheckedAt?: true
+    lastSeenPriceCents?: true
+    lastSeenInStock?: true
+    lastError?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductSourceLinkMaxAggregateInputType = {
+    id?: true
+    ingredientId?: true
+    sourceId?: true
+    isPrimary?: true
+    externalSku?: true
+    externalUrl?: true
+    externalName?: true
+    expectedPackageQty?: true
+    expectedPackageUnit?: true
+    expectedConversionFactor?: true
+    expectedBaseQty?: true
+    packTolerancePct?: true
+    applyStrategy?: true
+    taxRatePct?: true
+    lastCheckedAt?: true
+    lastSeenPriceCents?: true
+    lastSeenInStock?: true
+    lastError?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductSourceLinkCountAggregateInputType = {
+    id?: true
+    ingredientId?: true
+    sourceId?: true
+    isPrimary?: true
+    externalSku?: true
+    externalUrl?: true
+    externalName?: true
+    expectedPackageQty?: true
+    expectedPackageUnit?: true
+    expectedConversionFactor?: true
+    expectedBaseQty?: true
+    packTolerancePct?: true
+    applyStrategy?: true
+    taxRatePct?: true
+    lastCheckedAt?: true
+    lastSeenPriceCents?: true
+    lastSeenInStock?: true
+    lastError?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductSourceLinkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductSourceLink to aggregate.
+     */
+    where?: ProductSourceLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductSourceLinks to fetch.
+     */
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductSourceLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductSourceLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductSourceLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductSourceLinks
+    **/
+    _count?: true | ProductSourceLinkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductSourceLinkAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductSourceLinkSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductSourceLinkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductSourceLinkMaxAggregateInputType
+  }
+
+  export type GetProductSourceLinkAggregateType<T extends ProductSourceLinkAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductSourceLink]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductSourceLink[P]>
+      : GetScalarType<T[P], AggregateProductSourceLink[P]>
+  }
+
+
+
+
+  export type ProductSourceLinkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductSourceLinkWhereInput
+    orderBy?: ProductSourceLinkOrderByWithAggregationInput | ProductSourceLinkOrderByWithAggregationInput[]
+    by: ProductSourceLinkScalarFieldEnum[] | ProductSourceLinkScalarFieldEnum
+    having?: ProductSourceLinkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductSourceLinkCountAggregateInputType | true
+    _avg?: ProductSourceLinkAvgAggregateInputType
+    _sum?: ProductSourceLinkSumAggregateInputType
+    _min?: ProductSourceLinkMinAggregateInputType
+    _max?: ProductSourceLinkMaxAggregateInputType
+  }
+
+  export type ProductSourceLinkGroupByOutputType = {
+    id: string
+    ingredientId: string
+    sourceId: string
+    isPrimary: boolean
+    externalSku: string | null
+    externalUrl: string | null
+    externalName: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor: number
+    expectedBaseQty: number
+    packTolerancePct: number
+    applyStrategy: string
+    taxRatePct: number
+    lastCheckedAt: Date | null
+    lastSeenPriceCents: number | null
+    lastSeenInStock: boolean | null
+    lastError: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductSourceLinkCountAggregateOutputType | null
+    _avg: ProductSourceLinkAvgAggregateOutputType | null
+    _sum: ProductSourceLinkSumAggregateOutputType | null
+    _min: ProductSourceLinkMinAggregateOutputType | null
+    _max: ProductSourceLinkMaxAggregateOutputType | null
+  }
+
+  type GetProductSourceLinkGroupByPayload<T extends ProductSourceLinkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductSourceLinkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductSourceLinkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductSourceLinkGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductSourceLinkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductSourceLinkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    isPrimary?: boolean
+    externalSku?: boolean
+    externalUrl?: boolean
+    externalName?: boolean
+    expectedPackageQty?: boolean
+    expectedPackageUnit?: boolean
+    expectedConversionFactor?: boolean
+    expectedBaseQty?: boolean
+    packTolerancePct?: boolean
+    applyStrategy?: boolean
+    taxRatePct?: boolean
+    lastCheckedAt?: boolean
+    lastSeenPriceCents?: boolean
+    lastSeenInStock?: boolean
+    lastError?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+    proposals?: boolean | ProductSourceLink$proposalsArgs<ExtArgs>
+    _count?: boolean | ProductSourceLinkCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productSourceLink"]>
+
+  export type ProductSourceLinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    isPrimary?: boolean
+    externalSku?: boolean
+    externalUrl?: boolean
+    externalName?: boolean
+    expectedPackageQty?: boolean
+    expectedPackageUnit?: boolean
+    expectedConversionFactor?: boolean
+    expectedBaseQty?: boolean
+    packTolerancePct?: boolean
+    applyStrategy?: boolean
+    taxRatePct?: boolean
+    lastCheckedAt?: boolean
+    lastSeenPriceCents?: boolean
+    lastSeenInStock?: boolean
+    lastError?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productSourceLink"]>
+
+  export type ProductSourceLinkSelectScalar = {
+    id?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    isPrimary?: boolean
+    externalSku?: boolean
+    externalUrl?: boolean
+    externalName?: boolean
+    expectedPackageQty?: boolean
+    expectedPackageUnit?: boolean
+    expectedConversionFactor?: boolean
+    expectedBaseQty?: boolean
+    packTolerancePct?: boolean
+    applyStrategy?: boolean
+    taxRatePct?: boolean
+    lastCheckedAt?: boolean
+    lastSeenPriceCents?: boolean
+    lastSeenInStock?: boolean
+    lastError?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductSourceLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+    proposals?: boolean | ProductSourceLink$proposalsArgs<ExtArgs>
+    _count?: boolean | ProductSourceLinkCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductSourceLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductSourceLinkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductSourceLink"
+    objects: {
+      ingredient: Prisma.$IngredientPayload<ExtArgs>
+      source: Prisma.$PriceSourcePayload<ExtArgs>
+      proposals: Prisma.$PriceUpdateProposalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ingredientId: string
+      sourceId: string
+      isPrimary: boolean
+      externalSku: string | null
+      externalUrl: string | null
+      externalName: string | null
+      expectedPackageQty: number
+      expectedPackageUnit: string
+      expectedConversionFactor: number
+      expectedBaseQty: number
+      packTolerancePct: number
+      applyStrategy: string
+      taxRatePct: number
+      lastCheckedAt: Date | null
+      lastSeenPriceCents: number | null
+      lastSeenInStock: boolean | null
+      lastError: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["productSourceLink"]>
+    composites: {}
+  }
+
+  type ProductSourceLinkGetPayload<S extends boolean | null | undefined | ProductSourceLinkDefaultArgs> = $Result.GetResult<Prisma.$ProductSourceLinkPayload, S>
+
+  type ProductSourceLinkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProductSourceLinkFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProductSourceLinkCountAggregateInputType | true
+    }
+
+  export interface ProductSourceLinkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductSourceLink'], meta: { name: 'ProductSourceLink' } }
+    /**
+     * Find zero or one ProductSourceLink that matches the filter.
+     * @param {ProductSourceLinkFindUniqueArgs} args - Arguments to find a ProductSourceLink
+     * @example
+     * // Get one ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductSourceLinkFindUniqueArgs>(args: SelectSubset<T, ProductSourceLinkFindUniqueArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ProductSourceLink that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProductSourceLinkFindUniqueOrThrowArgs} args - Arguments to find a ProductSourceLink
+     * @example
+     * // Get one ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductSourceLinkFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductSourceLinkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ProductSourceLink that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkFindFirstArgs} args - Arguments to find a ProductSourceLink
+     * @example
+     * // Get one ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductSourceLinkFindFirstArgs>(args?: SelectSubset<T, ProductSourceLinkFindFirstArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ProductSourceLink that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkFindFirstOrThrowArgs} args - Arguments to find a ProductSourceLink
+     * @example
+     * // Get one ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductSourceLinkFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductSourceLinkFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ProductSourceLinks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductSourceLinks
+     * const productSourceLinks = await prisma.productSourceLink.findMany()
+     * 
+     * // Get first 10 ProductSourceLinks
+     * const productSourceLinks = await prisma.productSourceLink.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productSourceLinkWithIdOnly = await prisma.productSourceLink.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductSourceLinkFindManyArgs>(args?: SelectSubset<T, ProductSourceLinkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ProductSourceLink.
+     * @param {ProductSourceLinkCreateArgs} args - Arguments to create a ProductSourceLink.
+     * @example
+     * // Create one ProductSourceLink
+     * const ProductSourceLink = await prisma.productSourceLink.create({
+     *   data: {
+     *     // ... data to create a ProductSourceLink
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductSourceLinkCreateArgs>(args: SelectSubset<T, ProductSourceLinkCreateArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ProductSourceLinks.
+     * @param {ProductSourceLinkCreateManyArgs} args - Arguments to create many ProductSourceLinks.
+     * @example
+     * // Create many ProductSourceLinks
+     * const productSourceLink = await prisma.productSourceLink.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductSourceLinkCreateManyArgs>(args?: SelectSubset<T, ProductSourceLinkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductSourceLinks and returns the data saved in the database.
+     * @param {ProductSourceLinkCreateManyAndReturnArgs} args - Arguments to create many ProductSourceLinks.
+     * @example
+     * // Create many ProductSourceLinks
+     * const productSourceLink = await prisma.productSourceLink.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductSourceLinks and only return the `id`
+     * const productSourceLinkWithIdOnly = await prisma.productSourceLink.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductSourceLinkCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductSourceLinkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ProductSourceLink.
+     * @param {ProductSourceLinkDeleteArgs} args - Arguments to delete one ProductSourceLink.
+     * @example
+     * // Delete one ProductSourceLink
+     * const ProductSourceLink = await prisma.productSourceLink.delete({
+     *   where: {
+     *     // ... filter to delete one ProductSourceLink
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductSourceLinkDeleteArgs>(args: SelectSubset<T, ProductSourceLinkDeleteArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ProductSourceLink.
+     * @param {ProductSourceLinkUpdateArgs} args - Arguments to update one ProductSourceLink.
+     * @example
+     * // Update one ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductSourceLinkUpdateArgs>(args: SelectSubset<T, ProductSourceLinkUpdateArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ProductSourceLinks.
+     * @param {ProductSourceLinkDeleteManyArgs} args - Arguments to filter ProductSourceLinks to delete.
+     * @example
+     * // Delete a few ProductSourceLinks
+     * const { count } = await prisma.productSourceLink.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductSourceLinkDeleteManyArgs>(args?: SelectSubset<T, ProductSourceLinkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductSourceLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductSourceLinks
+     * const productSourceLink = await prisma.productSourceLink.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductSourceLinkUpdateManyArgs>(args: SelectSubset<T, ProductSourceLinkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProductSourceLink.
+     * @param {ProductSourceLinkUpsertArgs} args - Arguments to update or create a ProductSourceLink.
+     * @example
+     * // Update or create a ProductSourceLink
+     * const productSourceLink = await prisma.productSourceLink.upsert({
+     *   create: {
+     *     // ... data to create a ProductSourceLink
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductSourceLink we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductSourceLinkUpsertArgs>(args: SelectSubset<T, ProductSourceLinkUpsertArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ProductSourceLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkCountArgs} args - Arguments to filter ProductSourceLinks to count.
+     * @example
+     * // Count the number of ProductSourceLinks
+     * const count = await prisma.productSourceLink.count({
+     *   where: {
+     *     // ... the filter for the ProductSourceLinks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductSourceLinkCountArgs>(
+      args?: Subset<T, ProductSourceLinkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductSourceLinkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductSourceLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductSourceLinkAggregateArgs>(args: Subset<T, ProductSourceLinkAggregateArgs>): Prisma.PrismaPromise<GetProductSourceLinkAggregateType<T>>
+
+    /**
+     * Group by ProductSourceLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductSourceLinkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductSourceLinkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductSourceLinkGroupByArgs['orderBy'] }
+        : { orderBy?: ProductSourceLinkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductSourceLinkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductSourceLinkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductSourceLink model
+   */
+  readonly fields: ProductSourceLinkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductSourceLink.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductSourceLinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ingredient<T extends IngredientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IngredientDefaultArgs<ExtArgs>>): Prisma__IngredientClient<$Result.GetResult<Prisma.$IngredientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    source<T extends PriceSourceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PriceSourceDefaultArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    proposals<T extends ProductSourceLink$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, ProductSourceLink$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductSourceLink model
+   */ 
+  interface ProductSourceLinkFieldRefs {
+    readonly id: FieldRef<"ProductSourceLink", 'String'>
+    readonly ingredientId: FieldRef<"ProductSourceLink", 'String'>
+    readonly sourceId: FieldRef<"ProductSourceLink", 'String'>
+    readonly isPrimary: FieldRef<"ProductSourceLink", 'Boolean'>
+    readonly externalSku: FieldRef<"ProductSourceLink", 'String'>
+    readonly externalUrl: FieldRef<"ProductSourceLink", 'String'>
+    readonly externalName: FieldRef<"ProductSourceLink", 'String'>
+    readonly expectedPackageQty: FieldRef<"ProductSourceLink", 'Float'>
+    readonly expectedPackageUnit: FieldRef<"ProductSourceLink", 'String'>
+    readonly expectedConversionFactor: FieldRef<"ProductSourceLink", 'Float'>
+    readonly expectedBaseQty: FieldRef<"ProductSourceLink", 'Float'>
+    readonly packTolerancePct: FieldRef<"ProductSourceLink", 'Float'>
+    readonly applyStrategy: FieldRef<"ProductSourceLink", 'String'>
+    readonly taxRatePct: FieldRef<"ProductSourceLink", 'Float'>
+    readonly lastCheckedAt: FieldRef<"ProductSourceLink", 'DateTime'>
+    readonly lastSeenPriceCents: FieldRef<"ProductSourceLink", 'Int'>
+    readonly lastSeenInStock: FieldRef<"ProductSourceLink", 'Boolean'>
+    readonly lastError: FieldRef<"ProductSourceLink", 'String'>
+    readonly isActive: FieldRef<"ProductSourceLink", 'Boolean'>
+    readonly createdAt: FieldRef<"ProductSourceLink", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductSourceLink", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductSourceLink findUnique
+   */
+  export type ProductSourceLinkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductSourceLink to fetch.
+     */
+    where: ProductSourceLinkWhereUniqueInput
+  }
+
+  /**
+   * ProductSourceLink findUniqueOrThrow
+   */
+  export type ProductSourceLinkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductSourceLink to fetch.
+     */
+    where: ProductSourceLinkWhereUniqueInput
+  }
+
+  /**
+   * ProductSourceLink findFirst
+   */
+  export type ProductSourceLinkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductSourceLink to fetch.
+     */
+    where?: ProductSourceLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductSourceLinks to fetch.
+     */
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductSourceLinks.
+     */
+    cursor?: ProductSourceLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductSourceLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductSourceLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductSourceLinks.
+     */
+    distinct?: ProductSourceLinkScalarFieldEnum | ProductSourceLinkScalarFieldEnum[]
+  }
+
+  /**
+   * ProductSourceLink findFirstOrThrow
+   */
+  export type ProductSourceLinkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductSourceLink to fetch.
+     */
+    where?: ProductSourceLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductSourceLinks to fetch.
+     */
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductSourceLinks.
+     */
+    cursor?: ProductSourceLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductSourceLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductSourceLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductSourceLinks.
+     */
+    distinct?: ProductSourceLinkScalarFieldEnum | ProductSourceLinkScalarFieldEnum[]
+  }
+
+  /**
+   * ProductSourceLink findMany
+   */
+  export type ProductSourceLinkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductSourceLinks to fetch.
+     */
+    where?: ProductSourceLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductSourceLinks to fetch.
+     */
+    orderBy?: ProductSourceLinkOrderByWithRelationInput | ProductSourceLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductSourceLinks.
+     */
+    cursor?: ProductSourceLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductSourceLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductSourceLinks.
+     */
+    skip?: number
+    distinct?: ProductSourceLinkScalarFieldEnum | ProductSourceLinkScalarFieldEnum[]
+  }
+
+  /**
+   * ProductSourceLink create
+   */
+  export type ProductSourceLinkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductSourceLink.
+     */
+    data: XOR<ProductSourceLinkCreateInput, ProductSourceLinkUncheckedCreateInput>
+  }
+
+  /**
+   * ProductSourceLink createMany
+   */
+  export type ProductSourceLinkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductSourceLinks.
+     */
+    data: ProductSourceLinkCreateManyInput | ProductSourceLinkCreateManyInput[]
+  }
+
+  /**
+   * ProductSourceLink createManyAndReturn
+   */
+  export type ProductSourceLinkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ProductSourceLinks.
+     */
+    data: ProductSourceLinkCreateManyInput | ProductSourceLinkCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductSourceLink update
+   */
+  export type ProductSourceLinkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductSourceLink.
+     */
+    data: XOR<ProductSourceLinkUpdateInput, ProductSourceLinkUncheckedUpdateInput>
+    /**
+     * Choose, which ProductSourceLink to update.
+     */
+    where: ProductSourceLinkWhereUniqueInput
+  }
+
+  /**
+   * ProductSourceLink updateMany
+   */
+  export type ProductSourceLinkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductSourceLinks.
+     */
+    data: XOR<ProductSourceLinkUpdateManyMutationInput, ProductSourceLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductSourceLinks to update
+     */
+    where?: ProductSourceLinkWhereInput
+  }
+
+  /**
+   * ProductSourceLink upsert
+   */
+  export type ProductSourceLinkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductSourceLink to update in case it exists.
+     */
+    where: ProductSourceLinkWhereUniqueInput
+    /**
+     * In case the ProductSourceLink found by the `where` argument doesn't exist, create a new ProductSourceLink with this data.
+     */
+    create: XOR<ProductSourceLinkCreateInput, ProductSourceLinkUncheckedCreateInput>
+    /**
+     * In case the ProductSourceLink was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductSourceLinkUpdateInput, ProductSourceLinkUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductSourceLink delete
+   */
+  export type ProductSourceLinkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    /**
+     * Filter which ProductSourceLink to delete.
+     */
+    where: ProductSourceLinkWhereUniqueInput
+  }
+
+  /**
+   * ProductSourceLink deleteMany
+   */
+  export type ProductSourceLinkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductSourceLinks to delete
+     */
+    where?: ProductSourceLinkWhereInput
+  }
+
+  /**
+   * ProductSourceLink.proposals
+   */
+  export type ProductSourceLink$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    where?: PriceUpdateProposalWhereInput
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * ProductSourceLink without action
+   */
+  export type ProductSourceLinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PriceSyncRun
+   */
+
+  export type AggregatePriceSyncRun = {
+    _count: PriceSyncRunCountAggregateOutputType | null
+    _avg: PriceSyncRunAvgAggregateOutputType | null
+    _sum: PriceSyncRunSumAggregateOutputType | null
+    _min: PriceSyncRunMinAggregateOutputType | null
+    _max: PriceSyncRunMaxAggregateOutputType | null
+  }
+
+  export type PriceSyncRunAvgAggregateOutputType = {
+    totalChecked: number | null
+    proposalsCreated: number | null
+    errorsCount: number | null
+  }
+
+  export type PriceSyncRunSumAggregateOutputType = {
+    totalChecked: number | null
+    proposalsCreated: number | null
+    errorsCount: number | null
+  }
+
+  export type PriceSyncRunMinAggregateOutputType = {
+    id: string | null
+    sourceId: string | null
+    triggerType: string | null
+    status: string | null
+    totalChecked: number | null
+    proposalsCreated: number | null
+    errorsCount: number | null
+    summaryJson: string | null
+    startedAt: Date | null
+    finishedAt: Date | null
+  }
+
+  export type PriceSyncRunMaxAggregateOutputType = {
+    id: string | null
+    sourceId: string | null
+    triggerType: string | null
+    status: string | null
+    totalChecked: number | null
+    proposalsCreated: number | null
+    errorsCount: number | null
+    summaryJson: string | null
+    startedAt: Date | null
+    finishedAt: Date | null
+  }
+
+  export type PriceSyncRunCountAggregateOutputType = {
+    id: number
+    sourceId: number
+    triggerType: number
+    status: number
+    totalChecked: number
+    proposalsCreated: number
+    errorsCount: number
+    summaryJson: number
+    startedAt: number
+    finishedAt: number
+    _all: number
+  }
+
+
+  export type PriceSyncRunAvgAggregateInputType = {
+    totalChecked?: true
+    proposalsCreated?: true
+    errorsCount?: true
+  }
+
+  export type PriceSyncRunSumAggregateInputType = {
+    totalChecked?: true
+    proposalsCreated?: true
+    errorsCount?: true
+  }
+
+  export type PriceSyncRunMinAggregateInputType = {
+    id?: true
+    sourceId?: true
+    triggerType?: true
+    status?: true
+    totalChecked?: true
+    proposalsCreated?: true
+    errorsCount?: true
+    summaryJson?: true
+    startedAt?: true
+    finishedAt?: true
+  }
+
+  export type PriceSyncRunMaxAggregateInputType = {
+    id?: true
+    sourceId?: true
+    triggerType?: true
+    status?: true
+    totalChecked?: true
+    proposalsCreated?: true
+    errorsCount?: true
+    summaryJson?: true
+    startedAt?: true
+    finishedAt?: true
+  }
+
+  export type PriceSyncRunCountAggregateInputType = {
+    id?: true
+    sourceId?: true
+    triggerType?: true
+    status?: true
+    totalChecked?: true
+    proposalsCreated?: true
+    errorsCount?: true
+    summaryJson?: true
+    startedAt?: true
+    finishedAt?: true
+    _all?: true
+  }
+
+  export type PriceSyncRunAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceSyncRun to aggregate.
+     */
+    where?: PriceSyncRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSyncRuns to fetch.
+     */
+    orderBy?: PriceSyncRunOrderByWithRelationInput | PriceSyncRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PriceSyncRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSyncRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSyncRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PriceSyncRuns
+    **/
+    _count?: true | PriceSyncRunCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PriceSyncRunAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PriceSyncRunSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PriceSyncRunMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PriceSyncRunMaxAggregateInputType
+  }
+
+  export type GetPriceSyncRunAggregateType<T extends PriceSyncRunAggregateArgs> = {
+        [P in keyof T & keyof AggregatePriceSyncRun]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePriceSyncRun[P]>
+      : GetScalarType<T[P], AggregatePriceSyncRun[P]>
+  }
+
+
+
+
+  export type PriceSyncRunGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceSyncRunWhereInput
+    orderBy?: PriceSyncRunOrderByWithAggregationInput | PriceSyncRunOrderByWithAggregationInput[]
+    by: PriceSyncRunScalarFieldEnum[] | PriceSyncRunScalarFieldEnum
+    having?: PriceSyncRunScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PriceSyncRunCountAggregateInputType | true
+    _avg?: PriceSyncRunAvgAggregateInputType
+    _sum?: PriceSyncRunSumAggregateInputType
+    _min?: PriceSyncRunMinAggregateInputType
+    _max?: PriceSyncRunMaxAggregateInputType
+  }
+
+  export type PriceSyncRunGroupByOutputType = {
+    id: string
+    sourceId: string | null
+    triggerType: string
+    status: string
+    totalChecked: number
+    proposalsCreated: number
+    errorsCount: number
+    summaryJson: string | null
+    startedAt: Date
+    finishedAt: Date | null
+    _count: PriceSyncRunCountAggregateOutputType | null
+    _avg: PriceSyncRunAvgAggregateOutputType | null
+    _sum: PriceSyncRunSumAggregateOutputType | null
+    _min: PriceSyncRunMinAggregateOutputType | null
+    _max: PriceSyncRunMaxAggregateOutputType | null
+  }
+
+  type GetPriceSyncRunGroupByPayload<T extends PriceSyncRunGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PriceSyncRunGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PriceSyncRunGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PriceSyncRunGroupByOutputType[P]>
+            : GetScalarType<T[P], PriceSyncRunGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PriceSyncRunSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sourceId?: boolean
+    triggerType?: boolean
+    status?: boolean
+    totalChecked?: boolean
+    proposalsCreated?: boolean
+    errorsCount?: boolean
+    summaryJson?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    source?: boolean | PriceSyncRun$sourceArgs<ExtArgs>
+    proposals?: boolean | PriceSyncRun$proposalsArgs<ExtArgs>
+    _count?: boolean | PriceSyncRunCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["priceSyncRun"]>
+
+  export type PriceSyncRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sourceId?: boolean
+    triggerType?: boolean
+    status?: boolean
+    totalChecked?: boolean
+    proposalsCreated?: boolean
+    errorsCount?: boolean
+    summaryJson?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    source?: boolean | PriceSyncRun$sourceArgs<ExtArgs>
+  }, ExtArgs["result"]["priceSyncRun"]>
+
+  export type PriceSyncRunSelectScalar = {
+    id?: boolean
+    sourceId?: boolean
+    triggerType?: boolean
+    status?: boolean
+    totalChecked?: boolean
+    proposalsCreated?: boolean
+    errorsCount?: boolean
+    summaryJson?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+  }
+
+  export type PriceSyncRunInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    source?: boolean | PriceSyncRun$sourceArgs<ExtArgs>
+    proposals?: boolean | PriceSyncRun$proposalsArgs<ExtArgs>
+    _count?: boolean | PriceSyncRunCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PriceSyncRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    source?: boolean | PriceSyncRun$sourceArgs<ExtArgs>
+  }
+
+  export type $PriceSyncRunPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PriceSyncRun"
+    objects: {
+      source: Prisma.$PriceSourcePayload<ExtArgs> | null
+      proposals: Prisma.$PriceUpdateProposalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sourceId: string | null
+      triggerType: string
+      status: string
+      totalChecked: number
+      proposalsCreated: number
+      errorsCount: number
+      summaryJson: string | null
+      startedAt: Date
+      finishedAt: Date | null
+    }, ExtArgs["result"]["priceSyncRun"]>
+    composites: {}
+  }
+
+  type PriceSyncRunGetPayload<S extends boolean | null | undefined | PriceSyncRunDefaultArgs> = $Result.GetResult<Prisma.$PriceSyncRunPayload, S>
+
+  type PriceSyncRunCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PriceSyncRunFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PriceSyncRunCountAggregateInputType | true
+    }
+
+  export interface PriceSyncRunDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PriceSyncRun'], meta: { name: 'PriceSyncRun' } }
+    /**
+     * Find zero or one PriceSyncRun that matches the filter.
+     * @param {PriceSyncRunFindUniqueArgs} args - Arguments to find a PriceSyncRun
+     * @example
+     * // Get one PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PriceSyncRunFindUniqueArgs>(args: SelectSubset<T, PriceSyncRunFindUniqueArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PriceSyncRun that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PriceSyncRunFindUniqueOrThrowArgs} args - Arguments to find a PriceSyncRun
+     * @example
+     * // Get one PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PriceSyncRunFindUniqueOrThrowArgs>(args: SelectSubset<T, PriceSyncRunFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PriceSyncRun that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunFindFirstArgs} args - Arguments to find a PriceSyncRun
+     * @example
+     * // Get one PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PriceSyncRunFindFirstArgs>(args?: SelectSubset<T, PriceSyncRunFindFirstArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PriceSyncRun that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunFindFirstOrThrowArgs} args - Arguments to find a PriceSyncRun
+     * @example
+     * // Get one PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PriceSyncRunFindFirstOrThrowArgs>(args?: SelectSubset<T, PriceSyncRunFindFirstOrThrowArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PriceSyncRuns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PriceSyncRuns
+     * const priceSyncRuns = await prisma.priceSyncRun.findMany()
+     * 
+     * // Get first 10 PriceSyncRuns
+     * const priceSyncRuns = await prisma.priceSyncRun.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const priceSyncRunWithIdOnly = await prisma.priceSyncRun.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PriceSyncRunFindManyArgs>(args?: SelectSubset<T, PriceSyncRunFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PriceSyncRun.
+     * @param {PriceSyncRunCreateArgs} args - Arguments to create a PriceSyncRun.
+     * @example
+     * // Create one PriceSyncRun
+     * const PriceSyncRun = await prisma.priceSyncRun.create({
+     *   data: {
+     *     // ... data to create a PriceSyncRun
+     *   }
+     * })
+     * 
+     */
+    create<T extends PriceSyncRunCreateArgs>(args: SelectSubset<T, PriceSyncRunCreateArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PriceSyncRuns.
+     * @param {PriceSyncRunCreateManyArgs} args - Arguments to create many PriceSyncRuns.
+     * @example
+     * // Create many PriceSyncRuns
+     * const priceSyncRun = await prisma.priceSyncRun.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PriceSyncRunCreateManyArgs>(args?: SelectSubset<T, PriceSyncRunCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PriceSyncRuns and returns the data saved in the database.
+     * @param {PriceSyncRunCreateManyAndReturnArgs} args - Arguments to create many PriceSyncRuns.
+     * @example
+     * // Create many PriceSyncRuns
+     * const priceSyncRun = await prisma.priceSyncRun.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PriceSyncRuns and only return the `id`
+     * const priceSyncRunWithIdOnly = await prisma.priceSyncRun.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PriceSyncRunCreateManyAndReturnArgs>(args?: SelectSubset<T, PriceSyncRunCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PriceSyncRun.
+     * @param {PriceSyncRunDeleteArgs} args - Arguments to delete one PriceSyncRun.
+     * @example
+     * // Delete one PriceSyncRun
+     * const PriceSyncRun = await prisma.priceSyncRun.delete({
+     *   where: {
+     *     // ... filter to delete one PriceSyncRun
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PriceSyncRunDeleteArgs>(args: SelectSubset<T, PriceSyncRunDeleteArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PriceSyncRun.
+     * @param {PriceSyncRunUpdateArgs} args - Arguments to update one PriceSyncRun.
+     * @example
+     * // Update one PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PriceSyncRunUpdateArgs>(args: SelectSubset<T, PriceSyncRunUpdateArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PriceSyncRuns.
+     * @param {PriceSyncRunDeleteManyArgs} args - Arguments to filter PriceSyncRuns to delete.
+     * @example
+     * // Delete a few PriceSyncRuns
+     * const { count } = await prisma.priceSyncRun.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PriceSyncRunDeleteManyArgs>(args?: SelectSubset<T, PriceSyncRunDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PriceSyncRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PriceSyncRuns
+     * const priceSyncRun = await prisma.priceSyncRun.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PriceSyncRunUpdateManyArgs>(args: SelectSubset<T, PriceSyncRunUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PriceSyncRun.
+     * @param {PriceSyncRunUpsertArgs} args - Arguments to update or create a PriceSyncRun.
+     * @example
+     * // Update or create a PriceSyncRun
+     * const priceSyncRun = await prisma.priceSyncRun.upsert({
+     *   create: {
+     *     // ... data to create a PriceSyncRun
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PriceSyncRun we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PriceSyncRunUpsertArgs>(args: SelectSubset<T, PriceSyncRunUpsertArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PriceSyncRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunCountArgs} args - Arguments to filter PriceSyncRuns to count.
+     * @example
+     * // Count the number of PriceSyncRuns
+     * const count = await prisma.priceSyncRun.count({
+     *   where: {
+     *     // ... the filter for the PriceSyncRuns we want to count
+     *   }
+     * })
+    **/
+    count<T extends PriceSyncRunCountArgs>(
+      args?: Subset<T, PriceSyncRunCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PriceSyncRunCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PriceSyncRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PriceSyncRunAggregateArgs>(args: Subset<T, PriceSyncRunAggregateArgs>): Prisma.PrismaPromise<GetPriceSyncRunAggregateType<T>>
+
+    /**
+     * Group by PriceSyncRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceSyncRunGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PriceSyncRunGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PriceSyncRunGroupByArgs['orderBy'] }
+        : { orderBy?: PriceSyncRunGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PriceSyncRunGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPriceSyncRunGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PriceSyncRun model
+   */
+  readonly fields: PriceSyncRunFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PriceSyncRun.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PriceSyncRunClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    source<T extends PriceSyncRun$sourceArgs<ExtArgs> = {}>(args?: Subset<T, PriceSyncRun$sourceArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    proposals<T extends PriceSyncRun$proposalsArgs<ExtArgs> = {}>(args?: Subset<T, PriceSyncRun$proposalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PriceSyncRun model
+   */ 
+  interface PriceSyncRunFieldRefs {
+    readonly id: FieldRef<"PriceSyncRun", 'String'>
+    readonly sourceId: FieldRef<"PriceSyncRun", 'String'>
+    readonly triggerType: FieldRef<"PriceSyncRun", 'String'>
+    readonly status: FieldRef<"PriceSyncRun", 'String'>
+    readonly totalChecked: FieldRef<"PriceSyncRun", 'Int'>
+    readonly proposalsCreated: FieldRef<"PriceSyncRun", 'Int'>
+    readonly errorsCount: FieldRef<"PriceSyncRun", 'Int'>
+    readonly summaryJson: FieldRef<"PriceSyncRun", 'String'>
+    readonly startedAt: FieldRef<"PriceSyncRun", 'DateTime'>
+    readonly finishedAt: FieldRef<"PriceSyncRun", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PriceSyncRun findUnique
+   */
+  export type PriceSyncRunFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSyncRun to fetch.
+     */
+    where: PriceSyncRunWhereUniqueInput
+  }
+
+  /**
+   * PriceSyncRun findUniqueOrThrow
+   */
+  export type PriceSyncRunFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSyncRun to fetch.
+     */
+    where: PriceSyncRunWhereUniqueInput
+  }
+
+  /**
+   * PriceSyncRun findFirst
+   */
+  export type PriceSyncRunFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSyncRun to fetch.
+     */
+    where?: PriceSyncRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSyncRuns to fetch.
+     */
+    orderBy?: PriceSyncRunOrderByWithRelationInput | PriceSyncRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceSyncRuns.
+     */
+    cursor?: PriceSyncRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSyncRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSyncRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceSyncRuns.
+     */
+    distinct?: PriceSyncRunScalarFieldEnum | PriceSyncRunScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSyncRun findFirstOrThrow
+   */
+  export type PriceSyncRunFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSyncRun to fetch.
+     */
+    where?: PriceSyncRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSyncRuns to fetch.
+     */
+    orderBy?: PriceSyncRunOrderByWithRelationInput | PriceSyncRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceSyncRuns.
+     */
+    cursor?: PriceSyncRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSyncRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSyncRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceSyncRuns.
+     */
+    distinct?: PriceSyncRunScalarFieldEnum | PriceSyncRunScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSyncRun findMany
+   */
+  export type PriceSyncRunFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceSyncRuns to fetch.
+     */
+    where?: PriceSyncRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceSyncRuns to fetch.
+     */
+    orderBy?: PriceSyncRunOrderByWithRelationInput | PriceSyncRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PriceSyncRuns.
+     */
+    cursor?: PriceSyncRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceSyncRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceSyncRuns.
+     */
+    skip?: number
+    distinct?: PriceSyncRunScalarFieldEnum | PriceSyncRunScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSyncRun create
+   */
+  export type PriceSyncRunCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PriceSyncRun.
+     */
+    data: XOR<PriceSyncRunCreateInput, PriceSyncRunUncheckedCreateInput>
+  }
+
+  /**
+   * PriceSyncRun createMany
+   */
+  export type PriceSyncRunCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PriceSyncRuns.
+     */
+    data: PriceSyncRunCreateManyInput | PriceSyncRunCreateManyInput[]
+  }
+
+  /**
+   * PriceSyncRun createManyAndReturn
+   */
+  export type PriceSyncRunCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PriceSyncRuns.
+     */
+    data: PriceSyncRunCreateManyInput | PriceSyncRunCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PriceSyncRun update
+   */
+  export type PriceSyncRunUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PriceSyncRun.
+     */
+    data: XOR<PriceSyncRunUpdateInput, PriceSyncRunUncheckedUpdateInput>
+    /**
+     * Choose, which PriceSyncRun to update.
+     */
+    where: PriceSyncRunWhereUniqueInput
+  }
+
+  /**
+   * PriceSyncRun updateMany
+   */
+  export type PriceSyncRunUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PriceSyncRuns.
+     */
+    data: XOR<PriceSyncRunUpdateManyMutationInput, PriceSyncRunUncheckedUpdateManyInput>
+    /**
+     * Filter which PriceSyncRuns to update
+     */
+    where?: PriceSyncRunWhereInput
+  }
+
+  /**
+   * PriceSyncRun upsert
+   */
+  export type PriceSyncRunUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PriceSyncRun to update in case it exists.
+     */
+    where: PriceSyncRunWhereUniqueInput
+    /**
+     * In case the PriceSyncRun found by the `where` argument doesn't exist, create a new PriceSyncRun with this data.
+     */
+    create: XOR<PriceSyncRunCreateInput, PriceSyncRunUncheckedCreateInput>
+    /**
+     * In case the PriceSyncRun was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PriceSyncRunUpdateInput, PriceSyncRunUncheckedUpdateInput>
+  }
+
+  /**
+   * PriceSyncRun delete
+   */
+  export type PriceSyncRunDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    /**
+     * Filter which PriceSyncRun to delete.
+     */
+    where: PriceSyncRunWhereUniqueInput
+  }
+
+  /**
+   * PriceSyncRun deleteMany
+   */
+  export type PriceSyncRunDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceSyncRuns to delete
+     */
+    where?: PriceSyncRunWhereInput
+  }
+
+  /**
+   * PriceSyncRun.source
+   */
+  export type PriceSyncRun$sourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSource
+     */
+    select?: PriceSourceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSourceInclude<ExtArgs> | null
+    where?: PriceSourceWhereInput
+  }
+
+  /**
+   * PriceSyncRun.proposals
+   */
+  export type PriceSyncRun$proposalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    where?: PriceUpdateProposalWhereInput
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * PriceSyncRun without action
+   */
+  export type PriceSyncRunDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PriceUpdateProposal
+   */
+
+  export type AggregatePriceUpdateProposal = {
+    _count: PriceUpdateProposalCountAggregateOutputType | null
+    _avg: PriceUpdateProposalAvgAggregateOutputType | null
+    _sum: PriceUpdateProposalSumAggregateOutputType | null
+    _min: PriceUpdateProposalMinAggregateOutputType | null
+    _max: PriceUpdateProposalMaxAggregateOutputType | null
+  }
+
+  export type PriceUpdateProposalAvgAggregateOutputType = {
+    currentPriceCents: number | null
+    currentCostPerBaseUnit: number | null
+    detectedPriceCents: number | null
+    detectedPackQty: number | null
+    proposedPriceCents: number | null
+    proposedCostPerBaseUnit: number | null
+    proposedPackageQty: number | null
+    proposedConversionFactor: number | null
+    diffPriceCents: number | null
+    diffPercent: number | null
+  }
+
+  export type PriceUpdateProposalSumAggregateOutputType = {
+    currentPriceCents: number | null
+    currentCostPerBaseUnit: number | null
+    detectedPriceCents: number | null
+    detectedPackQty: number | null
+    proposedPriceCents: number | null
+    proposedCostPerBaseUnit: number | null
+    proposedPackageQty: number | null
+    proposedConversionFactor: number | null
+    diffPriceCents: number | null
+    diffPercent: number | null
+  }
+
+  export type PriceUpdateProposalMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    runId: string | null
+    linkId: string | null
+    ingredientId: string | null
+    sourceId: string | null
+    status: string | null
+    applyStrategyUsed: string | null
+    currentPriceCents: number | null
+    currentCostPerBaseUnit: number | null
+    currentIngredientUpdatedAt: Date | null
+    detectedPriceCents: number | null
+    detectedInStock: boolean | null
+    detectedPackQty: number | null
+    detectedPackUnit: string | null
+    detectedRawTitle: string | null
+    proposedPriceCents: number | null
+    proposedCostPerBaseUnit: number | null
+    proposedPackageQty: number | null
+    proposedPackageUnit: string | null
+    proposedConversionFactor: number | null
+    diffPriceCents: number | null
+    diffPercent: number | null
+    packCheckStatus: string | null
+    alertsJson: string | null
+    evidenceUrl: string | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    expiresAt: Date | null
+    appliedSnapshotJson: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PriceUpdateProposalMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    runId: string | null
+    linkId: string | null
+    ingredientId: string | null
+    sourceId: string | null
+    status: string | null
+    applyStrategyUsed: string | null
+    currentPriceCents: number | null
+    currentCostPerBaseUnit: number | null
+    currentIngredientUpdatedAt: Date | null
+    detectedPriceCents: number | null
+    detectedInStock: boolean | null
+    detectedPackQty: number | null
+    detectedPackUnit: string | null
+    detectedRawTitle: string | null
+    proposedPriceCents: number | null
+    proposedCostPerBaseUnit: number | null
+    proposedPackageQty: number | null
+    proposedPackageUnit: string | null
+    proposedConversionFactor: number | null
+    diffPriceCents: number | null
+    diffPercent: number | null
+    packCheckStatus: string | null
+    alertsJson: string | null
+    evidenceUrl: string | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    expiresAt: Date | null
+    appliedSnapshotJson: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PriceUpdateProposalCountAggregateOutputType = {
+    id: number
+    code: number
+    runId: number
+    linkId: number
+    ingredientId: number
+    sourceId: number
+    status: number
+    applyStrategyUsed: number
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: number
+    detectedPriceCents: number
+    detectedInStock: number
+    detectedPackQty: number
+    detectedPackUnit: number
+    detectedRawTitle: number
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty: number
+    proposedPackageUnit: number
+    proposedConversionFactor: number
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus: number
+    alertsJson: number
+    evidenceUrl: number
+    reviewNote: number
+    reviewedAt: number
+    expiresAt: number
+    appliedSnapshotJson: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PriceUpdateProposalAvgAggregateInputType = {
+    currentPriceCents?: true
+    currentCostPerBaseUnit?: true
+    detectedPriceCents?: true
+    detectedPackQty?: true
+    proposedPriceCents?: true
+    proposedCostPerBaseUnit?: true
+    proposedPackageQty?: true
+    proposedConversionFactor?: true
+    diffPriceCents?: true
+    diffPercent?: true
+  }
+
+  export type PriceUpdateProposalSumAggregateInputType = {
+    currentPriceCents?: true
+    currentCostPerBaseUnit?: true
+    detectedPriceCents?: true
+    detectedPackQty?: true
+    proposedPriceCents?: true
+    proposedCostPerBaseUnit?: true
+    proposedPackageQty?: true
+    proposedConversionFactor?: true
+    diffPriceCents?: true
+    diffPercent?: true
+  }
+
+  export type PriceUpdateProposalMinAggregateInputType = {
+    id?: true
+    code?: true
+    runId?: true
+    linkId?: true
+    ingredientId?: true
+    sourceId?: true
+    status?: true
+    applyStrategyUsed?: true
+    currentPriceCents?: true
+    currentCostPerBaseUnit?: true
+    currentIngredientUpdatedAt?: true
+    detectedPriceCents?: true
+    detectedInStock?: true
+    detectedPackQty?: true
+    detectedPackUnit?: true
+    detectedRawTitle?: true
+    proposedPriceCents?: true
+    proposedCostPerBaseUnit?: true
+    proposedPackageQty?: true
+    proposedPackageUnit?: true
+    proposedConversionFactor?: true
+    diffPriceCents?: true
+    diffPercent?: true
+    packCheckStatus?: true
+    alertsJson?: true
+    evidenceUrl?: true
+    reviewNote?: true
+    reviewedAt?: true
+    expiresAt?: true
+    appliedSnapshotJson?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PriceUpdateProposalMaxAggregateInputType = {
+    id?: true
+    code?: true
+    runId?: true
+    linkId?: true
+    ingredientId?: true
+    sourceId?: true
+    status?: true
+    applyStrategyUsed?: true
+    currentPriceCents?: true
+    currentCostPerBaseUnit?: true
+    currentIngredientUpdatedAt?: true
+    detectedPriceCents?: true
+    detectedInStock?: true
+    detectedPackQty?: true
+    detectedPackUnit?: true
+    detectedRawTitle?: true
+    proposedPriceCents?: true
+    proposedCostPerBaseUnit?: true
+    proposedPackageQty?: true
+    proposedPackageUnit?: true
+    proposedConversionFactor?: true
+    diffPriceCents?: true
+    diffPercent?: true
+    packCheckStatus?: true
+    alertsJson?: true
+    evidenceUrl?: true
+    reviewNote?: true
+    reviewedAt?: true
+    expiresAt?: true
+    appliedSnapshotJson?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PriceUpdateProposalCountAggregateInputType = {
+    id?: true
+    code?: true
+    runId?: true
+    linkId?: true
+    ingredientId?: true
+    sourceId?: true
+    status?: true
+    applyStrategyUsed?: true
+    currentPriceCents?: true
+    currentCostPerBaseUnit?: true
+    currentIngredientUpdatedAt?: true
+    detectedPriceCents?: true
+    detectedInStock?: true
+    detectedPackQty?: true
+    detectedPackUnit?: true
+    detectedRawTitle?: true
+    proposedPriceCents?: true
+    proposedCostPerBaseUnit?: true
+    proposedPackageQty?: true
+    proposedPackageUnit?: true
+    proposedConversionFactor?: true
+    diffPriceCents?: true
+    diffPercent?: true
+    packCheckStatus?: true
+    alertsJson?: true
+    evidenceUrl?: true
+    reviewNote?: true
+    reviewedAt?: true
+    expiresAt?: true
+    appliedSnapshotJson?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PriceUpdateProposalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceUpdateProposal to aggregate.
+     */
+    where?: PriceUpdateProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceUpdateProposals to fetch.
+     */
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceUpdateProposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceUpdateProposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PriceUpdateProposals
+    **/
+    _count?: true | PriceUpdateProposalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PriceUpdateProposalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PriceUpdateProposalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PriceUpdateProposalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PriceUpdateProposalMaxAggregateInputType
+  }
+
+  export type GetPriceUpdateProposalAggregateType<T extends PriceUpdateProposalAggregateArgs> = {
+        [P in keyof T & keyof AggregatePriceUpdateProposal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePriceUpdateProposal[P]>
+      : GetScalarType<T[P], AggregatePriceUpdateProposal[P]>
+  }
+
+
+
+
+  export type PriceUpdateProposalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PriceUpdateProposalWhereInput
+    orderBy?: PriceUpdateProposalOrderByWithAggregationInput | PriceUpdateProposalOrderByWithAggregationInput[]
+    by: PriceUpdateProposalScalarFieldEnum[] | PriceUpdateProposalScalarFieldEnum
+    having?: PriceUpdateProposalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PriceUpdateProposalCountAggregateInputType | true
+    _avg?: PriceUpdateProposalAvgAggregateInputType
+    _sum?: PriceUpdateProposalSumAggregateInputType
+    _min?: PriceUpdateProposalMinAggregateInputType
+    _max?: PriceUpdateProposalMaxAggregateInputType
+  }
+
+  export type PriceUpdateProposalGroupByOutputType = {
+    id: string
+    code: string
+    runId: string | null
+    linkId: string | null
+    ingredientId: string
+    sourceId: string
+    status: string
+    applyStrategyUsed: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date
+    detectedPriceCents: number
+    detectedInStock: boolean
+    detectedPackQty: number | null
+    detectedPackUnit: string | null
+    detectedRawTitle: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty: number | null
+    proposedPackageUnit: string | null
+    proposedConversionFactor: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus: string
+    alertsJson: string | null
+    evidenceUrl: string | null
+    reviewNote: string | null
+    reviewedAt: Date | null
+    expiresAt: Date
+    appliedSnapshotJson: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PriceUpdateProposalCountAggregateOutputType | null
+    _avg: PriceUpdateProposalAvgAggregateOutputType | null
+    _sum: PriceUpdateProposalSumAggregateOutputType | null
+    _min: PriceUpdateProposalMinAggregateOutputType | null
+    _max: PriceUpdateProposalMaxAggregateOutputType | null
+  }
+
+  type GetPriceUpdateProposalGroupByPayload<T extends PriceUpdateProposalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PriceUpdateProposalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PriceUpdateProposalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PriceUpdateProposalGroupByOutputType[P]>
+            : GetScalarType<T[P], PriceUpdateProposalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PriceUpdateProposalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    runId?: boolean
+    linkId?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    status?: boolean
+    applyStrategyUsed?: boolean
+    currentPriceCents?: boolean
+    currentCostPerBaseUnit?: boolean
+    currentIngredientUpdatedAt?: boolean
+    detectedPriceCents?: boolean
+    detectedInStock?: boolean
+    detectedPackQty?: boolean
+    detectedPackUnit?: boolean
+    detectedRawTitle?: boolean
+    proposedPriceCents?: boolean
+    proposedCostPerBaseUnit?: boolean
+    proposedPackageQty?: boolean
+    proposedPackageUnit?: boolean
+    proposedConversionFactor?: boolean
+    diffPriceCents?: boolean
+    diffPercent?: boolean
+    packCheckStatus?: boolean
+    alertsJson?: boolean
+    evidenceUrl?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    expiresAt?: boolean
+    appliedSnapshotJson?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    run?: boolean | PriceUpdateProposal$runArgs<ExtArgs>
+    link?: boolean | PriceUpdateProposal$linkArgs<ExtArgs>
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+    priceHistoryEntries?: boolean | PriceUpdateProposal$priceHistoryEntriesArgs<ExtArgs>
+    _count?: boolean | PriceUpdateProposalCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["priceUpdateProposal"]>
+
+  export type PriceUpdateProposalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    runId?: boolean
+    linkId?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    status?: boolean
+    applyStrategyUsed?: boolean
+    currentPriceCents?: boolean
+    currentCostPerBaseUnit?: boolean
+    currentIngredientUpdatedAt?: boolean
+    detectedPriceCents?: boolean
+    detectedInStock?: boolean
+    detectedPackQty?: boolean
+    detectedPackUnit?: boolean
+    detectedRawTitle?: boolean
+    proposedPriceCents?: boolean
+    proposedCostPerBaseUnit?: boolean
+    proposedPackageQty?: boolean
+    proposedPackageUnit?: boolean
+    proposedConversionFactor?: boolean
+    diffPriceCents?: boolean
+    diffPercent?: boolean
+    packCheckStatus?: boolean
+    alertsJson?: boolean
+    evidenceUrl?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    expiresAt?: boolean
+    appliedSnapshotJson?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    run?: boolean | PriceUpdateProposal$runArgs<ExtArgs>
+    link?: boolean | PriceUpdateProposal$linkArgs<ExtArgs>
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["priceUpdateProposal"]>
+
+  export type PriceUpdateProposalSelectScalar = {
+    id?: boolean
+    code?: boolean
+    runId?: boolean
+    linkId?: boolean
+    ingredientId?: boolean
+    sourceId?: boolean
+    status?: boolean
+    applyStrategyUsed?: boolean
+    currentPriceCents?: boolean
+    currentCostPerBaseUnit?: boolean
+    currentIngredientUpdatedAt?: boolean
+    detectedPriceCents?: boolean
+    detectedInStock?: boolean
+    detectedPackQty?: boolean
+    detectedPackUnit?: boolean
+    detectedRawTitle?: boolean
+    proposedPriceCents?: boolean
+    proposedCostPerBaseUnit?: boolean
+    proposedPackageQty?: boolean
+    proposedPackageUnit?: boolean
+    proposedConversionFactor?: boolean
+    diffPriceCents?: boolean
+    diffPercent?: boolean
+    packCheckStatus?: boolean
+    alertsJson?: boolean
+    evidenceUrl?: boolean
+    reviewNote?: boolean
+    reviewedAt?: boolean
+    expiresAt?: boolean
+    appliedSnapshotJson?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PriceUpdateProposalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    run?: boolean | PriceUpdateProposal$runArgs<ExtArgs>
+    link?: boolean | PriceUpdateProposal$linkArgs<ExtArgs>
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+    priceHistoryEntries?: boolean | PriceUpdateProposal$priceHistoryEntriesArgs<ExtArgs>
+    _count?: boolean | PriceUpdateProposalCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PriceUpdateProposalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    run?: boolean | PriceUpdateProposal$runArgs<ExtArgs>
+    link?: boolean | PriceUpdateProposal$linkArgs<ExtArgs>
+    ingredient?: boolean | IngredientDefaultArgs<ExtArgs>
+    source?: boolean | PriceSourceDefaultArgs<ExtArgs>
+  }
+
+  export type $PriceUpdateProposalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PriceUpdateProposal"
+    objects: {
+      run: Prisma.$PriceSyncRunPayload<ExtArgs> | null
+      link: Prisma.$ProductSourceLinkPayload<ExtArgs> | null
+      ingredient: Prisma.$IngredientPayload<ExtArgs>
+      source: Prisma.$PriceSourcePayload<ExtArgs>
+      priceHistoryEntries: Prisma.$RecipePriceHistoryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      runId: string | null
+      linkId: string | null
+      ingredientId: string
+      sourceId: string
+      status: string
+      applyStrategyUsed: string
+      currentPriceCents: number
+      currentCostPerBaseUnit: number
+      currentIngredientUpdatedAt: Date
+      detectedPriceCents: number
+      detectedInStock: boolean
+      detectedPackQty: number | null
+      detectedPackUnit: string | null
+      detectedRawTitle: string | null
+      proposedPriceCents: number
+      proposedCostPerBaseUnit: number
+      proposedPackageQty: number | null
+      proposedPackageUnit: string | null
+      proposedConversionFactor: number | null
+      diffPriceCents: number
+      diffPercent: number
+      packCheckStatus: string
+      alertsJson: string | null
+      evidenceUrl: string | null
+      reviewNote: string | null
+      reviewedAt: Date | null
+      expiresAt: Date
+      appliedSnapshotJson: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["priceUpdateProposal"]>
+    composites: {}
+  }
+
+  type PriceUpdateProposalGetPayload<S extends boolean | null | undefined | PriceUpdateProposalDefaultArgs> = $Result.GetResult<Prisma.$PriceUpdateProposalPayload, S>
+
+  type PriceUpdateProposalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PriceUpdateProposalFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PriceUpdateProposalCountAggregateInputType | true
+    }
+
+  export interface PriceUpdateProposalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PriceUpdateProposal'], meta: { name: 'PriceUpdateProposal' } }
+    /**
+     * Find zero or one PriceUpdateProposal that matches the filter.
+     * @param {PriceUpdateProposalFindUniqueArgs} args - Arguments to find a PriceUpdateProposal
+     * @example
+     * // Get one PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PriceUpdateProposalFindUniqueArgs>(args: SelectSubset<T, PriceUpdateProposalFindUniqueArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PriceUpdateProposal that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PriceUpdateProposalFindUniqueOrThrowArgs} args - Arguments to find a PriceUpdateProposal
+     * @example
+     * // Get one PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PriceUpdateProposalFindUniqueOrThrowArgs>(args: SelectSubset<T, PriceUpdateProposalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PriceUpdateProposal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalFindFirstArgs} args - Arguments to find a PriceUpdateProposal
+     * @example
+     * // Get one PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PriceUpdateProposalFindFirstArgs>(args?: SelectSubset<T, PriceUpdateProposalFindFirstArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PriceUpdateProposal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalFindFirstOrThrowArgs} args - Arguments to find a PriceUpdateProposal
+     * @example
+     * // Get one PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PriceUpdateProposalFindFirstOrThrowArgs>(args?: SelectSubset<T, PriceUpdateProposalFindFirstOrThrowArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PriceUpdateProposals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PriceUpdateProposals
+     * const priceUpdateProposals = await prisma.priceUpdateProposal.findMany()
+     * 
+     * // Get first 10 PriceUpdateProposals
+     * const priceUpdateProposals = await prisma.priceUpdateProposal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const priceUpdateProposalWithIdOnly = await prisma.priceUpdateProposal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PriceUpdateProposalFindManyArgs>(args?: SelectSubset<T, PriceUpdateProposalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PriceUpdateProposal.
+     * @param {PriceUpdateProposalCreateArgs} args - Arguments to create a PriceUpdateProposal.
+     * @example
+     * // Create one PriceUpdateProposal
+     * const PriceUpdateProposal = await prisma.priceUpdateProposal.create({
+     *   data: {
+     *     // ... data to create a PriceUpdateProposal
+     *   }
+     * })
+     * 
+     */
+    create<T extends PriceUpdateProposalCreateArgs>(args: SelectSubset<T, PriceUpdateProposalCreateArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PriceUpdateProposals.
+     * @param {PriceUpdateProposalCreateManyArgs} args - Arguments to create many PriceUpdateProposals.
+     * @example
+     * // Create many PriceUpdateProposals
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PriceUpdateProposalCreateManyArgs>(args?: SelectSubset<T, PriceUpdateProposalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PriceUpdateProposals and returns the data saved in the database.
+     * @param {PriceUpdateProposalCreateManyAndReturnArgs} args - Arguments to create many PriceUpdateProposals.
+     * @example
+     * // Create many PriceUpdateProposals
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PriceUpdateProposals and only return the `id`
+     * const priceUpdateProposalWithIdOnly = await prisma.priceUpdateProposal.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PriceUpdateProposalCreateManyAndReturnArgs>(args?: SelectSubset<T, PriceUpdateProposalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PriceUpdateProposal.
+     * @param {PriceUpdateProposalDeleteArgs} args - Arguments to delete one PriceUpdateProposal.
+     * @example
+     * // Delete one PriceUpdateProposal
+     * const PriceUpdateProposal = await prisma.priceUpdateProposal.delete({
+     *   where: {
+     *     // ... filter to delete one PriceUpdateProposal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PriceUpdateProposalDeleteArgs>(args: SelectSubset<T, PriceUpdateProposalDeleteArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PriceUpdateProposal.
+     * @param {PriceUpdateProposalUpdateArgs} args - Arguments to update one PriceUpdateProposal.
+     * @example
+     * // Update one PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PriceUpdateProposalUpdateArgs>(args: SelectSubset<T, PriceUpdateProposalUpdateArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PriceUpdateProposals.
+     * @param {PriceUpdateProposalDeleteManyArgs} args - Arguments to filter PriceUpdateProposals to delete.
+     * @example
+     * // Delete a few PriceUpdateProposals
+     * const { count } = await prisma.priceUpdateProposal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PriceUpdateProposalDeleteManyArgs>(args?: SelectSubset<T, PriceUpdateProposalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PriceUpdateProposals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PriceUpdateProposals
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PriceUpdateProposalUpdateManyArgs>(args: SelectSubset<T, PriceUpdateProposalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PriceUpdateProposal.
+     * @param {PriceUpdateProposalUpsertArgs} args - Arguments to update or create a PriceUpdateProposal.
+     * @example
+     * // Update or create a PriceUpdateProposal
+     * const priceUpdateProposal = await prisma.priceUpdateProposal.upsert({
+     *   create: {
+     *     // ... data to create a PriceUpdateProposal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PriceUpdateProposal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PriceUpdateProposalUpsertArgs>(args: SelectSubset<T, PriceUpdateProposalUpsertArgs<ExtArgs>>): Prisma__PriceUpdateProposalClient<$Result.GetResult<Prisma.$PriceUpdateProposalPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PriceUpdateProposals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalCountArgs} args - Arguments to filter PriceUpdateProposals to count.
+     * @example
+     * // Count the number of PriceUpdateProposals
+     * const count = await prisma.priceUpdateProposal.count({
+     *   where: {
+     *     // ... the filter for the PriceUpdateProposals we want to count
+     *   }
+     * })
+    **/
+    count<T extends PriceUpdateProposalCountArgs>(
+      args?: Subset<T, PriceUpdateProposalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PriceUpdateProposalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PriceUpdateProposal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PriceUpdateProposalAggregateArgs>(args: Subset<T, PriceUpdateProposalAggregateArgs>): Prisma.PrismaPromise<GetPriceUpdateProposalAggregateType<T>>
+
+    /**
+     * Group by PriceUpdateProposal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PriceUpdateProposalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PriceUpdateProposalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PriceUpdateProposalGroupByArgs['orderBy'] }
+        : { orderBy?: PriceUpdateProposalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PriceUpdateProposalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPriceUpdateProposalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PriceUpdateProposal model
+   */
+  readonly fields: PriceUpdateProposalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PriceUpdateProposal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PriceUpdateProposalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    run<T extends PriceUpdateProposal$runArgs<ExtArgs> = {}>(args?: Subset<T, PriceUpdateProposal$runArgs<ExtArgs>>): Prisma__PriceSyncRunClient<$Result.GetResult<Prisma.$PriceSyncRunPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    link<T extends PriceUpdateProposal$linkArgs<ExtArgs> = {}>(args?: Subset<T, PriceUpdateProposal$linkArgs<ExtArgs>>): Prisma__ProductSourceLinkClient<$Result.GetResult<Prisma.$ProductSourceLinkPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    ingredient<T extends IngredientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, IngredientDefaultArgs<ExtArgs>>): Prisma__IngredientClient<$Result.GetResult<Prisma.$IngredientPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    source<T extends PriceSourceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PriceSourceDefaultArgs<ExtArgs>>): Prisma__PriceSourceClient<$Result.GetResult<Prisma.$PriceSourcePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    priceHistoryEntries<T extends PriceUpdateProposal$priceHistoryEntriesArgs<ExtArgs> = {}>(args?: Subset<T, PriceUpdateProposal$priceHistoryEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipePriceHistoryPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PriceUpdateProposal model
+   */ 
+  interface PriceUpdateProposalFieldRefs {
+    readonly id: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly code: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly runId: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly linkId: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly ingredientId: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly sourceId: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly status: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly applyStrategyUsed: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly currentPriceCents: FieldRef<"PriceUpdateProposal", 'Int'>
+    readonly currentCostPerBaseUnit: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly currentIngredientUpdatedAt: FieldRef<"PriceUpdateProposal", 'DateTime'>
+    readonly detectedPriceCents: FieldRef<"PriceUpdateProposal", 'Int'>
+    readonly detectedInStock: FieldRef<"PriceUpdateProposal", 'Boolean'>
+    readonly detectedPackQty: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly detectedPackUnit: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly detectedRawTitle: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly proposedPriceCents: FieldRef<"PriceUpdateProposal", 'Int'>
+    readonly proposedCostPerBaseUnit: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly proposedPackageQty: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly proposedPackageUnit: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly proposedConversionFactor: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly diffPriceCents: FieldRef<"PriceUpdateProposal", 'Int'>
+    readonly diffPercent: FieldRef<"PriceUpdateProposal", 'Float'>
+    readonly packCheckStatus: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly alertsJson: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly evidenceUrl: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly reviewNote: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly reviewedAt: FieldRef<"PriceUpdateProposal", 'DateTime'>
+    readonly expiresAt: FieldRef<"PriceUpdateProposal", 'DateTime'>
+    readonly appliedSnapshotJson: FieldRef<"PriceUpdateProposal", 'String'>
+    readonly createdAt: FieldRef<"PriceUpdateProposal", 'DateTime'>
+    readonly updatedAt: FieldRef<"PriceUpdateProposal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PriceUpdateProposal findUnique
+   */
+  export type PriceUpdateProposalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceUpdateProposal to fetch.
+     */
+    where: PriceUpdateProposalWhereUniqueInput
+  }
+
+  /**
+   * PriceUpdateProposal findUniqueOrThrow
+   */
+  export type PriceUpdateProposalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceUpdateProposal to fetch.
+     */
+    where: PriceUpdateProposalWhereUniqueInput
+  }
+
+  /**
+   * PriceUpdateProposal findFirst
+   */
+  export type PriceUpdateProposalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceUpdateProposal to fetch.
+     */
+    where?: PriceUpdateProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceUpdateProposals to fetch.
+     */
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceUpdateProposals.
+     */
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceUpdateProposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceUpdateProposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceUpdateProposals.
+     */
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * PriceUpdateProposal findFirstOrThrow
+   */
+  export type PriceUpdateProposalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceUpdateProposal to fetch.
+     */
+    where?: PriceUpdateProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceUpdateProposals to fetch.
+     */
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PriceUpdateProposals.
+     */
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceUpdateProposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceUpdateProposals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PriceUpdateProposals.
+     */
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * PriceUpdateProposal findMany
+   */
+  export type PriceUpdateProposalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter, which PriceUpdateProposals to fetch.
+     */
+    where?: PriceUpdateProposalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PriceUpdateProposals to fetch.
+     */
+    orderBy?: PriceUpdateProposalOrderByWithRelationInput | PriceUpdateProposalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PriceUpdateProposals.
+     */
+    cursor?: PriceUpdateProposalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PriceUpdateProposals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PriceUpdateProposals.
+     */
+    skip?: number
+    distinct?: PriceUpdateProposalScalarFieldEnum | PriceUpdateProposalScalarFieldEnum[]
+  }
+
+  /**
+   * PriceUpdateProposal create
+   */
+  export type PriceUpdateProposalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PriceUpdateProposal.
+     */
+    data: XOR<PriceUpdateProposalCreateInput, PriceUpdateProposalUncheckedCreateInput>
+  }
+
+  /**
+   * PriceUpdateProposal createMany
+   */
+  export type PriceUpdateProposalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PriceUpdateProposals.
+     */
+    data: PriceUpdateProposalCreateManyInput | PriceUpdateProposalCreateManyInput[]
+  }
+
+  /**
+   * PriceUpdateProposal createManyAndReturn
+   */
+  export type PriceUpdateProposalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PriceUpdateProposals.
+     */
+    data: PriceUpdateProposalCreateManyInput | PriceUpdateProposalCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PriceUpdateProposal update
+   */
+  export type PriceUpdateProposalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PriceUpdateProposal.
+     */
+    data: XOR<PriceUpdateProposalUpdateInput, PriceUpdateProposalUncheckedUpdateInput>
+    /**
+     * Choose, which PriceUpdateProposal to update.
+     */
+    where: PriceUpdateProposalWhereUniqueInput
+  }
+
+  /**
+   * PriceUpdateProposal updateMany
+   */
+  export type PriceUpdateProposalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PriceUpdateProposals.
+     */
+    data: XOR<PriceUpdateProposalUpdateManyMutationInput, PriceUpdateProposalUncheckedUpdateManyInput>
+    /**
+     * Filter which PriceUpdateProposals to update
+     */
+    where?: PriceUpdateProposalWhereInput
+  }
+
+  /**
+   * PriceUpdateProposal upsert
+   */
+  export type PriceUpdateProposalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PriceUpdateProposal to update in case it exists.
+     */
+    where: PriceUpdateProposalWhereUniqueInput
+    /**
+     * In case the PriceUpdateProposal found by the `where` argument doesn't exist, create a new PriceUpdateProposal with this data.
+     */
+    create: XOR<PriceUpdateProposalCreateInput, PriceUpdateProposalUncheckedCreateInput>
+    /**
+     * In case the PriceUpdateProposal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PriceUpdateProposalUpdateInput, PriceUpdateProposalUncheckedUpdateInput>
+  }
+
+  /**
+   * PriceUpdateProposal delete
+   */
+  export type PriceUpdateProposalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+    /**
+     * Filter which PriceUpdateProposal to delete.
+     */
+    where: PriceUpdateProposalWhereUniqueInput
+  }
+
+  /**
+   * PriceUpdateProposal deleteMany
+   */
+  export type PriceUpdateProposalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PriceUpdateProposals to delete
+     */
+    where?: PriceUpdateProposalWhereInput
+  }
+
+  /**
+   * PriceUpdateProposal.run
+   */
+  export type PriceUpdateProposal$runArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceSyncRun
+     */
+    select?: PriceSyncRunSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceSyncRunInclude<ExtArgs> | null
+    where?: PriceSyncRunWhereInput
+  }
+
+  /**
+   * PriceUpdateProposal.link
+   */
+  export type PriceUpdateProposal$linkArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductSourceLink
+     */
+    select?: ProductSourceLinkSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductSourceLinkInclude<ExtArgs> | null
+    where?: ProductSourceLinkWhereInput
+  }
+
+  /**
+   * PriceUpdateProposal.priceHistoryEntries
+   */
+  export type PriceUpdateProposal$priceHistoryEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipePriceHistory
+     */
+    select?: RecipePriceHistorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipePriceHistoryInclude<ExtArgs> | null
+    where?: RecipePriceHistoryWhereInput
+    orderBy?: RecipePriceHistoryOrderByWithRelationInput | RecipePriceHistoryOrderByWithRelationInput[]
+    cursor?: RecipePriceHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecipePriceHistoryScalarFieldEnum | RecipePriceHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * PriceUpdateProposal without action
+   */
+  export type PriceUpdateProposalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PriceUpdateProposal
+     */
+    select?: PriceUpdateProposalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PriceUpdateProposalInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26596,6 +32238,7 @@ export namespace Prisma {
   export const RecipePriceHistoryScalarFieldEnum: {
     id: 'id',
     recipeId: 'recipeId',
+    proposalId: 'proposalId',
     batchCostCents: 'batchCostCents',
     unitCostCents: 'unitCostCents',
     priceCents: 'priceCents',
@@ -26775,6 +32418,112 @@ export namespace Prisma {
   export type ImportRowScalarFieldEnum = (typeof ImportRowScalarFieldEnum)[keyof typeof ImportRowScalarFieldEnum]
 
 
+  export const PriceSourceScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    baseUrl: 'baseUrl',
+    supplierId: 'supplierId',
+    adapterType: 'adapterType',
+    captureMode: 'captureMode',
+    taxMode: 'taxMode',
+    currency: 'currency',
+    rateLimitMs: 'rateLimitMs',
+    timeoutMs: 'timeoutMs',
+    proposalTtlHours: 'proposalTtlHours',
+    priceAlertThresholdPct: 'priceAlertThresholdPct',
+    configJson: 'configJson',
+    isActive: 'isActive',
+    lastSyncedAt: 'lastSyncedAt',
+    lastStatus: 'lastStatus',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PriceSourceScalarFieldEnum = (typeof PriceSourceScalarFieldEnum)[keyof typeof PriceSourceScalarFieldEnum]
+
+
+  export const ProductSourceLinkScalarFieldEnum: {
+    id: 'id',
+    ingredientId: 'ingredientId',
+    sourceId: 'sourceId',
+    isPrimary: 'isPrimary',
+    externalSku: 'externalSku',
+    externalUrl: 'externalUrl',
+    externalName: 'externalName',
+    expectedPackageQty: 'expectedPackageQty',
+    expectedPackageUnit: 'expectedPackageUnit',
+    expectedConversionFactor: 'expectedConversionFactor',
+    expectedBaseQty: 'expectedBaseQty',
+    packTolerancePct: 'packTolerancePct',
+    applyStrategy: 'applyStrategy',
+    taxRatePct: 'taxRatePct',
+    lastCheckedAt: 'lastCheckedAt',
+    lastSeenPriceCents: 'lastSeenPriceCents',
+    lastSeenInStock: 'lastSeenInStock',
+    lastError: 'lastError',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductSourceLinkScalarFieldEnum = (typeof ProductSourceLinkScalarFieldEnum)[keyof typeof ProductSourceLinkScalarFieldEnum]
+
+
+  export const PriceSyncRunScalarFieldEnum: {
+    id: 'id',
+    sourceId: 'sourceId',
+    triggerType: 'triggerType',
+    status: 'status',
+    totalChecked: 'totalChecked',
+    proposalsCreated: 'proposalsCreated',
+    errorsCount: 'errorsCount',
+    summaryJson: 'summaryJson',
+    startedAt: 'startedAt',
+    finishedAt: 'finishedAt'
+  };
+
+  export type PriceSyncRunScalarFieldEnum = (typeof PriceSyncRunScalarFieldEnum)[keyof typeof PriceSyncRunScalarFieldEnum]
+
+
+  export const PriceUpdateProposalScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    runId: 'runId',
+    linkId: 'linkId',
+    ingredientId: 'ingredientId',
+    sourceId: 'sourceId',
+    status: 'status',
+    applyStrategyUsed: 'applyStrategyUsed',
+    currentPriceCents: 'currentPriceCents',
+    currentCostPerBaseUnit: 'currentCostPerBaseUnit',
+    currentIngredientUpdatedAt: 'currentIngredientUpdatedAt',
+    detectedPriceCents: 'detectedPriceCents',
+    detectedInStock: 'detectedInStock',
+    detectedPackQty: 'detectedPackQty',
+    detectedPackUnit: 'detectedPackUnit',
+    detectedRawTitle: 'detectedRawTitle',
+    proposedPriceCents: 'proposedPriceCents',
+    proposedCostPerBaseUnit: 'proposedCostPerBaseUnit',
+    proposedPackageQty: 'proposedPackageQty',
+    proposedPackageUnit: 'proposedPackageUnit',
+    proposedConversionFactor: 'proposedConversionFactor',
+    diffPriceCents: 'diffPriceCents',
+    diffPercent: 'diffPercent',
+    packCheckStatus: 'packCheckStatus',
+    alertsJson: 'alertsJson',
+    evidenceUrl: 'evidenceUrl',
+    reviewNote: 'reviewNote',
+    reviewedAt: 'reviewedAt',
+    expiresAt: 'expiresAt',
+    appliedSnapshotJson: 'appliedSnapshotJson',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PriceUpdateProposalScalarFieldEnum = (typeof PriceUpdateProposalScalarFieldEnum)[keyof typeof PriceUpdateProposalScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -26914,6 +32663,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     ingredients?: IngredientListRelationFilter
+    priceSources?: PriceSourceListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -26926,6 +32676,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ingredients?: IngredientOrderByRelationAggregateInput
+    priceSources?: PriceSourceOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -26941,6 +32692,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     updatedAt?: DateTimeFilter<"Supplier"> | Date | string
     ingredients?: IngredientListRelationFilter
+    priceSources?: PriceSourceListRelationFilter
   }, "id" | "code">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -27131,6 +32883,9 @@ export namespace Prisma {
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     factorRef?: XOR<UnitConversionRefNullableRelationFilter, UnitConversionRefWhereInput> | null
     recipeIngredients?: RecipeIngredientListRelationFilter
+    presentationMaterials?: PresentationMaterialListRelationFilter
+    sourceLinks?: ProductSourceLinkListRelationFilter
+    priceProposals?: PriceUpdateProposalListRelationFilter
   }
 
   export type IngredientOrderByWithRelationInput = {
@@ -27156,6 +32911,9 @@ export namespace Prisma {
     supplier?: SupplierOrderByWithRelationInput
     factorRef?: UnitConversionRefOrderByWithRelationInput
     recipeIngredients?: RecipeIngredientOrderByRelationAggregateInput
+    presentationMaterials?: PresentationMaterialOrderByRelationAggregateInput
+    sourceLinks?: ProductSourceLinkOrderByRelationAggregateInput
+    priceProposals?: PriceUpdateProposalOrderByRelationAggregateInput
   }
 
   export type IngredientWhereUniqueInput = Prisma.AtLeast<{
@@ -27184,6 +32942,9 @@ export namespace Prisma {
     supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
     factorRef?: XOR<UnitConversionRefNullableRelationFilter, UnitConversionRefWhereInput> | null
     recipeIngredients?: RecipeIngredientListRelationFilter
+    presentationMaterials?: PresentationMaterialListRelationFilter
+    sourceLinks?: ProductSourceLinkListRelationFilter
+    priceProposals?: PriceUpdateProposalListRelationFilter
   }, "id" | "code">
 
   export type IngredientOrderByWithAggregationInput = {
@@ -27272,6 +33033,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseListRelationFilter
     usedInRecipes?: SubRecipeUseListRelationFilter
     presentations?: RecipePresentationListRelationFilter
+    presentationSubrecipes?: PresentationSubrecipeListRelationFilter
     saleItems?: SaleItemListRelationFilter
     priceHistory?: RecipePriceHistoryListRelationFilter
   }
@@ -27307,6 +33069,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseOrderByRelationAggregateInput
     usedInRecipes?: SubRecipeUseOrderByRelationAggregateInput
     presentations?: RecipePresentationOrderByRelationAggregateInput
+    presentationSubrecipes?: PresentationSubrecipeOrderByRelationAggregateInput
     saleItems?: SaleItemOrderByRelationAggregateInput
     priceHistory?: RecipePriceHistoryOrderByRelationAggregateInput
   }
@@ -27345,6 +33108,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseListRelationFilter
     usedInRecipes?: SubRecipeUseListRelationFilter
     presentations?: RecipePresentationListRelationFilter
+    presentationSubrecipes?: PresentationSubrecipeListRelationFilter
     saleItems?: SaleItemListRelationFilter
     priceHistory?: RecipePriceHistoryListRelationFilter
   }, "id" | "slug">
@@ -27611,6 +33375,7 @@ export namespace Prisma {
     unitCostCents?: IntFilter<"PresentationMaterial"> | number
     totalCostCents?: IntFilter<"PresentationMaterial"> | number
     presentation?: XOR<RecipePresentationRelationFilter, RecipePresentationWhereInput>
+    ingredient?: XOR<IngredientNullableRelationFilter, IngredientWhereInput> | null
   }
 
   export type PresentationMaterialOrderByWithRelationInput = {
@@ -27624,6 +33389,7 @@ export namespace Prisma {
     unitCostCents?: SortOrder
     totalCostCents?: SortOrder
     presentation?: RecipePresentationOrderByWithRelationInput
+    ingredient?: IngredientOrderByWithRelationInput
   }
 
   export type PresentationMaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -27640,6 +33406,7 @@ export namespace Prisma {
     unitCostCents?: IntFilter<"PresentationMaterial"> | number
     totalCostCents?: IntFilter<"PresentationMaterial"> | number
     presentation?: XOR<RecipePresentationRelationFilter, RecipePresentationWhereInput>
+    ingredient?: XOR<IngredientNullableRelationFilter, IngredientWhereInput> | null
   }, "id">
 
   export type PresentationMaterialOrderByWithAggregationInput = {
@@ -27686,6 +33453,7 @@ export namespace Prisma {
     unit?: StringFilter<"PresentationSubrecipe"> | string
     costCents?: IntFilter<"PresentationSubrecipe"> | number
     presentation?: XOR<RecipePresentationRelationFilter, RecipePresentationWhereInput>
+    subRecipe?: XOR<RecipeNullableRelationFilter, RecipeWhereInput> | null
   }
 
   export type PresentationSubrecipeOrderByWithRelationInput = {
@@ -27697,6 +33465,7 @@ export namespace Prisma {
     unit?: SortOrder
     costCents?: SortOrder
     presentation?: RecipePresentationOrderByWithRelationInput
+    subRecipe?: RecipeOrderByWithRelationInput
   }
 
   export type PresentationSubrecipeWhereUniqueInput = Prisma.AtLeast<{
@@ -27711,6 +33480,7 @@ export namespace Prisma {
     unit?: StringFilter<"PresentationSubrecipe"> | string
     costCents?: IntFilter<"PresentationSubrecipe"> | number
     presentation?: XOR<RecipePresentationRelationFilter, RecipePresentationWhereInput>
+    subRecipe?: XOR<RecipeNullableRelationFilter, RecipeWhereInput> | null
   }, "id">
 
   export type PresentationSubrecipeOrderByWithAggregationInput = {
@@ -27877,6 +33647,7 @@ export namespace Prisma {
     NOT?: RecipePriceHistoryWhereInput | RecipePriceHistoryWhereInput[]
     id?: StringFilter<"RecipePriceHistory"> | string
     recipeId?: StringFilter<"RecipePriceHistory"> | string
+    proposalId?: StringNullableFilter<"RecipePriceHistory"> | string | null
     batchCostCents?: IntFilter<"RecipePriceHistory"> | number
     unitCostCents?: IntFilter<"RecipePriceHistory"> | number
     priceCents?: IntFilter<"RecipePriceHistory"> | number
@@ -27884,11 +33655,13 @@ export namespace Prisma {
     recordedAt?: DateTimeFilter<"RecipePriceHistory"> | Date | string
     reason?: StringNullableFilter<"RecipePriceHistory"> | string | null
     recipe?: XOR<RecipeRelationFilter, RecipeWhereInput>
+    proposal?: XOR<PriceUpdateProposalNullableRelationFilter, PriceUpdateProposalWhereInput> | null
   }
 
   export type RecipePriceHistoryOrderByWithRelationInput = {
     id?: SortOrder
     recipeId?: SortOrder
+    proposalId?: SortOrderInput | SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
     priceCents?: SortOrder
@@ -27896,6 +33669,7 @@ export namespace Prisma {
     recordedAt?: SortOrder
     reason?: SortOrderInput | SortOrder
     recipe?: RecipeOrderByWithRelationInput
+    proposal?: PriceUpdateProposalOrderByWithRelationInput
   }
 
   export type RecipePriceHistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -27904,6 +33678,7 @@ export namespace Prisma {
     OR?: RecipePriceHistoryWhereInput[]
     NOT?: RecipePriceHistoryWhereInput | RecipePriceHistoryWhereInput[]
     recipeId?: StringFilter<"RecipePriceHistory"> | string
+    proposalId?: StringNullableFilter<"RecipePriceHistory"> | string | null
     batchCostCents?: IntFilter<"RecipePriceHistory"> | number
     unitCostCents?: IntFilter<"RecipePriceHistory"> | number
     priceCents?: IntFilter<"RecipePriceHistory"> | number
@@ -27911,11 +33686,13 @@ export namespace Prisma {
     recordedAt?: DateTimeFilter<"RecipePriceHistory"> | Date | string
     reason?: StringNullableFilter<"RecipePriceHistory"> | string | null
     recipe?: XOR<RecipeRelationFilter, RecipeWhereInput>
+    proposal?: XOR<PriceUpdateProposalNullableRelationFilter, PriceUpdateProposalWhereInput> | null
   }, "id">
 
   export type RecipePriceHistoryOrderByWithAggregationInput = {
     id?: SortOrder
     recipeId?: SortOrder
+    proposalId?: SortOrderInput | SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
     priceCents?: SortOrder
@@ -27935,6 +33712,7 @@ export namespace Prisma {
     NOT?: RecipePriceHistoryScalarWhereWithAggregatesInput | RecipePriceHistoryScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"RecipePriceHistory"> | string
     recipeId?: StringWithAggregatesFilter<"RecipePriceHistory"> | string
+    proposalId?: StringNullableWithAggregatesFilter<"RecipePriceHistory"> | string | null
     batchCostCents?: IntWithAggregatesFilter<"RecipePriceHistory"> | number
     unitCostCents?: IntWithAggregatesFilter<"RecipePriceHistory"> | number
     priceCents?: IntWithAggregatesFilter<"RecipePriceHistory"> | number
@@ -28820,6 +34598,574 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ImportRow"> | Date | string
   }
 
+  export type PriceSourceWhereInput = {
+    AND?: PriceSourceWhereInput | PriceSourceWhereInput[]
+    OR?: PriceSourceWhereInput[]
+    NOT?: PriceSourceWhereInput | PriceSourceWhereInput[]
+    id?: StringFilter<"PriceSource"> | string
+    code?: StringFilter<"PriceSource"> | string
+    name?: StringFilter<"PriceSource"> | string
+    baseUrl?: StringNullableFilter<"PriceSource"> | string | null
+    supplierId?: StringNullableFilter<"PriceSource"> | string | null
+    adapterType?: StringFilter<"PriceSource"> | string
+    captureMode?: StringFilter<"PriceSource"> | string
+    taxMode?: StringFilter<"PriceSource"> | string
+    currency?: StringFilter<"PriceSource"> | string
+    rateLimitMs?: IntFilter<"PriceSource"> | number
+    timeoutMs?: IntFilter<"PriceSource"> | number
+    proposalTtlHours?: IntFilter<"PriceSource"> | number
+    priceAlertThresholdPct?: FloatFilter<"PriceSource"> | number
+    configJson?: StringNullableFilter<"PriceSource"> | string | null
+    isActive?: BoolFilter<"PriceSource"> | boolean
+    lastSyncedAt?: DateTimeNullableFilter<"PriceSource"> | Date | string | null
+    lastStatus?: StringNullableFilter<"PriceSource"> | string | null
+    createdAt?: DateTimeFilter<"PriceSource"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceSource"> | Date | string
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    links?: ProductSourceLinkListRelationFilter
+    syncRuns?: PriceSyncRunListRelationFilter
+    proposals?: PriceUpdateProposalListRelationFilter
+  }
+
+  export type PriceSourceOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    baseUrl?: SortOrderInput | SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    adapterType?: SortOrder
+    captureMode?: SortOrder
+    taxMode?: SortOrder
+    currency?: SortOrder
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+    configJson?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    lastStatus?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    supplier?: SupplierOrderByWithRelationInput
+    links?: ProductSourceLinkOrderByRelationAggregateInput
+    syncRuns?: PriceSyncRunOrderByRelationAggregateInput
+    proposals?: PriceUpdateProposalOrderByRelationAggregateInput
+  }
+
+  export type PriceSourceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: PriceSourceWhereInput | PriceSourceWhereInput[]
+    OR?: PriceSourceWhereInput[]
+    NOT?: PriceSourceWhereInput | PriceSourceWhereInput[]
+    name?: StringFilter<"PriceSource"> | string
+    baseUrl?: StringNullableFilter<"PriceSource"> | string | null
+    supplierId?: StringNullableFilter<"PriceSource"> | string | null
+    adapterType?: StringFilter<"PriceSource"> | string
+    captureMode?: StringFilter<"PriceSource"> | string
+    taxMode?: StringFilter<"PriceSource"> | string
+    currency?: StringFilter<"PriceSource"> | string
+    rateLimitMs?: IntFilter<"PriceSource"> | number
+    timeoutMs?: IntFilter<"PriceSource"> | number
+    proposalTtlHours?: IntFilter<"PriceSource"> | number
+    priceAlertThresholdPct?: FloatFilter<"PriceSource"> | number
+    configJson?: StringNullableFilter<"PriceSource"> | string | null
+    isActive?: BoolFilter<"PriceSource"> | boolean
+    lastSyncedAt?: DateTimeNullableFilter<"PriceSource"> | Date | string | null
+    lastStatus?: StringNullableFilter<"PriceSource"> | string | null
+    createdAt?: DateTimeFilter<"PriceSource"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceSource"> | Date | string
+    supplier?: XOR<SupplierNullableRelationFilter, SupplierWhereInput> | null
+    links?: ProductSourceLinkListRelationFilter
+    syncRuns?: PriceSyncRunListRelationFilter
+    proposals?: PriceUpdateProposalListRelationFilter
+  }, "id" | "code">
+
+  export type PriceSourceOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    baseUrl?: SortOrderInput | SortOrder
+    supplierId?: SortOrderInput | SortOrder
+    adapterType?: SortOrder
+    captureMode?: SortOrder
+    taxMode?: SortOrder
+    currency?: SortOrder
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+    configJson?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    lastStatus?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PriceSourceCountOrderByAggregateInput
+    _avg?: PriceSourceAvgOrderByAggregateInput
+    _max?: PriceSourceMaxOrderByAggregateInput
+    _min?: PriceSourceMinOrderByAggregateInput
+    _sum?: PriceSourceSumOrderByAggregateInput
+  }
+
+  export type PriceSourceScalarWhereWithAggregatesInput = {
+    AND?: PriceSourceScalarWhereWithAggregatesInput | PriceSourceScalarWhereWithAggregatesInput[]
+    OR?: PriceSourceScalarWhereWithAggregatesInput[]
+    NOT?: PriceSourceScalarWhereWithAggregatesInput | PriceSourceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PriceSource"> | string
+    code?: StringWithAggregatesFilter<"PriceSource"> | string
+    name?: StringWithAggregatesFilter<"PriceSource"> | string
+    baseUrl?: StringNullableWithAggregatesFilter<"PriceSource"> | string | null
+    supplierId?: StringNullableWithAggregatesFilter<"PriceSource"> | string | null
+    adapterType?: StringWithAggregatesFilter<"PriceSource"> | string
+    captureMode?: StringWithAggregatesFilter<"PriceSource"> | string
+    taxMode?: StringWithAggregatesFilter<"PriceSource"> | string
+    currency?: StringWithAggregatesFilter<"PriceSource"> | string
+    rateLimitMs?: IntWithAggregatesFilter<"PriceSource"> | number
+    timeoutMs?: IntWithAggregatesFilter<"PriceSource"> | number
+    proposalTtlHours?: IntWithAggregatesFilter<"PriceSource"> | number
+    priceAlertThresholdPct?: FloatWithAggregatesFilter<"PriceSource"> | number
+    configJson?: StringNullableWithAggregatesFilter<"PriceSource"> | string | null
+    isActive?: BoolWithAggregatesFilter<"PriceSource"> | boolean
+    lastSyncedAt?: DateTimeNullableWithAggregatesFilter<"PriceSource"> | Date | string | null
+    lastStatus?: StringNullableWithAggregatesFilter<"PriceSource"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PriceSource"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PriceSource"> | Date | string
+  }
+
+  export type ProductSourceLinkWhereInput = {
+    AND?: ProductSourceLinkWhereInput | ProductSourceLinkWhereInput[]
+    OR?: ProductSourceLinkWhereInput[]
+    NOT?: ProductSourceLinkWhereInput | ProductSourceLinkWhereInput[]
+    id?: StringFilter<"ProductSourceLink"> | string
+    ingredientId?: StringFilter<"ProductSourceLink"> | string
+    sourceId?: StringFilter<"ProductSourceLink"> | string
+    isPrimary?: BoolFilter<"ProductSourceLink"> | boolean
+    externalSku?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalUrl?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalName?: StringNullableFilter<"ProductSourceLink"> | string | null
+    expectedPackageQty?: FloatFilter<"ProductSourceLink"> | number
+    expectedPackageUnit?: StringFilter<"ProductSourceLink"> | string
+    expectedConversionFactor?: FloatFilter<"ProductSourceLink"> | number
+    expectedBaseQty?: FloatFilter<"ProductSourceLink"> | number
+    packTolerancePct?: FloatFilter<"ProductSourceLink"> | number
+    applyStrategy?: StringFilter<"ProductSourceLink"> | string
+    taxRatePct?: FloatFilter<"ProductSourceLink"> | number
+    lastCheckedAt?: DateTimeNullableFilter<"ProductSourceLink"> | Date | string | null
+    lastSeenPriceCents?: IntNullableFilter<"ProductSourceLink"> | number | null
+    lastSeenInStock?: BoolNullableFilter<"ProductSourceLink"> | boolean | null
+    lastError?: StringNullableFilter<"ProductSourceLink"> | string | null
+    isActive?: BoolFilter<"ProductSourceLink"> | boolean
+    createdAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+    ingredient?: XOR<IngredientRelationFilter, IngredientWhereInput>
+    source?: XOR<PriceSourceRelationFilter, PriceSourceWhereInput>
+    proposals?: PriceUpdateProposalListRelationFilter
+  }
+
+  export type ProductSourceLinkOrderByWithRelationInput = {
+    id?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    isPrimary?: SortOrder
+    externalSku?: SortOrderInput | SortOrder
+    externalUrl?: SortOrderInput | SortOrder
+    externalName?: SortOrderInput | SortOrder
+    expectedPackageQty?: SortOrder
+    expectedPackageUnit?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    applyStrategy?: SortOrder
+    taxRatePct?: SortOrder
+    lastCheckedAt?: SortOrderInput | SortOrder
+    lastSeenPriceCents?: SortOrderInput | SortOrder
+    lastSeenInStock?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ingredient?: IngredientOrderByWithRelationInput
+    source?: PriceSourceOrderByWithRelationInput
+    proposals?: PriceUpdateProposalOrderByRelationAggregateInput
+  }
+
+  export type ProductSourceLinkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductSourceLinkWhereInput | ProductSourceLinkWhereInput[]
+    OR?: ProductSourceLinkWhereInput[]
+    NOT?: ProductSourceLinkWhereInput | ProductSourceLinkWhereInput[]
+    ingredientId?: StringFilter<"ProductSourceLink"> | string
+    sourceId?: StringFilter<"ProductSourceLink"> | string
+    isPrimary?: BoolFilter<"ProductSourceLink"> | boolean
+    externalSku?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalUrl?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalName?: StringNullableFilter<"ProductSourceLink"> | string | null
+    expectedPackageQty?: FloatFilter<"ProductSourceLink"> | number
+    expectedPackageUnit?: StringFilter<"ProductSourceLink"> | string
+    expectedConversionFactor?: FloatFilter<"ProductSourceLink"> | number
+    expectedBaseQty?: FloatFilter<"ProductSourceLink"> | number
+    packTolerancePct?: FloatFilter<"ProductSourceLink"> | number
+    applyStrategy?: StringFilter<"ProductSourceLink"> | string
+    taxRatePct?: FloatFilter<"ProductSourceLink"> | number
+    lastCheckedAt?: DateTimeNullableFilter<"ProductSourceLink"> | Date | string | null
+    lastSeenPriceCents?: IntNullableFilter<"ProductSourceLink"> | number | null
+    lastSeenInStock?: BoolNullableFilter<"ProductSourceLink"> | boolean | null
+    lastError?: StringNullableFilter<"ProductSourceLink"> | string | null
+    isActive?: BoolFilter<"ProductSourceLink"> | boolean
+    createdAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+    ingredient?: XOR<IngredientRelationFilter, IngredientWhereInput>
+    source?: XOR<PriceSourceRelationFilter, PriceSourceWhereInput>
+    proposals?: PriceUpdateProposalListRelationFilter
+  }, "id">
+
+  export type ProductSourceLinkOrderByWithAggregationInput = {
+    id?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    isPrimary?: SortOrder
+    externalSku?: SortOrderInput | SortOrder
+    externalUrl?: SortOrderInput | SortOrder
+    externalName?: SortOrderInput | SortOrder
+    expectedPackageQty?: SortOrder
+    expectedPackageUnit?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    applyStrategy?: SortOrder
+    taxRatePct?: SortOrder
+    lastCheckedAt?: SortOrderInput | SortOrder
+    lastSeenPriceCents?: SortOrderInput | SortOrder
+    lastSeenInStock?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductSourceLinkCountOrderByAggregateInput
+    _avg?: ProductSourceLinkAvgOrderByAggregateInput
+    _max?: ProductSourceLinkMaxOrderByAggregateInput
+    _min?: ProductSourceLinkMinOrderByAggregateInput
+    _sum?: ProductSourceLinkSumOrderByAggregateInput
+  }
+
+  export type ProductSourceLinkScalarWhereWithAggregatesInput = {
+    AND?: ProductSourceLinkScalarWhereWithAggregatesInput | ProductSourceLinkScalarWhereWithAggregatesInput[]
+    OR?: ProductSourceLinkScalarWhereWithAggregatesInput[]
+    NOT?: ProductSourceLinkScalarWhereWithAggregatesInput | ProductSourceLinkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductSourceLink"> | string
+    ingredientId?: StringWithAggregatesFilter<"ProductSourceLink"> | string
+    sourceId?: StringWithAggregatesFilter<"ProductSourceLink"> | string
+    isPrimary?: BoolWithAggregatesFilter<"ProductSourceLink"> | boolean
+    externalSku?: StringNullableWithAggregatesFilter<"ProductSourceLink"> | string | null
+    externalUrl?: StringNullableWithAggregatesFilter<"ProductSourceLink"> | string | null
+    externalName?: StringNullableWithAggregatesFilter<"ProductSourceLink"> | string | null
+    expectedPackageQty?: FloatWithAggregatesFilter<"ProductSourceLink"> | number
+    expectedPackageUnit?: StringWithAggregatesFilter<"ProductSourceLink"> | string
+    expectedConversionFactor?: FloatWithAggregatesFilter<"ProductSourceLink"> | number
+    expectedBaseQty?: FloatWithAggregatesFilter<"ProductSourceLink"> | number
+    packTolerancePct?: FloatWithAggregatesFilter<"ProductSourceLink"> | number
+    applyStrategy?: StringWithAggregatesFilter<"ProductSourceLink"> | string
+    taxRatePct?: FloatWithAggregatesFilter<"ProductSourceLink"> | number
+    lastCheckedAt?: DateTimeNullableWithAggregatesFilter<"ProductSourceLink"> | Date | string | null
+    lastSeenPriceCents?: IntNullableWithAggregatesFilter<"ProductSourceLink"> | number | null
+    lastSeenInStock?: BoolNullableWithAggregatesFilter<"ProductSourceLink"> | boolean | null
+    lastError?: StringNullableWithAggregatesFilter<"ProductSourceLink"> | string | null
+    isActive?: BoolWithAggregatesFilter<"ProductSourceLink"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ProductSourceLink"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductSourceLink"> | Date | string
+  }
+
+  export type PriceSyncRunWhereInput = {
+    AND?: PriceSyncRunWhereInput | PriceSyncRunWhereInput[]
+    OR?: PriceSyncRunWhereInput[]
+    NOT?: PriceSyncRunWhereInput | PriceSyncRunWhereInput[]
+    id?: StringFilter<"PriceSyncRun"> | string
+    sourceId?: StringNullableFilter<"PriceSyncRun"> | string | null
+    triggerType?: StringFilter<"PriceSyncRun"> | string
+    status?: StringFilter<"PriceSyncRun"> | string
+    totalChecked?: IntFilter<"PriceSyncRun"> | number
+    proposalsCreated?: IntFilter<"PriceSyncRun"> | number
+    errorsCount?: IntFilter<"PriceSyncRun"> | number
+    summaryJson?: StringNullableFilter<"PriceSyncRun"> | string | null
+    startedAt?: DateTimeFilter<"PriceSyncRun"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"PriceSyncRun"> | Date | string | null
+    source?: XOR<PriceSourceNullableRelationFilter, PriceSourceWhereInput> | null
+    proposals?: PriceUpdateProposalListRelationFilter
+  }
+
+  export type PriceSyncRunOrderByWithRelationInput = {
+    id?: SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    triggerType?: SortOrder
+    status?: SortOrder
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+    summaryJson?: SortOrderInput | SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    source?: PriceSourceOrderByWithRelationInput
+    proposals?: PriceUpdateProposalOrderByRelationAggregateInput
+  }
+
+  export type PriceSyncRunWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PriceSyncRunWhereInput | PriceSyncRunWhereInput[]
+    OR?: PriceSyncRunWhereInput[]
+    NOT?: PriceSyncRunWhereInput | PriceSyncRunWhereInput[]
+    sourceId?: StringNullableFilter<"PriceSyncRun"> | string | null
+    triggerType?: StringFilter<"PriceSyncRun"> | string
+    status?: StringFilter<"PriceSyncRun"> | string
+    totalChecked?: IntFilter<"PriceSyncRun"> | number
+    proposalsCreated?: IntFilter<"PriceSyncRun"> | number
+    errorsCount?: IntFilter<"PriceSyncRun"> | number
+    summaryJson?: StringNullableFilter<"PriceSyncRun"> | string | null
+    startedAt?: DateTimeFilter<"PriceSyncRun"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"PriceSyncRun"> | Date | string | null
+    source?: XOR<PriceSourceNullableRelationFilter, PriceSourceWhereInput> | null
+    proposals?: PriceUpdateProposalListRelationFilter
+  }, "id">
+
+  export type PriceSyncRunOrderByWithAggregationInput = {
+    id?: SortOrder
+    sourceId?: SortOrderInput | SortOrder
+    triggerType?: SortOrder
+    status?: SortOrder
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+    summaryJson?: SortOrderInput | SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    _count?: PriceSyncRunCountOrderByAggregateInput
+    _avg?: PriceSyncRunAvgOrderByAggregateInput
+    _max?: PriceSyncRunMaxOrderByAggregateInput
+    _min?: PriceSyncRunMinOrderByAggregateInput
+    _sum?: PriceSyncRunSumOrderByAggregateInput
+  }
+
+  export type PriceSyncRunScalarWhereWithAggregatesInput = {
+    AND?: PriceSyncRunScalarWhereWithAggregatesInput | PriceSyncRunScalarWhereWithAggregatesInput[]
+    OR?: PriceSyncRunScalarWhereWithAggregatesInput[]
+    NOT?: PriceSyncRunScalarWhereWithAggregatesInput | PriceSyncRunScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PriceSyncRun"> | string
+    sourceId?: StringNullableWithAggregatesFilter<"PriceSyncRun"> | string | null
+    triggerType?: StringWithAggregatesFilter<"PriceSyncRun"> | string
+    status?: StringWithAggregatesFilter<"PriceSyncRun"> | string
+    totalChecked?: IntWithAggregatesFilter<"PriceSyncRun"> | number
+    proposalsCreated?: IntWithAggregatesFilter<"PriceSyncRun"> | number
+    errorsCount?: IntWithAggregatesFilter<"PriceSyncRun"> | number
+    summaryJson?: StringNullableWithAggregatesFilter<"PriceSyncRun"> | string | null
+    startedAt?: DateTimeWithAggregatesFilter<"PriceSyncRun"> | Date | string
+    finishedAt?: DateTimeNullableWithAggregatesFilter<"PriceSyncRun"> | Date | string | null
+  }
+
+  export type PriceUpdateProposalWhereInput = {
+    AND?: PriceUpdateProposalWhereInput | PriceUpdateProposalWhereInput[]
+    OR?: PriceUpdateProposalWhereInput[]
+    NOT?: PriceUpdateProposalWhereInput | PriceUpdateProposalWhereInput[]
+    id?: StringFilter<"PriceUpdateProposal"> | string
+    code?: StringFilter<"PriceUpdateProposal"> | string
+    runId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    linkId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    ingredientId?: StringFilter<"PriceUpdateProposal"> | string
+    sourceId?: StringFilter<"PriceUpdateProposal"> | string
+    status?: StringFilter<"PriceUpdateProposal"> | string
+    applyStrategyUsed?: StringFilter<"PriceUpdateProposal"> | string
+    currentPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    currentCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    currentIngredientUpdatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    detectedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    detectedInStock?: BoolFilter<"PriceUpdateProposal"> | boolean
+    detectedPackQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    detectedPackUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    detectedRawTitle?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    proposedCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    proposedPackageQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    proposedPackageUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedConversionFactor?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    diffPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    diffPercent?: FloatFilter<"PriceUpdateProposal"> | number
+    packCheckStatus?: StringFilter<"PriceUpdateProposal"> | string
+    alertsJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    evidenceUrl?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewNote?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"PriceUpdateProposal"> | Date | string | null
+    expiresAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    appliedSnapshotJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    createdAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    run?: XOR<PriceSyncRunNullableRelationFilter, PriceSyncRunWhereInput> | null
+    link?: XOR<ProductSourceLinkNullableRelationFilter, ProductSourceLinkWhereInput> | null
+    ingredient?: XOR<IngredientRelationFilter, IngredientWhereInput>
+    source?: XOR<PriceSourceRelationFilter, PriceSourceWhereInput>
+    priceHistoryEntries?: RecipePriceHistoryListRelationFilter
+  }
+
+  export type PriceUpdateProposalOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    runId?: SortOrderInput | SortOrder
+    linkId?: SortOrderInput | SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    status?: SortOrder
+    applyStrategyUsed?: SortOrder
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    currentIngredientUpdatedAt?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedInStock?: SortOrder
+    detectedPackQty?: SortOrderInput | SortOrder
+    detectedPackUnit?: SortOrderInput | SortOrder
+    detectedRawTitle?: SortOrderInput | SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrderInput | SortOrder
+    proposedPackageUnit?: SortOrderInput | SortOrder
+    proposedConversionFactor?: SortOrderInput | SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+    packCheckStatus?: SortOrder
+    alertsJson?: SortOrderInput | SortOrder
+    evidenceUrl?: SortOrderInput | SortOrder
+    reviewNote?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrder
+    appliedSnapshotJson?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    run?: PriceSyncRunOrderByWithRelationInput
+    link?: ProductSourceLinkOrderByWithRelationInput
+    ingredient?: IngredientOrderByWithRelationInput
+    source?: PriceSourceOrderByWithRelationInput
+    priceHistoryEntries?: RecipePriceHistoryOrderByRelationAggregateInput
+  }
+
+  export type PriceUpdateProposalWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: PriceUpdateProposalWhereInput | PriceUpdateProposalWhereInput[]
+    OR?: PriceUpdateProposalWhereInput[]
+    NOT?: PriceUpdateProposalWhereInput | PriceUpdateProposalWhereInput[]
+    runId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    linkId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    ingredientId?: StringFilter<"PriceUpdateProposal"> | string
+    sourceId?: StringFilter<"PriceUpdateProposal"> | string
+    status?: StringFilter<"PriceUpdateProposal"> | string
+    applyStrategyUsed?: StringFilter<"PriceUpdateProposal"> | string
+    currentPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    currentCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    currentIngredientUpdatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    detectedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    detectedInStock?: BoolFilter<"PriceUpdateProposal"> | boolean
+    detectedPackQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    detectedPackUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    detectedRawTitle?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    proposedCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    proposedPackageQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    proposedPackageUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedConversionFactor?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    diffPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    diffPercent?: FloatFilter<"PriceUpdateProposal"> | number
+    packCheckStatus?: StringFilter<"PriceUpdateProposal"> | string
+    alertsJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    evidenceUrl?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewNote?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"PriceUpdateProposal"> | Date | string | null
+    expiresAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    appliedSnapshotJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    createdAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    run?: XOR<PriceSyncRunNullableRelationFilter, PriceSyncRunWhereInput> | null
+    link?: XOR<ProductSourceLinkNullableRelationFilter, ProductSourceLinkWhereInput> | null
+    ingredient?: XOR<IngredientRelationFilter, IngredientWhereInput>
+    source?: XOR<PriceSourceRelationFilter, PriceSourceWhereInput>
+    priceHistoryEntries?: RecipePriceHistoryListRelationFilter
+  }, "id" | "code">
+
+  export type PriceUpdateProposalOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    runId?: SortOrderInput | SortOrder
+    linkId?: SortOrderInput | SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    status?: SortOrder
+    applyStrategyUsed?: SortOrder
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    currentIngredientUpdatedAt?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedInStock?: SortOrder
+    detectedPackQty?: SortOrderInput | SortOrder
+    detectedPackUnit?: SortOrderInput | SortOrder
+    detectedRawTitle?: SortOrderInput | SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrderInput | SortOrder
+    proposedPackageUnit?: SortOrderInput | SortOrder
+    proposedConversionFactor?: SortOrderInput | SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+    packCheckStatus?: SortOrder
+    alertsJson?: SortOrderInput | SortOrder
+    evidenceUrl?: SortOrderInput | SortOrder
+    reviewNote?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrder
+    appliedSnapshotJson?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PriceUpdateProposalCountOrderByAggregateInput
+    _avg?: PriceUpdateProposalAvgOrderByAggregateInput
+    _max?: PriceUpdateProposalMaxOrderByAggregateInput
+    _min?: PriceUpdateProposalMinOrderByAggregateInput
+    _sum?: PriceUpdateProposalSumOrderByAggregateInput
+  }
+
+  export type PriceUpdateProposalScalarWhereWithAggregatesInput = {
+    AND?: PriceUpdateProposalScalarWhereWithAggregatesInput | PriceUpdateProposalScalarWhereWithAggregatesInput[]
+    OR?: PriceUpdateProposalScalarWhereWithAggregatesInput[]
+    NOT?: PriceUpdateProposalScalarWhereWithAggregatesInput | PriceUpdateProposalScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    code?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    runId?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    linkId?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    ingredientId?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    sourceId?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    status?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    applyStrategyUsed?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    currentPriceCents?: IntWithAggregatesFilter<"PriceUpdateProposal"> | number
+    currentCostPerBaseUnit?: FloatWithAggregatesFilter<"PriceUpdateProposal"> | number
+    currentIngredientUpdatedAt?: DateTimeWithAggregatesFilter<"PriceUpdateProposal"> | Date | string
+    detectedPriceCents?: IntWithAggregatesFilter<"PriceUpdateProposal"> | number
+    detectedInStock?: BoolWithAggregatesFilter<"PriceUpdateProposal"> | boolean
+    detectedPackQty?: FloatNullableWithAggregatesFilter<"PriceUpdateProposal"> | number | null
+    detectedPackUnit?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    detectedRawTitle?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    proposedPriceCents?: IntWithAggregatesFilter<"PriceUpdateProposal"> | number
+    proposedCostPerBaseUnit?: FloatWithAggregatesFilter<"PriceUpdateProposal"> | number
+    proposedPackageQty?: FloatNullableWithAggregatesFilter<"PriceUpdateProposal"> | number | null
+    proposedPackageUnit?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    proposedConversionFactor?: FloatNullableWithAggregatesFilter<"PriceUpdateProposal"> | number | null
+    diffPriceCents?: IntWithAggregatesFilter<"PriceUpdateProposal"> | number
+    diffPercent?: FloatWithAggregatesFilter<"PriceUpdateProposal"> | number
+    packCheckStatus?: StringWithAggregatesFilter<"PriceUpdateProposal"> | string
+    alertsJson?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    evidenceUrl?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    reviewNote?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"PriceUpdateProposal"> | Date | string | null
+    expiresAt?: DateTimeWithAggregatesFilter<"PriceUpdateProposal"> | Date | string
+    appliedSnapshotJson?: StringNullableWithAggregatesFilter<"PriceUpdateProposal"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PriceUpdateProposal"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PriceUpdateProposal"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -28907,6 +35253,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ingredients?: IngredientCreateNestedManyWithoutSupplierInput
+    priceSources?: PriceSourceCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -28919,6 +35266,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ingredients?: IngredientUncheckedCreateNestedManyWithoutSupplierInput
+    priceSources?: PriceSourceUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -28931,6 +35279,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ingredients?: IngredientUpdateManyWithoutSupplierNestedInput
+    priceSources?: PriceSourceUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -28943,6 +35292,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ingredients?: IngredientUncheckedUpdateManyWithoutSupplierNestedInput
+    priceSources?: PriceSourceUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -29153,6 +35503,9 @@ export namespace Prisma {
     supplier?: SupplierCreateNestedOneWithoutIngredientsInput
     factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
     recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientUncheckedCreateInput = {
@@ -29176,6 +35529,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientUpdateInput = {
@@ -29199,6 +35555,9 @@ export namespace Prisma {
     supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
     factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
     recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateInput = {
@@ -29222,6 +35581,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientCreateManyInput = {
@@ -29319,6 +35681,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
@@ -29354,6 +35717,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -29389,6 +35753,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
@@ -29424,6 +35789,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -29741,7 +36107,6 @@ export namespace Prisma {
 
   export type PresentationMaterialCreateInput = {
     id?: string
-    ingredientId?: string | null
     materialType?: string
     name: string
     quantity: number
@@ -29749,6 +36114,7 @@ export namespace Prisma {
     unitCostCents: number
     totalCostCents: number
     presentation: RecipePresentationCreateNestedOneWithoutMaterialsInput
+    ingredient?: IngredientCreateNestedOneWithoutPresentationMaterialsInput
   }
 
   export type PresentationMaterialUncheckedCreateInput = {
@@ -29765,7 +36131,6 @@ export namespace Prisma {
 
   export type PresentationMaterialUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
     materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -29773,6 +36138,7 @@ export namespace Prisma {
     unitCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
     presentation?: RecipePresentationUpdateOneRequiredWithoutMaterialsNestedInput
+    ingredient?: IngredientUpdateOneWithoutPresentationMaterialsNestedInput
   }
 
   export type PresentationMaterialUncheckedUpdateInput = {
@@ -29801,7 +36167,6 @@ export namespace Prisma {
 
   export type PresentationMaterialUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
     materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -29824,12 +36189,12 @@ export namespace Prisma {
 
   export type PresentationSubrecipeCreateInput = {
     id?: string
-    subRecipeId?: string | null
     name: string
     quantity: number
     unit: string
     costCents: number
     presentation: RecipePresentationCreateNestedOneWithoutSubrecipesInput
+    subRecipe?: RecipeCreateNestedOneWithoutPresentationSubrecipesInput
   }
 
   export type PresentationSubrecipeUncheckedCreateInput = {
@@ -29844,12 +36209,12 @@ export namespace Prisma {
 
   export type PresentationSubrecipeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subRecipeId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     costCents?: IntFieldUpdateOperationsInput | number
     presentation?: RecipePresentationUpdateOneRequiredWithoutSubrecipesNestedInput
+    subRecipe?: RecipeUpdateOneWithoutPresentationSubrecipesNestedInput
   }
 
   export type PresentationSubrecipeUncheckedUpdateInput = {
@@ -29874,7 +36239,6 @@ export namespace Prisma {
 
   export type PresentationSubrecipeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subRecipeId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -30022,11 +36386,13 @@ export namespace Prisma {
     recordedAt?: Date | string
     reason?: string | null
     recipe: RecipeCreateNestedOneWithoutPriceHistoryInput
+    proposal?: PriceUpdateProposalCreateNestedOneWithoutPriceHistoryEntriesInput
   }
 
   export type RecipePriceHistoryUncheckedCreateInput = {
     id?: string
     recipeId: string
+    proposalId?: string | null
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -30044,11 +36410,13 @@ export namespace Prisma {
     recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     recipe?: RecipeUpdateOneRequiredWithoutPriceHistoryNestedInput
+    proposal?: PriceUpdateProposalUpdateOneWithoutPriceHistoryEntriesNestedInput
   }
 
   export type RecipePriceHistoryUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     recipeId?: StringFieldUpdateOperationsInput | string
+    proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
     priceCents?: IntFieldUpdateOperationsInput | number
@@ -30060,6 +36428,7 @@ export namespace Prisma {
   export type RecipePriceHistoryCreateManyInput = {
     id?: string
     recipeId: string
+    proposalId?: string | null
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -30081,6 +36450,7 @@ export namespace Prisma {
   export type RecipePriceHistoryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     recipeId?: StringFieldUpdateOperationsInput | string
+    proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
     priceCents?: IntFieldUpdateOperationsInput | number
@@ -31078,6 +37448,680 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PriceSourceCreateInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutPriceSourcesInput
+    links?: ProductSourceLinkCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUncheckedCreateInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    supplierId?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: ProductSourceLinkUncheckedCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunUncheckedCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutPriceSourcesNestedInput
+    links?: ProductSourceLinkUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: ProductSourceLinkUncheckedUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUncheckedUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceCreateManyInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    supplierId?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceSourceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceSourceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductSourceLinkCreateInput = {
+    id?: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredient: IngredientCreateNestedOneWithoutSourceLinksInput
+    source: PriceSourceCreateNestedOneWithoutLinksInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkUncheckedCreateInput = {
+    id?: string
+    ingredientId: string
+    sourceId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredient?: IngredientUpdateOneRequiredWithoutSourceLinksNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutLinksNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkCreateManyInput = {
+    id?: string
+    ingredientId: string
+    sourceId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductSourceLinkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductSourceLinkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceSyncRunCreateInput = {
+    id?: string
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    source?: PriceSourceCreateNestedOneWithoutSyncRunsInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutRunInput
+  }
+
+  export type PriceSyncRunUncheckedCreateInput = {
+    id?: string
+    sourceId?: string | null
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutRunInput
+  }
+
+  export type PriceSyncRunUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    source?: PriceSourceUpdateOneWithoutSyncRunsNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutRunNestedInput
+  }
+
+  export type PriceSyncRunUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutRunNestedInput
+  }
+
+  export type PriceSyncRunCreateManyInput = {
+    id?: string
+    sourceId?: string | null
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+  }
+
+  export type PriceSyncRunUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PriceSyncRunUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PriceUpdateProposalCreateInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    run?: PriceSyncRunCreateNestedOneWithoutProposalsInput
+    link?: ProductSourceLinkCreateNestedOneWithoutProposalsInput
+    ingredient: IngredientCreateNestedOneWithoutPriceProposalsInput
+    source: PriceSourceCreateNestedOneWithoutProposalsInput
+    priceHistoryEntries?: RecipePriceHistoryCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    run?: PriceSyncRunUpdateOneWithoutProposalsNestedInput
+    link?: ProductSourceLinkUpdateOneWithoutProposalsNestedInput
+    ingredient?: IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutProposalsNestedInput
+    priceHistoryEntries?: RecipePriceHistoryUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalCreateManyInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceUpdateProposalUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -31200,12 +38244,22 @@ export namespace Prisma {
     none?: IngredientWhereInput
   }
 
+  export type PriceSourceListRelationFilter = {
+    every?: PriceSourceWhereInput
+    some?: PriceSourceWhereInput
+    none?: PriceSourceWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type IngredientOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PriceSourceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31374,7 +38428,37 @@ export namespace Prisma {
     none?: RecipeIngredientWhereInput
   }
 
+  export type PresentationMaterialListRelationFilter = {
+    every?: PresentationMaterialWhereInput
+    some?: PresentationMaterialWhereInput
+    none?: PresentationMaterialWhereInput
+  }
+
+  export type ProductSourceLinkListRelationFilter = {
+    every?: ProductSourceLinkWhereInput
+    some?: ProductSourceLinkWhereInput
+    none?: ProductSourceLinkWhereInput
+  }
+
+  export type PriceUpdateProposalListRelationFilter = {
+    every?: PriceUpdateProposalWhereInput
+    some?: PriceUpdateProposalWhereInput
+    none?: PriceUpdateProposalWhereInput
+  }
+
   export type RecipeIngredientOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PresentationMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductSourceLinkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PriceUpdateProposalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31531,6 +38615,12 @@ export namespace Prisma {
     none?: RecipePresentationWhereInput
   }
 
+  export type PresentationSubrecipeListRelationFilter = {
+    every?: PresentationSubrecipeWhereInput
+    some?: PresentationSubrecipeWhereInput
+    none?: PresentationSubrecipeWhereInput
+  }
+
   export type SaleItemListRelationFilter = {
     every?: SaleItemWhereInput
     some?: SaleItemWhereInput
@@ -31548,6 +38638,10 @@ export namespace Prisma {
   }
 
   export type RecipePresentationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PresentationSubrecipeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31706,26 +38800,6 @@ export namespace Prisma {
     isNot?: RecipePresentationWhereInput | null
   }
 
-  export type PresentationMaterialListRelationFilter = {
-    every?: PresentationMaterialWhereInput
-    some?: PresentationMaterialWhereInput
-    none?: PresentationMaterialWhereInput
-  }
-
-  export type PresentationSubrecipeListRelationFilter = {
-    every?: PresentationSubrecipeWhereInput
-    some?: PresentationSubrecipeWhereInput
-    none?: PresentationSubrecipeWhereInput
-  }
-
-  export type PresentationMaterialOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PresentationSubrecipeOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type RecipePresentationCountOrderByAggregateInput = {
     id?: SortOrder
     recipeId?: SortOrder
@@ -31855,6 +38929,11 @@ export namespace Prisma {
     isNot?: RecipePresentationWhereInput
   }
 
+  export type IngredientNullableRelationFilter = {
+    is?: IngredientWhereInput | null
+    isNot?: IngredientWhereInput | null
+  }
+
   export type PresentationMaterialCountOrderByAggregateInput = {
     id?: SortOrder
     presentationId?: SortOrder
@@ -31901,6 +38980,11 @@ export namespace Prisma {
     quantity?: SortOrder
     unitCostCents?: SortOrder
     totalCostCents?: SortOrder
+  }
+
+  export type RecipeNullableRelationFilter = {
+    is?: RecipeWhereInput | null
+    isNot?: RecipeWhereInput | null
   }
 
   export type PresentationSubrecipeCountOrderByAggregateInput = {
@@ -32022,9 +39106,15 @@ export namespace Prisma {
     costCents?: SortOrder
   }
 
+  export type PriceUpdateProposalNullableRelationFilter = {
+    is?: PriceUpdateProposalWhereInput | null
+    isNot?: PriceUpdateProposalWhereInput | null
+  }
+
   export type RecipePriceHistoryCountOrderByAggregateInput = {
     id?: SortOrder
     recipeId?: SortOrder
+    proposalId?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
     priceCents?: SortOrder
@@ -32043,6 +39133,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMaxOrderByAggregateInput = {
     id?: SortOrder
     recipeId?: SortOrder
+    proposalId?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
     priceCents?: SortOrder
@@ -32054,6 +39145,7 @@ export namespace Prisma {
   export type RecipePriceHistoryMinOrderByAggregateInput = {
     id?: SortOrder
     recipeId?: SortOrder
+    proposalId?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
     priceCents?: SortOrder
@@ -32203,11 +39295,6 @@ export namespace Prisma {
   export type SaleRelationFilter = {
     is?: SaleWhereInput
     isNot?: SaleWhereInput
-  }
-
-  export type RecipeNullableRelationFilter = {
-    is?: RecipeWhereInput | null
-    isNot?: RecipeWhereInput | null
   }
 
   export type SaleItemCountOrderByAggregateInput = {
@@ -32680,6 +39767,401 @@ export namespace Prisma {
     rowIndex?: SortOrder
   }
 
+  export type PriceSyncRunListRelationFilter = {
+    every?: PriceSyncRunWhereInput
+    some?: PriceSyncRunWhereInput
+    none?: PriceSyncRunWhereInput
+  }
+
+  export type PriceSyncRunOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PriceSourceCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    baseUrl?: SortOrder
+    supplierId?: SortOrder
+    adapterType?: SortOrder
+    captureMode?: SortOrder
+    taxMode?: SortOrder
+    currency?: SortOrder
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+    configJson?: SortOrder
+    isActive?: SortOrder
+    lastSyncedAt?: SortOrder
+    lastStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceSourceAvgOrderByAggregateInput = {
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+  }
+
+  export type PriceSourceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    baseUrl?: SortOrder
+    supplierId?: SortOrder
+    adapterType?: SortOrder
+    captureMode?: SortOrder
+    taxMode?: SortOrder
+    currency?: SortOrder
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+    configJson?: SortOrder
+    isActive?: SortOrder
+    lastSyncedAt?: SortOrder
+    lastStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceSourceMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    baseUrl?: SortOrder
+    supplierId?: SortOrder
+    adapterType?: SortOrder
+    captureMode?: SortOrder
+    taxMode?: SortOrder
+    currency?: SortOrder
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+    configJson?: SortOrder
+    isActive?: SortOrder
+    lastSyncedAt?: SortOrder
+    lastStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceSourceSumOrderByAggregateInput = {
+    rateLimitMs?: SortOrder
+    timeoutMs?: SortOrder
+    proposalTtlHours?: SortOrder
+    priceAlertThresholdPct?: SortOrder
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type PriceSourceRelationFilter = {
+    is?: PriceSourceWhereInput
+    isNot?: PriceSourceWhereInput
+  }
+
+  export type ProductSourceLinkCountOrderByAggregateInput = {
+    id?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    isPrimary?: SortOrder
+    externalSku?: SortOrder
+    externalUrl?: SortOrder
+    externalName?: SortOrder
+    expectedPackageQty?: SortOrder
+    expectedPackageUnit?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    applyStrategy?: SortOrder
+    taxRatePct?: SortOrder
+    lastCheckedAt?: SortOrder
+    lastSeenPriceCents?: SortOrder
+    lastSeenInStock?: SortOrder
+    lastError?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductSourceLinkAvgOrderByAggregateInput = {
+    expectedPackageQty?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    taxRatePct?: SortOrder
+    lastSeenPriceCents?: SortOrder
+  }
+
+  export type ProductSourceLinkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    isPrimary?: SortOrder
+    externalSku?: SortOrder
+    externalUrl?: SortOrder
+    externalName?: SortOrder
+    expectedPackageQty?: SortOrder
+    expectedPackageUnit?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    applyStrategy?: SortOrder
+    taxRatePct?: SortOrder
+    lastCheckedAt?: SortOrder
+    lastSeenPriceCents?: SortOrder
+    lastSeenInStock?: SortOrder
+    lastError?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductSourceLinkMinOrderByAggregateInput = {
+    id?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    isPrimary?: SortOrder
+    externalSku?: SortOrder
+    externalUrl?: SortOrder
+    externalName?: SortOrder
+    expectedPackageQty?: SortOrder
+    expectedPackageUnit?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    applyStrategy?: SortOrder
+    taxRatePct?: SortOrder
+    lastCheckedAt?: SortOrder
+    lastSeenPriceCents?: SortOrder
+    lastSeenInStock?: SortOrder
+    lastError?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductSourceLinkSumOrderByAggregateInput = {
+    expectedPackageQty?: SortOrder
+    expectedConversionFactor?: SortOrder
+    expectedBaseQty?: SortOrder
+    packTolerancePct?: SortOrder
+    taxRatePct?: SortOrder
+    lastSeenPriceCents?: SortOrder
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type PriceSourceNullableRelationFilter = {
+    is?: PriceSourceWhereInput | null
+    isNot?: PriceSourceWhereInput | null
+  }
+
+  export type PriceSyncRunCountOrderByAggregateInput = {
+    id?: SortOrder
+    sourceId?: SortOrder
+    triggerType?: SortOrder
+    status?: SortOrder
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+    summaryJson?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+  }
+
+  export type PriceSyncRunAvgOrderByAggregateInput = {
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+  }
+
+  export type PriceSyncRunMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sourceId?: SortOrder
+    triggerType?: SortOrder
+    status?: SortOrder
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+    summaryJson?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+  }
+
+  export type PriceSyncRunMinOrderByAggregateInput = {
+    id?: SortOrder
+    sourceId?: SortOrder
+    triggerType?: SortOrder
+    status?: SortOrder
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+    summaryJson?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+  }
+
+  export type PriceSyncRunSumOrderByAggregateInput = {
+    totalChecked?: SortOrder
+    proposalsCreated?: SortOrder
+    errorsCount?: SortOrder
+  }
+
+  export type PriceSyncRunNullableRelationFilter = {
+    is?: PriceSyncRunWhereInput | null
+    isNot?: PriceSyncRunWhereInput | null
+  }
+
+  export type ProductSourceLinkNullableRelationFilter = {
+    is?: ProductSourceLinkWhereInput | null
+    isNot?: ProductSourceLinkWhereInput | null
+  }
+
+  export type PriceUpdateProposalCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    runId?: SortOrder
+    linkId?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    status?: SortOrder
+    applyStrategyUsed?: SortOrder
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    currentIngredientUpdatedAt?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedInStock?: SortOrder
+    detectedPackQty?: SortOrder
+    detectedPackUnit?: SortOrder
+    detectedRawTitle?: SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrder
+    proposedPackageUnit?: SortOrder
+    proposedConversionFactor?: SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+    packCheckStatus?: SortOrder
+    alertsJson?: SortOrder
+    evidenceUrl?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    expiresAt?: SortOrder
+    appliedSnapshotJson?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceUpdateProposalAvgOrderByAggregateInput = {
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedPackQty?: SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrder
+    proposedConversionFactor?: SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+  }
+
+  export type PriceUpdateProposalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    runId?: SortOrder
+    linkId?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    status?: SortOrder
+    applyStrategyUsed?: SortOrder
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    currentIngredientUpdatedAt?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedInStock?: SortOrder
+    detectedPackQty?: SortOrder
+    detectedPackUnit?: SortOrder
+    detectedRawTitle?: SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrder
+    proposedPackageUnit?: SortOrder
+    proposedConversionFactor?: SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+    packCheckStatus?: SortOrder
+    alertsJson?: SortOrder
+    evidenceUrl?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    expiresAt?: SortOrder
+    appliedSnapshotJson?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceUpdateProposalMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    runId?: SortOrder
+    linkId?: SortOrder
+    ingredientId?: SortOrder
+    sourceId?: SortOrder
+    status?: SortOrder
+    applyStrategyUsed?: SortOrder
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    currentIngredientUpdatedAt?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedInStock?: SortOrder
+    detectedPackQty?: SortOrder
+    detectedPackUnit?: SortOrder
+    detectedRawTitle?: SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrder
+    proposedPackageUnit?: SortOrder
+    proposedConversionFactor?: SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+    packCheckStatus?: SortOrder
+    alertsJson?: SortOrder
+    evidenceUrl?: SortOrder
+    reviewNote?: SortOrder
+    reviewedAt?: SortOrder
+    expiresAt?: SortOrder
+    appliedSnapshotJson?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PriceUpdateProposalSumOrderByAggregateInput = {
+    currentPriceCents?: SortOrder
+    currentCostPerBaseUnit?: SortOrder
+    detectedPriceCents?: SortOrder
+    detectedPackQty?: SortOrder
+    proposedPriceCents?: SortOrder
+    proposedCostPerBaseUnit?: SortOrder
+    proposedPackageQty?: SortOrder
+    proposedConversionFactor?: SortOrder
+    diffPriceCents?: SortOrder
+    diffPercent?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -32699,11 +40181,25 @@ export namespace Prisma {
     connect?: IngredientWhereUniqueInput | IngredientWhereUniqueInput[]
   }
 
+  export type PriceSourceCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput> | PriceSourceCreateWithoutSupplierInput[] | PriceSourceUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSupplierInput | PriceSourceCreateOrConnectWithoutSupplierInput[]
+    createMany?: PriceSourceCreateManySupplierInputEnvelope
+    connect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+  }
+
   export type IngredientUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<IngredientCreateWithoutSupplierInput, IngredientUncheckedCreateWithoutSupplierInput> | IngredientCreateWithoutSupplierInput[] | IngredientUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: IngredientCreateOrConnectWithoutSupplierInput | IngredientCreateOrConnectWithoutSupplierInput[]
     createMany?: IngredientCreateManySupplierInputEnvelope
     connect?: IngredientWhereUniqueInput | IngredientWhereUniqueInput[]
+  }
+
+  export type PriceSourceUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput> | PriceSourceCreateWithoutSupplierInput[] | PriceSourceUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSupplierInput | PriceSourceCreateOrConnectWithoutSupplierInput[]
+    createMany?: PriceSourceCreateManySupplierInputEnvelope
+    connect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -32724,6 +40220,20 @@ export namespace Prisma {
     deleteMany?: IngredientScalarWhereInput | IngredientScalarWhereInput[]
   }
 
+  export type PriceSourceUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput> | PriceSourceCreateWithoutSupplierInput[] | PriceSourceUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSupplierInput | PriceSourceCreateOrConnectWithoutSupplierInput[]
+    upsert?: PriceSourceUpsertWithWhereUniqueWithoutSupplierInput | PriceSourceUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: PriceSourceCreateManySupplierInputEnvelope
+    set?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    disconnect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    delete?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    connect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    update?: PriceSourceUpdateWithWhereUniqueWithoutSupplierInput | PriceSourceUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: PriceSourceUpdateManyWithWhereWithoutSupplierInput | PriceSourceUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: PriceSourceScalarWhereInput | PriceSourceScalarWhereInput[]
+  }
+
   export type IngredientUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<IngredientCreateWithoutSupplierInput, IngredientUncheckedCreateWithoutSupplierInput> | IngredientCreateWithoutSupplierInput[] | IngredientUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: IngredientCreateOrConnectWithoutSupplierInput | IngredientCreateOrConnectWithoutSupplierInput[]
@@ -32736,6 +40246,20 @@ export namespace Prisma {
     update?: IngredientUpdateWithWhereUniqueWithoutSupplierInput | IngredientUpdateWithWhereUniqueWithoutSupplierInput[]
     updateMany?: IngredientUpdateManyWithWhereWithoutSupplierInput | IngredientUpdateManyWithWhereWithoutSupplierInput[]
     deleteMany?: IngredientScalarWhereInput | IngredientScalarWhereInput[]
+  }
+
+  export type PriceSourceUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput> | PriceSourceCreateWithoutSupplierInput[] | PriceSourceUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSupplierInput | PriceSourceCreateOrConnectWithoutSupplierInput[]
+    upsert?: PriceSourceUpsertWithWhereUniqueWithoutSupplierInput | PriceSourceUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: PriceSourceCreateManySupplierInputEnvelope
+    set?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    disconnect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    delete?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    connect?: PriceSourceWhereUniqueInput | PriceSourceWhereUniqueInput[]
+    update?: PriceSourceUpdateWithWhereUniqueWithoutSupplierInput | PriceSourceUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: PriceSourceUpdateManyWithWhereWithoutSupplierInput | PriceSourceUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: PriceSourceScalarWhereInput | PriceSourceScalarWhereInput[]
   }
 
   export type SupplierCreateNestedOneWithoutIngredientsInput = {
@@ -32757,11 +40281,53 @@ export namespace Prisma {
     connect?: RecipeIngredientWhereUniqueInput | RecipeIngredientWhereUniqueInput[]
   }
 
+  export type PresentationMaterialCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput> | PresentationMaterialCreateWithoutIngredientInput[] | PresentationMaterialUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PresentationMaterialCreateOrConnectWithoutIngredientInput | PresentationMaterialCreateOrConnectWithoutIngredientInput[]
+    createMany?: PresentationMaterialCreateManyIngredientInputEnvelope
+    connect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+  }
+
+  export type ProductSourceLinkCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput> | ProductSourceLinkCreateWithoutIngredientInput[] | ProductSourceLinkUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutIngredientInput | ProductSourceLinkCreateOrConnectWithoutIngredientInput[]
+    createMany?: ProductSourceLinkCreateManyIngredientInputEnvelope
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput> | PriceUpdateProposalCreateWithoutIngredientInput[] | PriceUpdateProposalUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutIngredientInput | PriceUpdateProposalCreateOrConnectWithoutIngredientInput[]
+    createMany?: PriceUpdateProposalCreateManyIngredientInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
   export type RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput = {
     create?: XOR<RecipeIngredientCreateWithoutIngredientInput, RecipeIngredientUncheckedCreateWithoutIngredientInput> | RecipeIngredientCreateWithoutIngredientInput[] | RecipeIngredientUncheckedCreateWithoutIngredientInput[]
     connectOrCreate?: RecipeIngredientCreateOrConnectWithoutIngredientInput | RecipeIngredientCreateOrConnectWithoutIngredientInput[]
     createMany?: RecipeIngredientCreateManyIngredientInputEnvelope
     connect?: RecipeIngredientWhereUniqueInput | RecipeIngredientWhereUniqueInput[]
+  }
+
+  export type PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput> | PresentationMaterialCreateWithoutIngredientInput[] | PresentationMaterialUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PresentationMaterialCreateOrConnectWithoutIngredientInput | PresentationMaterialCreateOrConnectWithoutIngredientInput[]
+    createMany?: PresentationMaterialCreateManyIngredientInputEnvelope
+    connect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+  }
+
+  export type ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput> | ProductSourceLinkCreateWithoutIngredientInput[] | ProductSourceLinkUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutIngredientInput | ProductSourceLinkCreateOrConnectWithoutIngredientInput[]
+    createMany?: ProductSourceLinkCreateManyIngredientInputEnvelope
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput> | PriceUpdateProposalCreateWithoutIngredientInput[] | PriceUpdateProposalUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutIngredientInput | PriceUpdateProposalCreateOrConnectWithoutIngredientInput[]
+    createMany?: PriceUpdateProposalCreateManyIngredientInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -32822,6 +40388,48 @@ export namespace Prisma {
     deleteMany?: RecipeIngredientScalarWhereInput | RecipeIngredientScalarWhereInput[]
   }
 
+  export type PresentationMaterialUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput> | PresentationMaterialCreateWithoutIngredientInput[] | PresentationMaterialUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PresentationMaterialCreateOrConnectWithoutIngredientInput | PresentationMaterialCreateOrConnectWithoutIngredientInput[]
+    upsert?: PresentationMaterialUpsertWithWhereUniqueWithoutIngredientInput | PresentationMaterialUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: PresentationMaterialCreateManyIngredientInputEnvelope
+    set?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    disconnect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    delete?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    connect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    update?: PresentationMaterialUpdateWithWhereUniqueWithoutIngredientInput | PresentationMaterialUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: PresentationMaterialUpdateManyWithWhereWithoutIngredientInput | PresentationMaterialUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
+  }
+
+  export type ProductSourceLinkUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput> | ProductSourceLinkCreateWithoutIngredientInput[] | ProductSourceLinkUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutIngredientInput | ProductSourceLinkCreateOrConnectWithoutIngredientInput[]
+    upsert?: ProductSourceLinkUpsertWithWhereUniqueWithoutIngredientInput | ProductSourceLinkUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: ProductSourceLinkCreateManyIngredientInputEnvelope
+    set?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    disconnect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    delete?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    update?: ProductSourceLinkUpdateWithWhereUniqueWithoutIngredientInput | ProductSourceLinkUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: ProductSourceLinkUpdateManyWithWhereWithoutIngredientInput | ProductSourceLinkUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput> | PriceUpdateProposalCreateWithoutIngredientInput[] | PriceUpdateProposalUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutIngredientInput | PriceUpdateProposalCreateOrConnectWithoutIngredientInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutIngredientInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: PriceUpdateProposalCreateManyIngredientInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutIngredientInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutIngredientInput | PriceUpdateProposalUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
   export type RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput = {
     create?: XOR<RecipeIngredientCreateWithoutIngredientInput, RecipeIngredientUncheckedCreateWithoutIngredientInput> | RecipeIngredientCreateWithoutIngredientInput[] | RecipeIngredientUncheckedCreateWithoutIngredientInput[]
     connectOrCreate?: RecipeIngredientCreateOrConnectWithoutIngredientInput | RecipeIngredientCreateOrConnectWithoutIngredientInput[]
@@ -32834,6 +40442,48 @@ export namespace Prisma {
     update?: RecipeIngredientUpdateWithWhereUniqueWithoutIngredientInput | RecipeIngredientUpdateWithWhereUniqueWithoutIngredientInput[]
     updateMany?: RecipeIngredientUpdateManyWithWhereWithoutIngredientInput | RecipeIngredientUpdateManyWithWhereWithoutIngredientInput[]
     deleteMany?: RecipeIngredientScalarWhereInput | RecipeIngredientScalarWhereInput[]
+  }
+
+  export type PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput> | PresentationMaterialCreateWithoutIngredientInput[] | PresentationMaterialUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PresentationMaterialCreateOrConnectWithoutIngredientInput | PresentationMaterialCreateOrConnectWithoutIngredientInput[]
+    upsert?: PresentationMaterialUpsertWithWhereUniqueWithoutIngredientInput | PresentationMaterialUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: PresentationMaterialCreateManyIngredientInputEnvelope
+    set?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    disconnect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    delete?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    connect?: PresentationMaterialWhereUniqueInput | PresentationMaterialWhereUniqueInput[]
+    update?: PresentationMaterialUpdateWithWhereUniqueWithoutIngredientInput | PresentationMaterialUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: PresentationMaterialUpdateManyWithWhereWithoutIngredientInput | PresentationMaterialUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
+  }
+
+  export type ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput> | ProductSourceLinkCreateWithoutIngredientInput[] | ProductSourceLinkUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutIngredientInput | ProductSourceLinkCreateOrConnectWithoutIngredientInput[]
+    upsert?: ProductSourceLinkUpsertWithWhereUniqueWithoutIngredientInput | ProductSourceLinkUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: ProductSourceLinkCreateManyIngredientInputEnvelope
+    set?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    disconnect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    delete?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    update?: ProductSourceLinkUpdateWithWhereUniqueWithoutIngredientInput | ProductSourceLinkUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: ProductSourceLinkUpdateManyWithWhereWithoutIngredientInput | ProductSourceLinkUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput> | PriceUpdateProposalCreateWithoutIngredientInput[] | PriceUpdateProposalUncheckedCreateWithoutIngredientInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutIngredientInput | PriceUpdateProposalCreateOrConnectWithoutIngredientInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutIngredientInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutIngredientInput[]
+    createMany?: PriceUpdateProposalCreateManyIngredientInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutIngredientInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutIngredientInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutIngredientInput | PriceUpdateProposalUpdateManyWithWhereWithoutIngredientInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
   }
 
   export type RecipeIngredientCreateNestedManyWithoutRecipeInput = {
@@ -32862,6 +40512,13 @@ export namespace Prisma {
     connectOrCreate?: RecipePresentationCreateOrConnectWithoutRecipeInput | RecipePresentationCreateOrConnectWithoutRecipeInput[]
     createMany?: RecipePresentationCreateManyRecipeInputEnvelope
     connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+  }
+
+  export type PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput = {
+    create?: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput> | PresentationSubrecipeCreateWithoutSubRecipeInput[] | PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput[]
+    connectOrCreate?: PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput | PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput[]
+    createMany?: PresentationSubrecipeCreateManySubRecipeInputEnvelope
+    connect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
   }
 
   export type SaleItemCreateNestedManyWithoutRecipeInput = {
@@ -32904,6 +40561,13 @@ export namespace Prisma {
     connectOrCreate?: RecipePresentationCreateOrConnectWithoutRecipeInput | RecipePresentationCreateOrConnectWithoutRecipeInput[]
     createMany?: RecipePresentationCreateManyRecipeInputEnvelope
     connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+  }
+
+  export type PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput = {
+    create?: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput> | PresentationSubrecipeCreateWithoutSubRecipeInput[] | PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput[]
+    connectOrCreate?: PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput | PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput[]
+    createMany?: PresentationSubrecipeCreateManySubRecipeInputEnvelope
+    connect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
   }
 
   export type SaleItemUncheckedCreateNestedManyWithoutRecipeInput = {
@@ -32982,6 +40646,20 @@ export namespace Prisma {
     update?: RecipePresentationUpdateWithWhereUniqueWithoutRecipeInput | RecipePresentationUpdateWithWhereUniqueWithoutRecipeInput[]
     updateMany?: RecipePresentationUpdateManyWithWhereWithoutRecipeInput | RecipePresentationUpdateManyWithWhereWithoutRecipeInput[]
     deleteMany?: RecipePresentationScalarWhereInput | RecipePresentationScalarWhereInput[]
+  }
+
+  export type PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput = {
+    create?: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput> | PresentationSubrecipeCreateWithoutSubRecipeInput[] | PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput[]
+    connectOrCreate?: PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput | PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput[]
+    upsert?: PresentationSubrecipeUpsertWithWhereUniqueWithoutSubRecipeInput | PresentationSubrecipeUpsertWithWhereUniqueWithoutSubRecipeInput[]
+    createMany?: PresentationSubrecipeCreateManySubRecipeInputEnvelope
+    set?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    disconnect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    delete?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    connect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    update?: PresentationSubrecipeUpdateWithWhereUniqueWithoutSubRecipeInput | PresentationSubrecipeUpdateWithWhereUniqueWithoutSubRecipeInput[]
+    updateMany?: PresentationSubrecipeUpdateManyWithWhereWithoutSubRecipeInput | PresentationSubrecipeUpdateManyWithWhereWithoutSubRecipeInput[]
+    deleteMany?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
   }
 
   export type SaleItemUpdateManyWithoutRecipeNestedInput = {
@@ -33066,6 +40744,20 @@ export namespace Prisma {
     update?: RecipePresentationUpdateWithWhereUniqueWithoutRecipeInput | RecipePresentationUpdateWithWhereUniqueWithoutRecipeInput[]
     updateMany?: RecipePresentationUpdateManyWithWhereWithoutRecipeInput | RecipePresentationUpdateManyWithWhereWithoutRecipeInput[]
     deleteMany?: RecipePresentationScalarWhereInput | RecipePresentationScalarWhereInput[]
+  }
+
+  export type PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput = {
+    create?: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput> | PresentationSubrecipeCreateWithoutSubRecipeInput[] | PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput[]
+    connectOrCreate?: PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput | PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput[]
+    upsert?: PresentationSubrecipeUpsertWithWhereUniqueWithoutSubRecipeInput | PresentationSubrecipeUpsertWithWhereUniqueWithoutSubRecipeInput[]
+    createMany?: PresentationSubrecipeCreateManySubRecipeInputEnvelope
+    set?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    disconnect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    delete?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    connect?: PresentationSubrecipeWhereUniqueInput | PresentationSubrecipeWhereUniqueInput[]
+    update?: PresentationSubrecipeUpdateWithWhereUniqueWithoutSubRecipeInput | PresentationSubrecipeUpdateWithWhereUniqueWithoutSubRecipeInput[]
+    updateMany?: PresentationSubrecipeUpdateManyWithWhereWithoutSubRecipeInput | PresentationSubrecipeUpdateManyWithWhereWithoutSubRecipeInput[]
+    deleteMany?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
   }
 
   export type SaleItemUncheckedUpdateManyWithoutRecipeNestedInput = {
@@ -33300,6 +40992,12 @@ export namespace Prisma {
     connect?: RecipePresentationWhereUniqueInput
   }
 
+  export type IngredientCreateNestedOneWithoutPresentationMaterialsInput = {
+    create?: XOR<IngredientCreateWithoutPresentationMaterialsInput, IngredientUncheckedCreateWithoutPresentationMaterialsInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutPresentationMaterialsInput
+    connect?: IngredientWhereUniqueInput
+  }
+
   export type RecipePresentationUpdateOneRequiredWithoutMaterialsNestedInput = {
     create?: XOR<RecipePresentationCreateWithoutMaterialsInput, RecipePresentationUncheckedCreateWithoutMaterialsInput>
     connectOrCreate?: RecipePresentationCreateOrConnectWithoutMaterialsInput
@@ -33308,10 +41006,26 @@ export namespace Prisma {
     update?: XOR<XOR<RecipePresentationUpdateToOneWithWhereWithoutMaterialsInput, RecipePresentationUpdateWithoutMaterialsInput>, RecipePresentationUncheckedUpdateWithoutMaterialsInput>
   }
 
+  export type IngredientUpdateOneWithoutPresentationMaterialsNestedInput = {
+    create?: XOR<IngredientCreateWithoutPresentationMaterialsInput, IngredientUncheckedCreateWithoutPresentationMaterialsInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutPresentationMaterialsInput
+    upsert?: IngredientUpsertWithoutPresentationMaterialsInput
+    disconnect?: IngredientWhereInput | boolean
+    delete?: IngredientWhereInput | boolean
+    connect?: IngredientWhereUniqueInput
+    update?: XOR<XOR<IngredientUpdateToOneWithWhereWithoutPresentationMaterialsInput, IngredientUpdateWithoutPresentationMaterialsInput>, IngredientUncheckedUpdateWithoutPresentationMaterialsInput>
+  }
+
   export type RecipePresentationCreateNestedOneWithoutSubrecipesInput = {
     create?: XOR<RecipePresentationCreateWithoutSubrecipesInput, RecipePresentationUncheckedCreateWithoutSubrecipesInput>
     connectOrCreate?: RecipePresentationCreateOrConnectWithoutSubrecipesInput
     connect?: RecipePresentationWhereUniqueInput
+  }
+
+  export type RecipeCreateNestedOneWithoutPresentationSubrecipesInput = {
+    create?: XOR<RecipeCreateWithoutPresentationSubrecipesInput, RecipeUncheckedCreateWithoutPresentationSubrecipesInput>
+    connectOrCreate?: RecipeCreateOrConnectWithoutPresentationSubrecipesInput
+    connect?: RecipeWhereUniqueInput
   }
 
   export type RecipePresentationUpdateOneRequiredWithoutSubrecipesNestedInput = {
@@ -33320,6 +41034,16 @@ export namespace Prisma {
     upsert?: RecipePresentationUpsertWithoutSubrecipesInput
     connect?: RecipePresentationWhereUniqueInput
     update?: XOR<XOR<RecipePresentationUpdateToOneWithWhereWithoutSubrecipesInput, RecipePresentationUpdateWithoutSubrecipesInput>, RecipePresentationUncheckedUpdateWithoutSubrecipesInput>
+  }
+
+  export type RecipeUpdateOneWithoutPresentationSubrecipesNestedInput = {
+    create?: XOR<RecipeCreateWithoutPresentationSubrecipesInput, RecipeUncheckedCreateWithoutPresentationSubrecipesInput>
+    connectOrCreate?: RecipeCreateOrConnectWithoutPresentationSubrecipesInput
+    upsert?: RecipeUpsertWithoutPresentationSubrecipesInput
+    disconnect?: RecipeWhereInput | boolean
+    delete?: RecipeWhereInput | boolean
+    connect?: RecipeWhereUniqueInput
+    update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutPresentationSubrecipesInput, RecipeUpdateWithoutPresentationSubrecipesInput>, RecipeUncheckedUpdateWithoutPresentationSubrecipesInput>
   }
 
   export type RecipeCreateNestedOneWithoutIngredientsInput = {
@@ -33384,12 +41108,28 @@ export namespace Prisma {
     connect?: RecipeWhereUniqueInput
   }
 
+  export type PriceUpdateProposalCreateNestedOneWithoutPriceHistoryEntriesInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedCreateWithoutPriceHistoryEntriesInput>
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutPriceHistoryEntriesInput
+    connect?: PriceUpdateProposalWhereUniqueInput
+  }
+
   export type RecipeUpdateOneRequiredWithoutPriceHistoryNestedInput = {
     create?: XOR<RecipeCreateWithoutPriceHistoryInput, RecipeUncheckedCreateWithoutPriceHistoryInput>
     connectOrCreate?: RecipeCreateOrConnectWithoutPriceHistoryInput
     upsert?: RecipeUpsertWithoutPriceHistoryInput
     connect?: RecipeWhereUniqueInput
     update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutPriceHistoryInput, RecipeUpdateWithoutPriceHistoryInput>, RecipeUncheckedUpdateWithoutPriceHistoryInput>
+  }
+
+  export type PriceUpdateProposalUpdateOneWithoutPriceHistoryEntriesNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedCreateWithoutPriceHistoryEntriesInput>
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutPriceHistoryEntriesInput
+    upsert?: PriceUpdateProposalUpsertWithoutPriceHistoryEntriesInput
+    disconnect?: PriceUpdateProposalWhereInput | boolean
+    delete?: PriceUpdateProposalWhereInput | boolean
+    connect?: PriceUpdateProposalWhereUniqueInput
+    update?: XOR<XOR<PriceUpdateProposalUpdateToOneWithWhereWithoutPriceHistoryEntriesInput, PriceUpdateProposalUpdateWithoutPriceHistoryEntriesInput>, PriceUpdateProposalUncheckedUpdateWithoutPriceHistoryEntriesInput>
   }
 
   export type SaleCreateNestedManyWithoutCustomerInput = {
@@ -33868,6 +41608,382 @@ export namespace Prisma {
     update?: XOR<XOR<ImportSessionUpdateToOneWithWhereWithoutRowsInput, ImportSessionUpdateWithoutRowsInput>, ImportSessionUncheckedUpdateWithoutRowsInput>
   }
 
+  export type SupplierCreateNestedOneWithoutPriceSourcesInput = {
+    create?: XOR<SupplierCreateWithoutPriceSourcesInput, SupplierUncheckedCreateWithoutPriceSourcesInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutPriceSourcesInput
+    connect?: SupplierWhereUniqueInput
+  }
+
+  export type ProductSourceLinkCreateNestedManyWithoutSourceInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput> | ProductSourceLinkCreateWithoutSourceInput[] | ProductSourceLinkUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutSourceInput | ProductSourceLinkCreateOrConnectWithoutSourceInput[]
+    createMany?: ProductSourceLinkCreateManySourceInputEnvelope
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+  }
+
+  export type PriceSyncRunCreateNestedManyWithoutSourceInput = {
+    create?: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput> | PriceSyncRunCreateWithoutSourceInput[] | PriceSyncRunUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutSourceInput | PriceSyncRunCreateOrConnectWithoutSourceInput[]
+    createMany?: PriceSyncRunCreateManySourceInputEnvelope
+    connect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalCreateNestedManyWithoutSourceInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput> | PriceUpdateProposalCreateWithoutSourceInput[] | PriceUpdateProposalUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutSourceInput | PriceUpdateProposalCreateOrConnectWithoutSourceInput[]
+    createMany?: PriceUpdateProposalCreateManySourceInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type ProductSourceLinkUncheckedCreateNestedManyWithoutSourceInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput> | ProductSourceLinkCreateWithoutSourceInput[] | ProductSourceLinkUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutSourceInput | ProductSourceLinkCreateOrConnectWithoutSourceInput[]
+    createMany?: ProductSourceLinkCreateManySourceInputEnvelope
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+  }
+
+  export type PriceSyncRunUncheckedCreateNestedManyWithoutSourceInput = {
+    create?: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput> | PriceSyncRunCreateWithoutSourceInput[] | PriceSyncRunUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutSourceInput | PriceSyncRunCreateOrConnectWithoutSourceInput[]
+    createMany?: PriceSyncRunCreateManySourceInputEnvelope
+    connect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedCreateNestedManyWithoutSourceInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput> | PriceUpdateProposalCreateWithoutSourceInput[] | PriceUpdateProposalUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutSourceInput | PriceUpdateProposalCreateOrConnectWithoutSourceInput[]
+    createMany?: PriceUpdateProposalCreateManySourceInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type SupplierUpdateOneWithoutPriceSourcesNestedInput = {
+    create?: XOR<SupplierCreateWithoutPriceSourcesInput, SupplierUncheckedCreateWithoutPriceSourcesInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutPriceSourcesInput
+    upsert?: SupplierUpsertWithoutPriceSourcesInput
+    disconnect?: SupplierWhereInput | boolean
+    delete?: SupplierWhereInput | boolean
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutPriceSourcesInput, SupplierUpdateWithoutPriceSourcesInput>, SupplierUncheckedUpdateWithoutPriceSourcesInput>
+  }
+
+  export type ProductSourceLinkUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput> | ProductSourceLinkCreateWithoutSourceInput[] | ProductSourceLinkUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutSourceInput | ProductSourceLinkCreateOrConnectWithoutSourceInput[]
+    upsert?: ProductSourceLinkUpsertWithWhereUniqueWithoutSourceInput | ProductSourceLinkUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: ProductSourceLinkCreateManySourceInputEnvelope
+    set?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    disconnect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    delete?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    update?: ProductSourceLinkUpdateWithWhereUniqueWithoutSourceInput | ProductSourceLinkUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: ProductSourceLinkUpdateManyWithWhereWithoutSourceInput | ProductSourceLinkUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+  }
+
+  export type PriceSyncRunUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput> | PriceSyncRunCreateWithoutSourceInput[] | PriceSyncRunUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutSourceInput | PriceSyncRunCreateOrConnectWithoutSourceInput[]
+    upsert?: PriceSyncRunUpsertWithWhereUniqueWithoutSourceInput | PriceSyncRunUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: PriceSyncRunCreateManySourceInputEnvelope
+    set?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    disconnect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    delete?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    connect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    update?: PriceSyncRunUpdateWithWhereUniqueWithoutSourceInput | PriceSyncRunUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: PriceSyncRunUpdateManyWithWhereWithoutSourceInput | PriceSyncRunUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: PriceSyncRunScalarWhereInput | PriceSyncRunScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput> | PriceUpdateProposalCreateWithoutSourceInput[] | PriceUpdateProposalUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutSourceInput | PriceUpdateProposalCreateOrConnectWithoutSourceInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutSourceInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: PriceUpdateProposalCreateManySourceInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutSourceInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutSourceInput | PriceUpdateProposalUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type ProductSourceLinkUncheckedUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput> | ProductSourceLinkCreateWithoutSourceInput[] | ProductSourceLinkUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutSourceInput | ProductSourceLinkCreateOrConnectWithoutSourceInput[]
+    upsert?: ProductSourceLinkUpsertWithWhereUniqueWithoutSourceInput | ProductSourceLinkUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: ProductSourceLinkCreateManySourceInputEnvelope
+    set?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    disconnect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    delete?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    connect?: ProductSourceLinkWhereUniqueInput | ProductSourceLinkWhereUniqueInput[]
+    update?: ProductSourceLinkUpdateWithWhereUniqueWithoutSourceInput | ProductSourceLinkUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: ProductSourceLinkUpdateManyWithWhereWithoutSourceInput | ProductSourceLinkUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+  }
+
+  export type PriceSyncRunUncheckedUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput> | PriceSyncRunCreateWithoutSourceInput[] | PriceSyncRunUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutSourceInput | PriceSyncRunCreateOrConnectWithoutSourceInput[]
+    upsert?: PriceSyncRunUpsertWithWhereUniqueWithoutSourceInput | PriceSyncRunUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: PriceSyncRunCreateManySourceInputEnvelope
+    set?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    disconnect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    delete?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    connect?: PriceSyncRunWhereUniqueInput | PriceSyncRunWhereUniqueInput[]
+    update?: PriceSyncRunUpdateWithWhereUniqueWithoutSourceInput | PriceSyncRunUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: PriceSyncRunUpdateManyWithWhereWithoutSourceInput | PriceSyncRunUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: PriceSyncRunScalarWhereInput | PriceSyncRunScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutSourceNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput> | PriceUpdateProposalCreateWithoutSourceInput[] | PriceUpdateProposalUncheckedCreateWithoutSourceInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutSourceInput | PriceUpdateProposalCreateOrConnectWithoutSourceInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutSourceInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutSourceInput[]
+    createMany?: PriceUpdateProposalCreateManySourceInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutSourceInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutSourceInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutSourceInput | PriceUpdateProposalUpdateManyWithWhereWithoutSourceInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type IngredientCreateNestedOneWithoutSourceLinksInput = {
+    create?: XOR<IngredientCreateWithoutSourceLinksInput, IngredientUncheckedCreateWithoutSourceLinksInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutSourceLinksInput
+    connect?: IngredientWhereUniqueInput
+  }
+
+  export type PriceSourceCreateNestedOneWithoutLinksInput = {
+    create?: XOR<PriceSourceCreateWithoutLinksInput, PriceSourceUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutLinksInput
+    connect?: PriceSourceWhereUniqueInput
+  }
+
+  export type PriceUpdateProposalCreateNestedManyWithoutLinkInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput> | PriceUpdateProposalCreateWithoutLinkInput[] | PriceUpdateProposalUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutLinkInput | PriceUpdateProposalCreateOrConnectWithoutLinkInput[]
+    createMany?: PriceUpdateProposalCreateManyLinkInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedCreateNestedManyWithoutLinkInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput> | PriceUpdateProposalCreateWithoutLinkInput[] | PriceUpdateProposalUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutLinkInput | PriceUpdateProposalCreateOrConnectWithoutLinkInput[]
+    createMany?: PriceUpdateProposalCreateManyLinkInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
+  export type IngredientUpdateOneRequiredWithoutSourceLinksNestedInput = {
+    create?: XOR<IngredientCreateWithoutSourceLinksInput, IngredientUncheckedCreateWithoutSourceLinksInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutSourceLinksInput
+    upsert?: IngredientUpsertWithoutSourceLinksInput
+    connect?: IngredientWhereUniqueInput
+    update?: XOR<XOR<IngredientUpdateToOneWithWhereWithoutSourceLinksInput, IngredientUpdateWithoutSourceLinksInput>, IngredientUncheckedUpdateWithoutSourceLinksInput>
+  }
+
+  export type PriceSourceUpdateOneRequiredWithoutLinksNestedInput = {
+    create?: XOR<PriceSourceCreateWithoutLinksInput, PriceSourceUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutLinksInput
+    upsert?: PriceSourceUpsertWithoutLinksInput
+    connect?: PriceSourceWhereUniqueInput
+    update?: XOR<XOR<PriceSourceUpdateToOneWithWhereWithoutLinksInput, PriceSourceUpdateWithoutLinksInput>, PriceSourceUncheckedUpdateWithoutLinksInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithoutLinkNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput> | PriceUpdateProposalCreateWithoutLinkInput[] | PriceUpdateProposalUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutLinkInput | PriceUpdateProposalCreateOrConnectWithoutLinkInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutLinkInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutLinkInput[]
+    createMany?: PriceUpdateProposalCreateManyLinkInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutLinkInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutLinkInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutLinkInput | PriceUpdateProposalUpdateManyWithWhereWithoutLinkInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutLinkNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput> | PriceUpdateProposalCreateWithoutLinkInput[] | PriceUpdateProposalUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutLinkInput | PriceUpdateProposalCreateOrConnectWithoutLinkInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutLinkInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutLinkInput[]
+    createMany?: PriceUpdateProposalCreateManyLinkInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutLinkInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutLinkInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutLinkInput | PriceUpdateProposalUpdateManyWithWhereWithoutLinkInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type PriceSourceCreateNestedOneWithoutSyncRunsInput = {
+    create?: XOR<PriceSourceCreateWithoutSyncRunsInput, PriceSourceUncheckedCreateWithoutSyncRunsInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSyncRunsInput
+    connect?: PriceSourceWhereUniqueInput
+  }
+
+  export type PriceUpdateProposalCreateNestedManyWithoutRunInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput> | PriceUpdateProposalCreateWithoutRunInput[] | PriceUpdateProposalUncheckedCreateWithoutRunInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutRunInput | PriceUpdateProposalCreateOrConnectWithoutRunInput[]
+    createMany?: PriceUpdateProposalCreateManyRunInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedCreateNestedManyWithoutRunInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput> | PriceUpdateProposalCreateWithoutRunInput[] | PriceUpdateProposalUncheckedCreateWithoutRunInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutRunInput | PriceUpdateProposalCreateOrConnectWithoutRunInput[]
+    createMany?: PriceUpdateProposalCreateManyRunInputEnvelope
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+  }
+
+  export type PriceSourceUpdateOneWithoutSyncRunsNestedInput = {
+    create?: XOR<PriceSourceCreateWithoutSyncRunsInput, PriceSourceUncheckedCreateWithoutSyncRunsInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutSyncRunsInput
+    upsert?: PriceSourceUpsertWithoutSyncRunsInput
+    disconnect?: PriceSourceWhereInput | boolean
+    delete?: PriceSourceWhereInput | boolean
+    connect?: PriceSourceWhereUniqueInput
+    update?: XOR<XOR<PriceSourceUpdateToOneWithWhereWithoutSyncRunsInput, PriceSourceUpdateWithoutSyncRunsInput>, PriceSourceUncheckedUpdateWithoutSyncRunsInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithoutRunNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput> | PriceUpdateProposalCreateWithoutRunInput[] | PriceUpdateProposalUncheckedCreateWithoutRunInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutRunInput | PriceUpdateProposalCreateOrConnectWithoutRunInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutRunInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutRunInput[]
+    createMany?: PriceUpdateProposalCreateManyRunInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutRunInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutRunInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutRunInput | PriceUpdateProposalUpdateManyWithWhereWithoutRunInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutRunNestedInput = {
+    create?: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput> | PriceUpdateProposalCreateWithoutRunInput[] | PriceUpdateProposalUncheckedCreateWithoutRunInput[]
+    connectOrCreate?: PriceUpdateProposalCreateOrConnectWithoutRunInput | PriceUpdateProposalCreateOrConnectWithoutRunInput[]
+    upsert?: PriceUpdateProposalUpsertWithWhereUniqueWithoutRunInput | PriceUpdateProposalUpsertWithWhereUniqueWithoutRunInput[]
+    createMany?: PriceUpdateProposalCreateManyRunInputEnvelope
+    set?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    disconnect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    delete?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    connect?: PriceUpdateProposalWhereUniqueInput | PriceUpdateProposalWhereUniqueInput[]
+    update?: PriceUpdateProposalUpdateWithWhereUniqueWithoutRunInput | PriceUpdateProposalUpdateWithWhereUniqueWithoutRunInput[]
+    updateMany?: PriceUpdateProposalUpdateManyWithWhereWithoutRunInput | PriceUpdateProposalUpdateManyWithWhereWithoutRunInput[]
+    deleteMany?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+  }
+
+  export type PriceSyncRunCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<PriceSyncRunCreateWithoutProposalsInput, PriceSyncRunUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutProposalsInput
+    connect?: PriceSyncRunWhereUniqueInput
+  }
+
+  export type ProductSourceLinkCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutProposalsInput, ProductSourceLinkUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutProposalsInput
+    connect?: ProductSourceLinkWhereUniqueInput
+  }
+
+  export type IngredientCreateNestedOneWithoutPriceProposalsInput = {
+    create?: XOR<IngredientCreateWithoutPriceProposalsInput, IngredientUncheckedCreateWithoutPriceProposalsInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutPriceProposalsInput
+    connect?: IngredientWhereUniqueInput
+  }
+
+  export type PriceSourceCreateNestedOneWithoutProposalsInput = {
+    create?: XOR<PriceSourceCreateWithoutProposalsInput, PriceSourceUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutProposalsInput
+    connect?: PriceSourceWhereUniqueInput
+  }
+
+  export type RecipePriceHistoryCreateNestedManyWithoutProposalInput = {
+    create?: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput> | RecipePriceHistoryCreateWithoutProposalInput[] | RecipePriceHistoryUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: RecipePriceHistoryCreateOrConnectWithoutProposalInput | RecipePriceHistoryCreateOrConnectWithoutProposalInput[]
+    createMany?: RecipePriceHistoryCreateManyProposalInputEnvelope
+    connect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+  }
+
+  export type RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput = {
+    create?: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput> | RecipePriceHistoryCreateWithoutProposalInput[] | RecipePriceHistoryUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: RecipePriceHistoryCreateOrConnectWithoutProposalInput | RecipePriceHistoryCreateOrConnectWithoutProposalInput[]
+    createMany?: RecipePriceHistoryCreateManyProposalInputEnvelope
+    connect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+  }
+
+  export type PriceSyncRunUpdateOneWithoutProposalsNestedInput = {
+    create?: XOR<PriceSyncRunCreateWithoutProposalsInput, PriceSyncRunUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: PriceSyncRunCreateOrConnectWithoutProposalsInput
+    upsert?: PriceSyncRunUpsertWithoutProposalsInput
+    disconnect?: PriceSyncRunWhereInput | boolean
+    delete?: PriceSyncRunWhereInput | boolean
+    connect?: PriceSyncRunWhereUniqueInput
+    update?: XOR<XOR<PriceSyncRunUpdateToOneWithWhereWithoutProposalsInput, PriceSyncRunUpdateWithoutProposalsInput>, PriceSyncRunUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type ProductSourceLinkUpdateOneWithoutProposalsNestedInput = {
+    create?: XOR<ProductSourceLinkCreateWithoutProposalsInput, ProductSourceLinkUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: ProductSourceLinkCreateOrConnectWithoutProposalsInput
+    upsert?: ProductSourceLinkUpsertWithoutProposalsInput
+    disconnect?: ProductSourceLinkWhereInput | boolean
+    delete?: ProductSourceLinkWhereInput | boolean
+    connect?: ProductSourceLinkWhereUniqueInput
+    update?: XOR<XOR<ProductSourceLinkUpdateToOneWithWhereWithoutProposalsInput, ProductSourceLinkUpdateWithoutProposalsInput>, ProductSourceLinkUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput = {
+    create?: XOR<IngredientCreateWithoutPriceProposalsInput, IngredientUncheckedCreateWithoutPriceProposalsInput>
+    connectOrCreate?: IngredientCreateOrConnectWithoutPriceProposalsInput
+    upsert?: IngredientUpsertWithoutPriceProposalsInput
+    connect?: IngredientWhereUniqueInput
+    update?: XOR<XOR<IngredientUpdateToOneWithWhereWithoutPriceProposalsInput, IngredientUpdateWithoutPriceProposalsInput>, IngredientUncheckedUpdateWithoutPriceProposalsInput>
+  }
+
+  export type PriceSourceUpdateOneRequiredWithoutProposalsNestedInput = {
+    create?: XOR<PriceSourceCreateWithoutProposalsInput, PriceSourceUncheckedCreateWithoutProposalsInput>
+    connectOrCreate?: PriceSourceCreateOrConnectWithoutProposalsInput
+    upsert?: PriceSourceUpsertWithoutProposalsInput
+    connect?: PriceSourceWhereUniqueInput
+    update?: XOR<XOR<PriceSourceUpdateToOneWithWhereWithoutProposalsInput, PriceSourceUpdateWithoutProposalsInput>, PriceSourceUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type RecipePriceHistoryUpdateManyWithoutProposalNestedInput = {
+    create?: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput> | RecipePriceHistoryCreateWithoutProposalInput[] | RecipePriceHistoryUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: RecipePriceHistoryCreateOrConnectWithoutProposalInput | RecipePriceHistoryCreateOrConnectWithoutProposalInput[]
+    upsert?: RecipePriceHistoryUpsertWithWhereUniqueWithoutProposalInput | RecipePriceHistoryUpsertWithWhereUniqueWithoutProposalInput[]
+    createMany?: RecipePriceHistoryCreateManyProposalInputEnvelope
+    set?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    disconnect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    delete?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    connect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    update?: RecipePriceHistoryUpdateWithWhereUniqueWithoutProposalInput | RecipePriceHistoryUpdateWithWhereUniqueWithoutProposalInput[]
+    updateMany?: RecipePriceHistoryUpdateManyWithWhereWithoutProposalInput | RecipePriceHistoryUpdateManyWithWhereWithoutProposalInput[]
+    deleteMany?: RecipePriceHistoryScalarWhereInput | RecipePriceHistoryScalarWhereInput[]
+  }
+
+  export type RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput = {
+    create?: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput> | RecipePriceHistoryCreateWithoutProposalInput[] | RecipePriceHistoryUncheckedCreateWithoutProposalInput[]
+    connectOrCreate?: RecipePriceHistoryCreateOrConnectWithoutProposalInput | RecipePriceHistoryCreateOrConnectWithoutProposalInput[]
+    upsert?: RecipePriceHistoryUpsertWithWhereUniqueWithoutProposalInput | RecipePriceHistoryUpsertWithWhereUniqueWithoutProposalInput[]
+    createMany?: RecipePriceHistoryCreateManyProposalInputEnvelope
+    set?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    disconnect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    delete?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    connect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
+    update?: RecipePriceHistoryUpdateWithWhereUniqueWithoutProposalInput | RecipePriceHistoryUpdateWithWhereUniqueWithoutProposalInput[]
+    updateMany?: RecipePriceHistoryUpdateManyWithWhereWithoutProposalInput | RecipePriceHistoryUpdateManyWithWhereWithoutProposalInput[]
+    deleteMany?: RecipePriceHistoryScalarWhereInput | RecipePriceHistoryScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -34101,6 +42217,19 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type IngredientCreateWithoutSupplierInput = {
     id?: string
     code?: string | null
@@ -34121,6 +42250,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
     recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientUncheckedCreateWithoutSupplierInput = {
@@ -34143,6 +42275,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientCreateOrConnectWithoutSupplierInput = {
@@ -34152,6 +42287,63 @@ export namespace Prisma {
 
   export type IngredientCreateManySupplierInputEnvelope = {
     data: IngredientCreateManySupplierInput | IngredientCreateManySupplierInput[]
+  }
+
+  export type PriceSourceCreateWithoutSupplierInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: ProductSourceLinkCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: ProductSourceLinkUncheckedCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunUncheckedCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceCreateOrConnectWithoutSupplierInput = {
+    where: PriceSourceWhereUniqueInput
+    create: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type PriceSourceCreateManySupplierInputEnvelope = {
+    data: PriceSourceCreateManySupplierInput | PriceSourceCreateManySupplierInput[]
   }
 
   export type IngredientUpsertWithWhereUniqueWithoutSupplierInput = {
@@ -34195,6 +42387,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Ingredient"> | Date | string
   }
 
+  export type PriceSourceUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: PriceSourceWhereUniqueInput
+    update: XOR<PriceSourceUpdateWithoutSupplierInput, PriceSourceUncheckedUpdateWithoutSupplierInput>
+    create: XOR<PriceSourceCreateWithoutSupplierInput, PriceSourceUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type PriceSourceUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: PriceSourceWhereUniqueInput
+    data: XOR<PriceSourceUpdateWithoutSupplierInput, PriceSourceUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type PriceSourceUpdateManyWithWhereWithoutSupplierInput = {
+    where: PriceSourceScalarWhereInput
+    data: XOR<PriceSourceUpdateManyMutationInput, PriceSourceUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type PriceSourceScalarWhereInput = {
+    AND?: PriceSourceScalarWhereInput | PriceSourceScalarWhereInput[]
+    OR?: PriceSourceScalarWhereInput[]
+    NOT?: PriceSourceScalarWhereInput | PriceSourceScalarWhereInput[]
+    id?: StringFilter<"PriceSource"> | string
+    code?: StringFilter<"PriceSource"> | string
+    name?: StringFilter<"PriceSource"> | string
+    baseUrl?: StringNullableFilter<"PriceSource"> | string | null
+    supplierId?: StringNullableFilter<"PriceSource"> | string | null
+    adapterType?: StringFilter<"PriceSource"> | string
+    captureMode?: StringFilter<"PriceSource"> | string
+    taxMode?: StringFilter<"PriceSource"> | string
+    currency?: StringFilter<"PriceSource"> | string
+    rateLimitMs?: IntFilter<"PriceSource"> | number
+    timeoutMs?: IntFilter<"PriceSource"> | number
+    proposalTtlHours?: IntFilter<"PriceSource"> | number
+    priceAlertThresholdPct?: FloatFilter<"PriceSource"> | number
+    configJson?: StringNullableFilter<"PriceSource"> | string | null
+    isActive?: BoolFilter<"PriceSource"> | boolean
+    lastSyncedAt?: DateTimeNullableFilter<"PriceSource"> | Date | string | null
+    lastStatus?: StringNullableFilter<"PriceSource"> | string | null
+    createdAt?: DateTimeFilter<"PriceSource"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceSource"> | Date | string
+  }
+
   export type SupplierCreateWithoutIngredientsInput = {
     id?: string
     code?: string | null
@@ -34204,6 +42437,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    priceSources?: PriceSourceCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutIngredientsInput = {
@@ -34215,6 +42449,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    priceSources?: PriceSourceUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutIngredientsInput = {
@@ -34288,6 +42523,173 @@ export namespace Prisma {
     data: RecipeIngredientCreateManyIngredientInput | RecipeIngredientCreateManyIngredientInput[]
   }
 
+  export type PresentationMaterialCreateWithoutIngredientInput = {
+    id?: string
+    materialType?: string
+    name: string
+    quantity: number
+    unit: string
+    unitCostCents: number
+    totalCostCents: number
+    presentation: RecipePresentationCreateNestedOneWithoutMaterialsInput
+  }
+
+  export type PresentationMaterialUncheckedCreateWithoutIngredientInput = {
+    id?: string
+    presentationId: string
+    materialType?: string
+    name: string
+    quantity: number
+    unit: string
+    unitCostCents: number
+    totalCostCents: number
+  }
+
+  export type PresentationMaterialCreateOrConnectWithoutIngredientInput = {
+    where: PresentationMaterialWhereUniqueInput
+    create: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type PresentationMaterialCreateManyIngredientInputEnvelope = {
+    data: PresentationMaterialCreateManyIngredientInput | PresentationMaterialCreateManyIngredientInput[]
+  }
+
+  export type ProductSourceLinkCreateWithoutIngredientInput = {
+    id?: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    source: PriceSourceCreateNestedOneWithoutLinksInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkUncheckedCreateWithoutIngredientInput = {
+    id?: string
+    sourceId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkCreateOrConnectWithoutIngredientInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    create: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type ProductSourceLinkCreateManyIngredientInputEnvelope = {
+    data: ProductSourceLinkCreateManyIngredientInput | ProductSourceLinkCreateManyIngredientInput[]
+  }
+
+  export type PriceUpdateProposalCreateWithoutIngredientInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    run?: PriceSyncRunCreateNestedOneWithoutProposalsInput
+    link?: ProductSourceLinkCreateNestedOneWithoutProposalsInput
+    source: PriceSourceCreateNestedOneWithoutProposalsInput
+    priceHistoryEntries?: RecipePriceHistoryCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateWithoutIngredientInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalCreateOrConnectWithoutIngredientInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    create: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type PriceUpdateProposalCreateManyIngredientInputEnvelope = {
+    data: PriceUpdateProposalCreateManyIngredientInput | PriceUpdateProposalCreateManyIngredientInput[]
+  }
+
   export type SupplierUpsertWithoutIngredientsInput = {
     update: XOR<SupplierUpdateWithoutIngredientsInput, SupplierUncheckedUpdateWithoutIngredientsInput>
     create: XOR<SupplierCreateWithoutIngredientsInput, SupplierUncheckedCreateWithoutIngredientsInput>
@@ -34308,6 +42710,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceSources?: PriceSourceUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutIngredientsInput = {
@@ -34319,6 +42722,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceSources?: PriceSourceUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type UnitConversionRefUpsertWithoutIngredientsInput = {
@@ -34393,6 +42797,134 @@ export namespace Prisma {
     unit?: StringFilter<"RecipeIngredient"> | string
     costCents?: IntFilter<"RecipeIngredient"> | number
     notes?: StringNullableFilter<"RecipeIngredient"> | string | null
+  }
+
+  export type PresentationMaterialUpsertWithWhereUniqueWithoutIngredientInput = {
+    where: PresentationMaterialWhereUniqueInput
+    update: XOR<PresentationMaterialUpdateWithoutIngredientInput, PresentationMaterialUncheckedUpdateWithoutIngredientInput>
+    create: XOR<PresentationMaterialCreateWithoutIngredientInput, PresentationMaterialUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type PresentationMaterialUpdateWithWhereUniqueWithoutIngredientInput = {
+    where: PresentationMaterialWhereUniqueInput
+    data: XOR<PresentationMaterialUpdateWithoutIngredientInput, PresentationMaterialUncheckedUpdateWithoutIngredientInput>
+  }
+
+  export type PresentationMaterialUpdateManyWithWhereWithoutIngredientInput = {
+    where: PresentationMaterialScalarWhereInput
+    data: XOR<PresentationMaterialUpdateManyMutationInput, PresentationMaterialUncheckedUpdateManyWithoutIngredientInput>
+  }
+
+  export type PresentationMaterialScalarWhereInput = {
+    AND?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
+    OR?: PresentationMaterialScalarWhereInput[]
+    NOT?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
+    id?: StringFilter<"PresentationMaterial"> | string
+    presentationId?: StringFilter<"PresentationMaterial"> | string
+    ingredientId?: StringNullableFilter<"PresentationMaterial"> | string | null
+    materialType?: StringFilter<"PresentationMaterial"> | string
+    name?: StringFilter<"PresentationMaterial"> | string
+    quantity?: FloatFilter<"PresentationMaterial"> | number
+    unit?: StringFilter<"PresentationMaterial"> | string
+    unitCostCents?: IntFilter<"PresentationMaterial"> | number
+    totalCostCents?: IntFilter<"PresentationMaterial"> | number
+  }
+
+  export type ProductSourceLinkUpsertWithWhereUniqueWithoutIngredientInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    update: XOR<ProductSourceLinkUpdateWithoutIngredientInput, ProductSourceLinkUncheckedUpdateWithoutIngredientInput>
+    create: XOR<ProductSourceLinkCreateWithoutIngredientInput, ProductSourceLinkUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type ProductSourceLinkUpdateWithWhereUniqueWithoutIngredientInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    data: XOR<ProductSourceLinkUpdateWithoutIngredientInput, ProductSourceLinkUncheckedUpdateWithoutIngredientInput>
+  }
+
+  export type ProductSourceLinkUpdateManyWithWhereWithoutIngredientInput = {
+    where: ProductSourceLinkScalarWhereInput
+    data: XOR<ProductSourceLinkUpdateManyMutationInput, ProductSourceLinkUncheckedUpdateManyWithoutIngredientInput>
+  }
+
+  export type ProductSourceLinkScalarWhereInput = {
+    AND?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+    OR?: ProductSourceLinkScalarWhereInput[]
+    NOT?: ProductSourceLinkScalarWhereInput | ProductSourceLinkScalarWhereInput[]
+    id?: StringFilter<"ProductSourceLink"> | string
+    ingredientId?: StringFilter<"ProductSourceLink"> | string
+    sourceId?: StringFilter<"ProductSourceLink"> | string
+    isPrimary?: BoolFilter<"ProductSourceLink"> | boolean
+    externalSku?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalUrl?: StringNullableFilter<"ProductSourceLink"> | string | null
+    externalName?: StringNullableFilter<"ProductSourceLink"> | string | null
+    expectedPackageQty?: FloatFilter<"ProductSourceLink"> | number
+    expectedPackageUnit?: StringFilter<"ProductSourceLink"> | string
+    expectedConversionFactor?: FloatFilter<"ProductSourceLink"> | number
+    expectedBaseQty?: FloatFilter<"ProductSourceLink"> | number
+    packTolerancePct?: FloatFilter<"ProductSourceLink"> | number
+    applyStrategy?: StringFilter<"ProductSourceLink"> | string
+    taxRatePct?: FloatFilter<"ProductSourceLink"> | number
+    lastCheckedAt?: DateTimeNullableFilter<"ProductSourceLink"> | Date | string | null
+    lastSeenPriceCents?: IntNullableFilter<"ProductSourceLink"> | number | null
+    lastSeenInStock?: BoolNullableFilter<"ProductSourceLink"> | boolean | null
+    lastError?: StringNullableFilter<"ProductSourceLink"> | string | null
+    isActive?: BoolFilter<"ProductSourceLink"> | boolean
+    createdAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductSourceLink"> | Date | string
+  }
+
+  export type PriceUpdateProposalUpsertWithWhereUniqueWithoutIngredientInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    update: XOR<PriceUpdateProposalUpdateWithoutIngredientInput, PriceUpdateProposalUncheckedUpdateWithoutIngredientInput>
+    create: XOR<PriceUpdateProposalCreateWithoutIngredientInput, PriceUpdateProposalUncheckedCreateWithoutIngredientInput>
+  }
+
+  export type PriceUpdateProposalUpdateWithWhereUniqueWithoutIngredientInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    data: XOR<PriceUpdateProposalUpdateWithoutIngredientInput, PriceUpdateProposalUncheckedUpdateWithoutIngredientInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithWhereWithoutIngredientInput = {
+    where: PriceUpdateProposalScalarWhereInput
+    data: XOR<PriceUpdateProposalUpdateManyMutationInput, PriceUpdateProposalUncheckedUpdateManyWithoutIngredientInput>
+  }
+
+  export type PriceUpdateProposalScalarWhereInput = {
+    AND?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+    OR?: PriceUpdateProposalScalarWhereInput[]
+    NOT?: PriceUpdateProposalScalarWhereInput | PriceUpdateProposalScalarWhereInput[]
+    id?: StringFilter<"PriceUpdateProposal"> | string
+    code?: StringFilter<"PriceUpdateProposal"> | string
+    runId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    linkId?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    ingredientId?: StringFilter<"PriceUpdateProposal"> | string
+    sourceId?: StringFilter<"PriceUpdateProposal"> | string
+    status?: StringFilter<"PriceUpdateProposal"> | string
+    applyStrategyUsed?: StringFilter<"PriceUpdateProposal"> | string
+    currentPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    currentCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    currentIngredientUpdatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    detectedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    detectedInStock?: BoolFilter<"PriceUpdateProposal"> | boolean
+    detectedPackQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    detectedPackUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    detectedRawTitle?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    proposedCostPerBaseUnit?: FloatFilter<"PriceUpdateProposal"> | number
+    proposedPackageQty?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    proposedPackageUnit?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    proposedConversionFactor?: FloatNullableFilter<"PriceUpdateProposal"> | number | null
+    diffPriceCents?: IntFilter<"PriceUpdateProposal"> | number
+    diffPercent?: FloatFilter<"PriceUpdateProposal"> | number
+    packCheckStatus?: StringFilter<"PriceUpdateProposal"> | string
+    alertsJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    evidenceUrl?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewNote?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"PriceUpdateProposal"> | Date | string | null
+    expiresAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    appliedSnapshotJson?: StringNullableFilter<"PriceUpdateProposal"> | string | null
+    createdAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
+    updatedAt?: DateTimeFilter<"PriceUpdateProposal"> | Date | string
   }
 
   export type RecipeIngredientCreateWithoutRecipeInput = {
@@ -34543,6 +43075,33 @@ export namespace Prisma {
     data: RecipePresentationCreateManyRecipeInput | RecipePresentationCreateManyRecipeInput[]
   }
 
+  export type PresentationSubrecipeCreateWithoutSubRecipeInput = {
+    id?: string
+    name: string
+    quantity: number
+    unit: string
+    costCents: number
+    presentation: RecipePresentationCreateNestedOneWithoutSubrecipesInput
+  }
+
+  export type PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput = {
+    id?: string
+    presentationId: string
+    name: string
+    quantity: number
+    unit: string
+    costCents: number
+  }
+
+  export type PresentationSubrecipeCreateOrConnectWithoutSubRecipeInput = {
+    where: PresentationSubrecipeWhereUniqueInput
+    create: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput>
+  }
+
+  export type PresentationSubrecipeCreateManySubRecipeInputEnvelope = {
+    data: PresentationSubrecipeCreateManySubRecipeInput | PresentationSubrecipeCreateManySubRecipeInput[]
+  }
+
   export type SaleItemCreateWithoutRecipeInput = {
     id?: string
     productName: string
@@ -34586,10 +43145,12 @@ export namespace Prisma {
     margin: number
     recordedAt?: Date | string
     reason?: string | null
+    proposal?: PriceUpdateProposalCreateNestedOneWithoutPriceHistoryEntriesInput
   }
 
   export type RecipePriceHistoryUncheckedCreateWithoutRecipeInput = {
     id?: string
+    proposalId?: string | null
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -34715,6 +43276,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RecipePresentation"> | Date | string
   }
 
+  export type PresentationSubrecipeUpsertWithWhereUniqueWithoutSubRecipeInput = {
+    where: PresentationSubrecipeWhereUniqueInput
+    update: XOR<PresentationSubrecipeUpdateWithoutSubRecipeInput, PresentationSubrecipeUncheckedUpdateWithoutSubRecipeInput>
+    create: XOR<PresentationSubrecipeCreateWithoutSubRecipeInput, PresentationSubrecipeUncheckedCreateWithoutSubRecipeInput>
+  }
+
+  export type PresentationSubrecipeUpdateWithWhereUniqueWithoutSubRecipeInput = {
+    where: PresentationSubrecipeWhereUniqueInput
+    data: XOR<PresentationSubrecipeUpdateWithoutSubRecipeInput, PresentationSubrecipeUncheckedUpdateWithoutSubRecipeInput>
+  }
+
+  export type PresentationSubrecipeUpdateManyWithWhereWithoutSubRecipeInput = {
+    where: PresentationSubrecipeScalarWhereInput
+    data: XOR<PresentationSubrecipeUpdateManyMutationInput, PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeInput>
+  }
+
+  export type PresentationSubrecipeScalarWhereInput = {
+    AND?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
+    OR?: PresentationSubrecipeScalarWhereInput[]
+    NOT?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
+    id?: StringFilter<"PresentationSubrecipe"> | string
+    presentationId?: StringFilter<"PresentationSubrecipe"> | string
+    subRecipeId?: StringNullableFilter<"PresentationSubrecipe"> | string | null
+    name?: StringFilter<"PresentationSubrecipe"> | string
+    quantity?: FloatFilter<"PresentationSubrecipe"> | number
+    unit?: StringFilter<"PresentationSubrecipe"> | string
+    costCents?: IntFilter<"PresentationSubrecipe"> | number
+  }
+
   export type SaleItemUpsertWithWhereUniqueWithoutRecipeInput = {
     where: SaleItemWhereUniqueInput
     update: XOR<SaleItemUpdateWithoutRecipeInput, SaleItemUncheckedUpdateWithoutRecipeInput>
@@ -34770,6 +43360,7 @@ export namespace Prisma {
     NOT?: RecipePriceHistoryScalarWhereInput | RecipePriceHistoryScalarWhereInput[]
     id?: StringFilter<"RecipePriceHistory"> | string
     recipeId?: StringFilter<"RecipePriceHistory"> | string
+    proposalId?: StringNullableFilter<"RecipePriceHistory"> | string | null
     batchCostCents?: IntFilter<"RecipePriceHistory"> | number
     unitCostCents?: IntFilter<"RecipePriceHistory"> | number
     priceCents?: IntFilter<"RecipePriceHistory"> | number
@@ -34808,6 +43399,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientCreateNestedManyWithoutRecipeInput
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
@@ -34842,6 +43434,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -34999,13 +43592,13 @@ export namespace Prisma {
 
   export type PresentationMaterialCreateWithoutPresentationInput = {
     id?: string
-    ingredientId?: string | null
     materialType?: string
     name: string
     quantity: number
     unit: string
     unitCostCents: number
     totalCostCents: number
+    ingredient?: IngredientCreateNestedOneWithoutPresentationMaterialsInput
   }
 
   export type PresentationMaterialUncheckedCreateWithoutPresentationInput = {
@@ -35030,11 +43623,11 @@ export namespace Prisma {
 
   export type PresentationSubrecipeCreateWithoutPresentationInput = {
     id?: string
-    subRecipeId?: string | null
     name: string
     quantity: number
     unit: string
     costCents: number
+    subRecipe?: RecipeCreateNestedOneWithoutPresentationSubrecipesInput
   }
 
   export type PresentationSubrecipeUncheckedCreateWithoutPresentationInput = {
@@ -35131,6 +43724,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUpdateManyWithoutRecipeNestedInput
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
@@ -35165,6 +43759,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -35278,21 +43873,6 @@ export namespace Prisma {
     data: XOR<PresentationMaterialUpdateManyMutationInput, PresentationMaterialUncheckedUpdateManyWithoutPresentationInput>
   }
 
-  export type PresentationMaterialScalarWhereInput = {
-    AND?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
-    OR?: PresentationMaterialScalarWhereInput[]
-    NOT?: PresentationMaterialScalarWhereInput | PresentationMaterialScalarWhereInput[]
-    id?: StringFilter<"PresentationMaterial"> | string
-    presentationId?: StringFilter<"PresentationMaterial"> | string
-    ingredientId?: StringNullableFilter<"PresentationMaterial"> | string | null
-    materialType?: StringFilter<"PresentationMaterial"> | string
-    name?: StringFilter<"PresentationMaterial"> | string
-    quantity?: FloatFilter<"PresentationMaterial"> | number
-    unit?: StringFilter<"PresentationMaterial"> | string
-    unitCostCents?: IntFilter<"PresentationMaterial"> | number
-    totalCostCents?: IntFilter<"PresentationMaterial"> | number
-  }
-
   export type PresentationSubrecipeUpsertWithWhereUniqueWithoutPresentationInput = {
     where: PresentationSubrecipeWhereUniqueInput
     update: XOR<PresentationSubrecipeUpdateWithoutPresentationInput, PresentationSubrecipeUncheckedUpdateWithoutPresentationInput>
@@ -35307,19 +43887,6 @@ export namespace Prisma {
   export type PresentationSubrecipeUpdateManyWithWhereWithoutPresentationInput = {
     where: PresentationSubrecipeScalarWhereInput
     data: XOR<PresentationSubrecipeUpdateManyMutationInput, PresentationSubrecipeUncheckedUpdateManyWithoutPresentationInput>
-  }
-
-  export type PresentationSubrecipeScalarWhereInput = {
-    AND?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
-    OR?: PresentationSubrecipeScalarWhereInput[]
-    NOT?: PresentationSubrecipeScalarWhereInput | PresentationSubrecipeScalarWhereInput[]
-    id?: StringFilter<"PresentationSubrecipe"> | string
-    presentationId?: StringFilter<"PresentationSubrecipe"> | string
-    subRecipeId?: StringNullableFilter<"PresentationSubrecipe"> | string | null
-    name?: StringFilter<"PresentationSubrecipe"> | string
-    quantity?: FloatFilter<"PresentationSubrecipe"> | number
-    unit?: StringFilter<"PresentationSubrecipe"> | string
-    costCents?: IntFilter<"PresentationSubrecipe"> | number
   }
 
   export type SaleItemUpsertWithWhereUniqueWithoutPresentationInput = {
@@ -35409,6 +43976,61 @@ export namespace Prisma {
     create: XOR<RecipePresentationCreateWithoutMaterialsInput, RecipePresentationUncheckedCreateWithoutMaterialsInput>
   }
 
+  export type IngredientCreateWithoutPresentationMaterialsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutIngredientsInput
+    factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
+    recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientUncheckedCreateWithoutPresentationMaterialsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    supplierId?: string | null
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    factorId?: string | null
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientCreateOrConnectWithoutPresentationMaterialsInput = {
+    where: IngredientWhereUniqueInput
+    create: XOR<IngredientCreateWithoutPresentationMaterialsInput, IngredientUncheckedCreateWithoutPresentationMaterialsInput>
+  }
+
   export type RecipePresentationUpsertWithoutMaterialsInput = {
     update: XOR<RecipePresentationUpdateWithoutMaterialsInput, RecipePresentationUncheckedUpdateWithoutMaterialsInput>
     create: XOR<RecipePresentationCreateWithoutMaterialsInput, RecipePresentationUncheckedCreateWithoutMaterialsInput>
@@ -35486,6 +44108,67 @@ export namespace Prisma {
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
   }
 
+  export type IngredientUpsertWithoutPresentationMaterialsInput = {
+    update: XOR<IngredientUpdateWithoutPresentationMaterialsInput, IngredientUncheckedUpdateWithoutPresentationMaterialsInput>
+    create: XOR<IngredientCreateWithoutPresentationMaterialsInput, IngredientUncheckedCreateWithoutPresentationMaterialsInput>
+    where?: IngredientWhereInput
+  }
+
+  export type IngredientUpdateToOneWithWhereWithoutPresentationMaterialsInput = {
+    where?: IngredientWhereInput
+    data: XOR<IngredientUpdateWithoutPresentationMaterialsInput, IngredientUncheckedUpdateWithoutPresentationMaterialsInput>
+  }
+
+  export type IngredientUpdateWithoutPresentationMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
+    factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
+    recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
+  }
+
+  export type IngredientUncheckedUpdateWithoutPresentationMaterialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    factorId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
+  }
+
   export type RecipePresentationCreateWithoutSubrecipesInput = {
     id?: string
     name: string
@@ -35555,6 +44238,81 @@ export namespace Prisma {
   export type RecipePresentationCreateOrConnectWithoutSubrecipesInput = {
     where: RecipePresentationWhereUniqueInput
     create: XOR<RecipePresentationCreateWithoutSubrecipesInput, RecipePresentationUncheckedCreateWithoutSubrecipesInput>
+  }
+
+  export type RecipeCreateWithoutPresentationSubrecipesInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    recipeType?: string
+    yield: number
+    yieldUnit?: string
+    packageCostCents?: number
+    laborPercent?: number
+    overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
+    targetMargin?: number
+    batchCostCents?: number
+    unitCostCents?: number
+    costPerYieldUnit?: number
+    suggestedPriceCents?: number
+    currentPriceCents?: number
+    status?: string
+    reviewFlag?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredients?: RecipeIngredientCreateNestedManyWithoutRecipeInput
+    subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
+    usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
+    presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
+    priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
+  }
+
+  export type RecipeUncheckedCreateWithoutPresentationSubrecipesInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    recipeType?: string
+    yield: number
+    yieldUnit?: string
+    packageCostCents?: number
+    laborPercent?: number
+    overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
+    targetMargin?: number
+    batchCostCents?: number
+    unitCostCents?: number
+    costPerYieldUnit?: number
+    suggestedPriceCents?: number
+    currentPriceCents?: number
+    status?: string
+    reviewFlag?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredients?: RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
+    subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
+    usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
+    presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
+    priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
+  }
+
+  export type RecipeCreateOrConnectWithoutPresentationSubrecipesInput = {
+    where: RecipeWhereUniqueInput
+    create: XOR<RecipeCreateWithoutPresentationSubrecipesInput, RecipeUncheckedCreateWithoutPresentationSubrecipesInput>
   }
 
   export type RecipePresentationUpsertWithoutSubrecipesInput = {
@@ -35634,6 +44392,87 @@ export namespace Prisma {
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
   }
 
+  export type RecipeUpsertWithoutPresentationSubrecipesInput = {
+    update: XOR<RecipeUpdateWithoutPresentationSubrecipesInput, RecipeUncheckedUpdateWithoutPresentationSubrecipesInput>
+    create: XOR<RecipeCreateWithoutPresentationSubrecipesInput, RecipeUncheckedCreateWithoutPresentationSubrecipesInput>
+    where?: RecipeWhereInput
+  }
+
+  export type RecipeUpdateToOneWithWhereWithoutPresentationSubrecipesInput = {
+    where?: RecipeWhereInput
+    data: XOR<RecipeUpdateWithoutPresentationSubrecipesInput, RecipeUncheckedUpdateWithoutPresentationSubrecipesInput>
+  }
+
+  export type RecipeUpdateWithoutPresentationSubrecipesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeType?: StringFieldUpdateOperationsInput | string
+    yield?: FloatFieldUpdateOperationsInput | number
+    yieldUnit?: StringFieldUpdateOperationsInput | string
+    packageCostCents?: IntFieldUpdateOperationsInput | number
+    laborPercent?: FloatFieldUpdateOperationsInput | number
+    overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
+    targetMargin?: FloatFieldUpdateOperationsInput | number
+    batchCostCents?: IntFieldUpdateOperationsInput | number
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    costPerYieldUnit?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredients?: RecipeIngredientUpdateManyWithoutRecipeNestedInput
+    subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
+    usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
+    presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
+    priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
+  }
+
+  export type RecipeUncheckedUpdateWithoutPresentationSubrecipesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recipeType?: StringFieldUpdateOperationsInput | string
+    yield?: FloatFieldUpdateOperationsInput | number
+    yieldUnit?: StringFieldUpdateOperationsInput | string
+    packageCostCents?: IntFieldUpdateOperationsInput | number
+    laborPercent?: FloatFieldUpdateOperationsInput | number
+    overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
+    targetMargin?: FloatFieldUpdateOperationsInput | number
+    batchCostCents?: IntFieldUpdateOperationsInput | number
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    costPerYieldUnit?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredients?: RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
+    subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
+    usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
+    presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
+    priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
+  }
+
   export type RecipeCreateWithoutIngredientsInput = {
     id?: string
     name: string
@@ -35664,6 +44503,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
@@ -35698,6 +44538,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -35727,6 +44568,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     supplier?: SupplierCreateNestedOneWithoutIngredientsInput
     factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientUncheckedCreateWithoutRecipeIngredientsInput = {
@@ -35749,6 +44593,9 @@ export namespace Prisma {
     reviewFlag?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientCreateOrConnectWithoutRecipeIngredientsInput = {
@@ -35797,6 +44644,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
@@ -35831,6 +44679,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -35866,6 +44715,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
     factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateWithoutRecipeIngredientsInput = {
@@ -35888,6 +44740,9 @@ export namespace Prisma {
     reviewFlag?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
   }
 
   export type RecipeCreateWithoutSubRecipeUsesInput = {
@@ -35920,6 +44775,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientCreateNestedManyWithoutRecipeInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
@@ -35954,6 +44810,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -35993,6 +44850,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientCreateNestedManyWithoutRecipeInput
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
@@ -36027,6 +44885,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedCreateNestedManyWithoutRecipeInput
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
@@ -36077,6 +44936,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUpdateManyWithoutRecipeNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
@@ -36111,6 +44971,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -36156,6 +45017,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUpdateManyWithoutRecipeNestedInput
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
@@ -36190,6 +45052,7 @@ export namespace Prisma {
     ingredients?: RecipeIngredientUncheckedUpdateManyWithoutRecipeNestedInput
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
@@ -36225,6 +45088,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemCreateNestedManyWithoutRecipeInput
   }
 
@@ -36259,12 +45123,88 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutRecipeInput
   }
 
   export type RecipeCreateOrConnectWithoutPriceHistoryInput = {
     where: RecipeWhereUniqueInput
     create: XOR<RecipeCreateWithoutPriceHistoryInput, RecipeUncheckedCreateWithoutPriceHistoryInput>
+  }
+
+  export type PriceUpdateProposalCreateWithoutPriceHistoryEntriesInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    run?: PriceSyncRunCreateNestedOneWithoutProposalsInput
+    link?: ProductSourceLinkCreateNestedOneWithoutProposalsInput
+    ingredient: IngredientCreateNestedOneWithoutPriceProposalsInput
+    source: PriceSourceCreateNestedOneWithoutProposalsInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateWithoutPriceHistoryEntriesInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceUpdateProposalCreateOrConnectWithoutPriceHistoryEntriesInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    create: XOR<PriceUpdateProposalCreateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedCreateWithoutPriceHistoryEntriesInput>
   }
 
   export type RecipeUpsertWithoutPriceHistoryInput = {
@@ -36309,6 +45249,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUpdateManyWithoutRecipeNestedInput
   }
 
@@ -36343,7 +45284,89 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
+  }
+
+  export type PriceUpdateProposalUpsertWithoutPriceHistoryEntriesInput = {
+    update: XOR<PriceUpdateProposalUpdateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedUpdateWithoutPriceHistoryEntriesInput>
+    create: XOR<PriceUpdateProposalCreateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedCreateWithoutPriceHistoryEntriesInput>
+    where?: PriceUpdateProposalWhereInput
+  }
+
+  export type PriceUpdateProposalUpdateToOneWithWhereWithoutPriceHistoryEntriesInput = {
+    where?: PriceUpdateProposalWhereInput
+    data: XOR<PriceUpdateProposalUpdateWithoutPriceHistoryEntriesInput, PriceUpdateProposalUncheckedUpdateWithoutPriceHistoryEntriesInput>
+  }
+
+  export type PriceUpdateProposalUpdateWithoutPriceHistoryEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    run?: PriceSyncRunUpdateOneWithoutProposalsNestedInput
+    link?: ProductSourceLinkUpdateOneWithoutProposalsNestedInput
+    ingredient?: IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutProposalsNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateWithoutPriceHistoryEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SaleCreateWithoutCustomerInput = {
@@ -36778,6 +45801,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeCreateNestedManyWithoutSubRecipeInput
     priceHistory?: RecipePriceHistoryCreateNestedManyWithoutRecipeInput
   }
 
@@ -36812,6 +45836,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedCreateNestedManyWithoutParentInput
     usedInRecipes?: SubRecipeUseUncheckedCreateNestedManyWithoutChildInput
     presentations?: RecipePresentationUncheckedCreateNestedManyWithoutRecipeInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutSubRecipeInput
     priceHistory?: RecipePriceHistoryUncheckedCreateNestedManyWithoutRecipeInput
   }
 
@@ -36980,6 +46005,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUpdateManyWithoutSubRecipeNestedInput
     priceHistory?: RecipePriceHistoryUpdateManyWithoutRecipeNestedInput
   }
 
@@ -37014,6 +46040,7 @@ export namespace Prisma {
     subRecipeUses?: SubRecipeUseUncheckedUpdateManyWithoutParentNestedInput
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     presentations?: RecipePresentationUncheckedUpdateManyWithoutRecipeNestedInput
+    presentationSubrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
   }
 
@@ -37540,6 +46567,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     supplier?: SupplierCreateNestedOneWithoutIngredientsInput
     recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientUncheckedCreateWithoutFactorRefInput = {
@@ -37562,6 +46592,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
   }
 
   export type IngredientCreateOrConnectWithoutFactorRefInput = {
@@ -37714,6 +46747,1290 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SupplierCreateWithoutPriceSourcesInput = {
+    id?: string
+    code?: string | null
+    name: string
+    phone?: string | null
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredients?: IngredientCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutPriceSourcesInput = {
+    id?: string
+    code?: string | null
+    name: string
+    phone?: string | null
+    notes?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredients?: IngredientUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutPriceSourcesInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutPriceSourcesInput, SupplierUncheckedCreateWithoutPriceSourcesInput>
+  }
+
+  export type ProductSourceLinkCreateWithoutSourceInput = {
+    id?: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredient: IngredientCreateNestedOneWithoutSourceLinksInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkUncheckedCreateWithoutSourceInput = {
+    id?: string
+    ingredientId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutLinkInput
+  }
+
+  export type ProductSourceLinkCreateOrConnectWithoutSourceInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    create: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput>
+  }
+
+  export type ProductSourceLinkCreateManySourceInputEnvelope = {
+    data: ProductSourceLinkCreateManySourceInput | ProductSourceLinkCreateManySourceInput[]
+  }
+
+  export type PriceSyncRunCreateWithoutSourceInput = {
+    id?: string
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutRunInput
+  }
+
+  export type PriceSyncRunUncheckedCreateWithoutSourceInput = {
+    id?: string
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutRunInput
+  }
+
+  export type PriceSyncRunCreateOrConnectWithoutSourceInput = {
+    where: PriceSyncRunWhereUniqueInput
+    create: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput>
+  }
+
+  export type PriceSyncRunCreateManySourceInputEnvelope = {
+    data: PriceSyncRunCreateManySourceInput | PriceSyncRunCreateManySourceInput[]
+  }
+
+  export type PriceUpdateProposalCreateWithoutSourceInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    run?: PriceSyncRunCreateNestedOneWithoutProposalsInput
+    link?: ProductSourceLinkCreateNestedOneWithoutProposalsInput
+    ingredient: IngredientCreateNestedOneWithoutPriceProposalsInput
+    priceHistoryEntries?: RecipePriceHistoryCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateWithoutSourceInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    ingredientId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalCreateOrConnectWithoutSourceInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    create: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput>
+  }
+
+  export type PriceUpdateProposalCreateManySourceInputEnvelope = {
+    data: PriceUpdateProposalCreateManySourceInput | PriceUpdateProposalCreateManySourceInput[]
+  }
+
+  export type SupplierUpsertWithoutPriceSourcesInput = {
+    update: XOR<SupplierUpdateWithoutPriceSourcesInput, SupplierUncheckedUpdateWithoutPriceSourcesInput>
+    create: XOR<SupplierCreateWithoutPriceSourcesInput, SupplierUncheckedCreateWithoutPriceSourcesInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutPriceSourcesInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutPriceSourcesInput, SupplierUncheckedUpdateWithoutPriceSourcesInput>
+  }
+
+  export type SupplierUpdateWithoutPriceSourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredients?: IngredientUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutPriceSourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredients?: IngredientUncheckedUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type ProductSourceLinkUpsertWithWhereUniqueWithoutSourceInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    update: XOR<ProductSourceLinkUpdateWithoutSourceInput, ProductSourceLinkUncheckedUpdateWithoutSourceInput>
+    create: XOR<ProductSourceLinkCreateWithoutSourceInput, ProductSourceLinkUncheckedCreateWithoutSourceInput>
+  }
+
+  export type ProductSourceLinkUpdateWithWhereUniqueWithoutSourceInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    data: XOR<ProductSourceLinkUpdateWithoutSourceInput, ProductSourceLinkUncheckedUpdateWithoutSourceInput>
+  }
+
+  export type ProductSourceLinkUpdateManyWithWhereWithoutSourceInput = {
+    where: ProductSourceLinkScalarWhereInput
+    data: XOR<ProductSourceLinkUpdateManyMutationInput, ProductSourceLinkUncheckedUpdateManyWithoutSourceInput>
+  }
+
+  export type PriceSyncRunUpsertWithWhereUniqueWithoutSourceInput = {
+    where: PriceSyncRunWhereUniqueInput
+    update: XOR<PriceSyncRunUpdateWithoutSourceInput, PriceSyncRunUncheckedUpdateWithoutSourceInput>
+    create: XOR<PriceSyncRunCreateWithoutSourceInput, PriceSyncRunUncheckedCreateWithoutSourceInput>
+  }
+
+  export type PriceSyncRunUpdateWithWhereUniqueWithoutSourceInput = {
+    where: PriceSyncRunWhereUniqueInput
+    data: XOR<PriceSyncRunUpdateWithoutSourceInput, PriceSyncRunUncheckedUpdateWithoutSourceInput>
+  }
+
+  export type PriceSyncRunUpdateManyWithWhereWithoutSourceInput = {
+    where: PriceSyncRunScalarWhereInput
+    data: XOR<PriceSyncRunUpdateManyMutationInput, PriceSyncRunUncheckedUpdateManyWithoutSourceInput>
+  }
+
+  export type PriceSyncRunScalarWhereInput = {
+    AND?: PriceSyncRunScalarWhereInput | PriceSyncRunScalarWhereInput[]
+    OR?: PriceSyncRunScalarWhereInput[]
+    NOT?: PriceSyncRunScalarWhereInput | PriceSyncRunScalarWhereInput[]
+    id?: StringFilter<"PriceSyncRun"> | string
+    sourceId?: StringNullableFilter<"PriceSyncRun"> | string | null
+    triggerType?: StringFilter<"PriceSyncRun"> | string
+    status?: StringFilter<"PriceSyncRun"> | string
+    totalChecked?: IntFilter<"PriceSyncRun"> | number
+    proposalsCreated?: IntFilter<"PriceSyncRun"> | number
+    errorsCount?: IntFilter<"PriceSyncRun"> | number
+    summaryJson?: StringNullableFilter<"PriceSyncRun"> | string | null
+    startedAt?: DateTimeFilter<"PriceSyncRun"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"PriceSyncRun"> | Date | string | null
+  }
+
+  export type PriceUpdateProposalUpsertWithWhereUniqueWithoutSourceInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    update: XOR<PriceUpdateProposalUpdateWithoutSourceInput, PriceUpdateProposalUncheckedUpdateWithoutSourceInput>
+    create: XOR<PriceUpdateProposalCreateWithoutSourceInput, PriceUpdateProposalUncheckedCreateWithoutSourceInput>
+  }
+
+  export type PriceUpdateProposalUpdateWithWhereUniqueWithoutSourceInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    data: XOR<PriceUpdateProposalUpdateWithoutSourceInput, PriceUpdateProposalUncheckedUpdateWithoutSourceInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithWhereWithoutSourceInput = {
+    where: PriceUpdateProposalScalarWhereInput
+    data: XOR<PriceUpdateProposalUpdateManyMutationInput, PriceUpdateProposalUncheckedUpdateManyWithoutSourceInput>
+  }
+
+  export type IngredientCreateWithoutSourceLinksInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutIngredientsInput
+    factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
+    recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientUncheckedCreateWithoutSourceLinksInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    supplierId?: string | null
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    factorId?: string | null
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    priceProposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientCreateOrConnectWithoutSourceLinksInput = {
+    where: IngredientWhereUniqueInput
+    create: XOR<IngredientCreateWithoutSourceLinksInput, IngredientUncheckedCreateWithoutSourceLinksInput>
+  }
+
+  export type PriceSourceCreateWithoutLinksInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutPriceSourcesInput
+    syncRuns?: PriceSyncRunCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUncheckedCreateWithoutLinksInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    supplierId?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    syncRuns?: PriceSyncRunUncheckedCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceCreateOrConnectWithoutLinksInput = {
+    where: PriceSourceWhereUniqueInput
+    create: XOR<PriceSourceCreateWithoutLinksInput, PriceSourceUncheckedCreateWithoutLinksInput>
+  }
+
+  export type PriceUpdateProposalCreateWithoutLinkInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    run?: PriceSyncRunCreateNestedOneWithoutProposalsInput
+    ingredient: IngredientCreateNestedOneWithoutPriceProposalsInput
+    source: PriceSourceCreateNestedOneWithoutProposalsInput
+    priceHistoryEntries?: RecipePriceHistoryCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateWithoutLinkInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalCreateOrConnectWithoutLinkInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    create: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput>
+  }
+
+  export type PriceUpdateProposalCreateManyLinkInputEnvelope = {
+    data: PriceUpdateProposalCreateManyLinkInput | PriceUpdateProposalCreateManyLinkInput[]
+  }
+
+  export type IngredientUpsertWithoutSourceLinksInput = {
+    update: XOR<IngredientUpdateWithoutSourceLinksInput, IngredientUncheckedUpdateWithoutSourceLinksInput>
+    create: XOR<IngredientCreateWithoutSourceLinksInput, IngredientUncheckedCreateWithoutSourceLinksInput>
+    where?: IngredientWhereInput
+  }
+
+  export type IngredientUpdateToOneWithWhereWithoutSourceLinksInput = {
+    where?: IngredientWhereInput
+    data: XOR<IngredientUpdateWithoutSourceLinksInput, IngredientUncheckedUpdateWithoutSourceLinksInput>
+  }
+
+  export type IngredientUpdateWithoutSourceLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
+    factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
+    recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
+  }
+
+  export type IngredientUncheckedUpdateWithoutSourceLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    factorId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
+  }
+
+  export type PriceSourceUpsertWithoutLinksInput = {
+    update: XOR<PriceSourceUpdateWithoutLinksInput, PriceSourceUncheckedUpdateWithoutLinksInput>
+    create: XOR<PriceSourceCreateWithoutLinksInput, PriceSourceUncheckedCreateWithoutLinksInput>
+    where?: PriceSourceWhereInput
+  }
+
+  export type PriceSourceUpdateToOneWithWhereWithoutLinksInput = {
+    where?: PriceSourceWhereInput
+    data: XOR<PriceSourceUpdateWithoutLinksInput, PriceSourceUncheckedUpdateWithoutLinksInput>
+  }
+
+  export type PriceSourceUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutPriceSourcesNestedInput
+    syncRuns?: PriceSyncRunUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    syncRuns?: PriceSyncRunUncheckedUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceUpdateProposalUpsertWithWhereUniqueWithoutLinkInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    update: XOR<PriceUpdateProposalUpdateWithoutLinkInput, PriceUpdateProposalUncheckedUpdateWithoutLinkInput>
+    create: XOR<PriceUpdateProposalCreateWithoutLinkInput, PriceUpdateProposalUncheckedCreateWithoutLinkInput>
+  }
+
+  export type PriceUpdateProposalUpdateWithWhereUniqueWithoutLinkInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    data: XOR<PriceUpdateProposalUpdateWithoutLinkInput, PriceUpdateProposalUncheckedUpdateWithoutLinkInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithWhereWithoutLinkInput = {
+    where: PriceUpdateProposalScalarWhereInput
+    data: XOR<PriceUpdateProposalUpdateManyMutationInput, PriceUpdateProposalUncheckedUpdateManyWithoutLinkInput>
+  }
+
+  export type PriceSourceCreateWithoutSyncRunsInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutPriceSourcesInput
+    links?: ProductSourceLinkCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUncheckedCreateWithoutSyncRunsInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    supplierId?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: ProductSourceLinkUncheckedCreateNestedManyWithoutSourceInput
+    proposals?: PriceUpdateProposalUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceCreateOrConnectWithoutSyncRunsInput = {
+    where: PriceSourceWhereUniqueInput
+    create: XOR<PriceSourceCreateWithoutSyncRunsInput, PriceSourceUncheckedCreateWithoutSyncRunsInput>
+  }
+
+  export type PriceUpdateProposalCreateWithoutRunInput = {
+    id?: string
+    code: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    link?: ProductSourceLinkCreateNestedOneWithoutProposalsInput
+    ingredient: IngredientCreateNestedOneWithoutPriceProposalsInput
+    source: PriceSourceCreateNestedOneWithoutProposalsInput
+    priceHistoryEntries?: RecipePriceHistoryCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalUncheckedCreateWithoutRunInput = {
+    id?: string
+    code: string
+    linkId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedCreateNestedManyWithoutProposalInput
+  }
+
+  export type PriceUpdateProposalCreateOrConnectWithoutRunInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    create: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput>
+  }
+
+  export type PriceUpdateProposalCreateManyRunInputEnvelope = {
+    data: PriceUpdateProposalCreateManyRunInput | PriceUpdateProposalCreateManyRunInput[]
+  }
+
+  export type PriceSourceUpsertWithoutSyncRunsInput = {
+    update: XOR<PriceSourceUpdateWithoutSyncRunsInput, PriceSourceUncheckedUpdateWithoutSyncRunsInput>
+    create: XOR<PriceSourceCreateWithoutSyncRunsInput, PriceSourceUncheckedCreateWithoutSyncRunsInput>
+    where?: PriceSourceWhereInput
+  }
+
+  export type PriceSourceUpdateToOneWithWhereWithoutSyncRunsInput = {
+    where?: PriceSourceWhereInput
+    data: XOR<PriceSourceUpdateWithoutSyncRunsInput, PriceSourceUncheckedUpdateWithoutSyncRunsInput>
+  }
+
+  export type PriceSourceUpdateWithoutSyncRunsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutPriceSourcesNestedInput
+    links?: ProductSourceLinkUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateWithoutSyncRunsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: ProductSourceLinkUncheckedUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceUpdateProposalUpsertWithWhereUniqueWithoutRunInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    update: XOR<PriceUpdateProposalUpdateWithoutRunInput, PriceUpdateProposalUncheckedUpdateWithoutRunInput>
+    create: XOR<PriceUpdateProposalCreateWithoutRunInput, PriceUpdateProposalUncheckedCreateWithoutRunInput>
+  }
+
+  export type PriceUpdateProposalUpdateWithWhereUniqueWithoutRunInput = {
+    where: PriceUpdateProposalWhereUniqueInput
+    data: XOR<PriceUpdateProposalUpdateWithoutRunInput, PriceUpdateProposalUncheckedUpdateWithoutRunInput>
+  }
+
+  export type PriceUpdateProposalUpdateManyWithWhereWithoutRunInput = {
+    where: PriceUpdateProposalScalarWhereInput
+    data: XOR<PriceUpdateProposalUpdateManyMutationInput, PriceUpdateProposalUncheckedUpdateManyWithoutRunInput>
+  }
+
+  export type PriceSyncRunCreateWithoutProposalsInput = {
+    id?: string
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    source?: PriceSourceCreateNestedOneWithoutSyncRunsInput
+  }
+
+  export type PriceSyncRunUncheckedCreateWithoutProposalsInput = {
+    id?: string
+    sourceId?: string | null
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+  }
+
+  export type PriceSyncRunCreateOrConnectWithoutProposalsInput = {
+    where: PriceSyncRunWhereUniqueInput
+    create: XOR<PriceSyncRunCreateWithoutProposalsInput, PriceSyncRunUncheckedCreateWithoutProposalsInput>
+  }
+
+  export type ProductSourceLinkCreateWithoutProposalsInput = {
+    id?: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ingredient: IngredientCreateNestedOneWithoutSourceLinksInput
+    source: PriceSourceCreateNestedOneWithoutLinksInput
+  }
+
+  export type ProductSourceLinkUncheckedCreateWithoutProposalsInput = {
+    id?: string
+    ingredientId: string
+    sourceId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductSourceLinkCreateOrConnectWithoutProposalsInput = {
+    where: ProductSourceLinkWhereUniqueInput
+    create: XOR<ProductSourceLinkCreateWithoutProposalsInput, ProductSourceLinkUncheckedCreateWithoutProposalsInput>
+  }
+
+  export type IngredientCreateWithoutPriceProposalsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutIngredientsInput
+    factorRef?: UnitConversionRefCreateNestedOneWithoutIngredientsInput
+    recipeIngredients?: RecipeIngredientCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientUncheckedCreateWithoutPriceProposalsInput = {
+    id?: string
+    code?: string | null
+    name: string
+    category?: string
+    supplierId?: string | null
+    packagePriceCents: number
+    packageQty: number
+    packageUnit: string
+    baseUnit: string
+    factorId?: string | null
+    conversionFactor?: number
+    costPerBaseUnit: number
+    density?: number | null
+    isActive?: boolean
+    notes?: string | null
+    importedFrom?: string | null
+    reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipeIngredients?: RecipeIngredientUncheckedCreateNestedManyWithoutIngredientInput
+    presentationMaterials?: PresentationMaterialUncheckedCreateNestedManyWithoutIngredientInput
+    sourceLinks?: ProductSourceLinkUncheckedCreateNestedManyWithoutIngredientInput
+  }
+
+  export type IngredientCreateOrConnectWithoutPriceProposalsInput = {
+    where: IngredientWhereUniqueInput
+    create: XOR<IngredientCreateWithoutPriceProposalsInput, IngredientUncheckedCreateWithoutPriceProposalsInput>
+  }
+
+  export type PriceSourceCreateWithoutProposalsInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    supplier?: SupplierCreateNestedOneWithoutPriceSourcesInput
+    links?: ProductSourceLinkCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceUncheckedCreateWithoutProposalsInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    supplierId?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: ProductSourceLinkUncheckedCreateNestedManyWithoutSourceInput
+    syncRuns?: PriceSyncRunUncheckedCreateNestedManyWithoutSourceInput
+  }
+
+  export type PriceSourceCreateOrConnectWithoutProposalsInput = {
+    where: PriceSourceWhereUniqueInput
+    create: XOR<PriceSourceCreateWithoutProposalsInput, PriceSourceUncheckedCreateWithoutProposalsInput>
+  }
+
+  export type RecipePriceHistoryCreateWithoutProposalInput = {
+    id?: string
+    batchCostCents: number
+    unitCostCents: number
+    priceCents: number
+    margin: number
+    recordedAt?: Date | string
+    reason?: string | null
+    recipe: RecipeCreateNestedOneWithoutPriceHistoryInput
+  }
+
+  export type RecipePriceHistoryUncheckedCreateWithoutProposalInput = {
+    id?: string
+    recipeId: string
+    batchCostCents: number
+    unitCostCents: number
+    priceCents: number
+    margin: number
+    recordedAt?: Date | string
+    reason?: string | null
+  }
+
+  export type RecipePriceHistoryCreateOrConnectWithoutProposalInput = {
+    where: RecipePriceHistoryWhereUniqueInput
+    create: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput>
+  }
+
+  export type RecipePriceHistoryCreateManyProposalInputEnvelope = {
+    data: RecipePriceHistoryCreateManyProposalInput | RecipePriceHistoryCreateManyProposalInput[]
+  }
+
+  export type PriceSyncRunUpsertWithoutProposalsInput = {
+    update: XOR<PriceSyncRunUpdateWithoutProposalsInput, PriceSyncRunUncheckedUpdateWithoutProposalsInput>
+    create: XOR<PriceSyncRunCreateWithoutProposalsInput, PriceSyncRunUncheckedCreateWithoutProposalsInput>
+    where?: PriceSyncRunWhereInput
+  }
+
+  export type PriceSyncRunUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: PriceSyncRunWhereInput
+    data: XOR<PriceSyncRunUpdateWithoutProposalsInput, PriceSyncRunUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type PriceSyncRunUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    source?: PriceSourceUpdateOneWithoutSyncRunsNestedInput
+  }
+
+  export type PriceSyncRunUncheckedUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceId?: NullableStringFieldUpdateOperationsInput | string | null
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProductSourceLinkUpsertWithoutProposalsInput = {
+    update: XOR<ProductSourceLinkUpdateWithoutProposalsInput, ProductSourceLinkUncheckedUpdateWithoutProposalsInput>
+    create: XOR<ProductSourceLinkCreateWithoutProposalsInput, ProductSourceLinkUncheckedCreateWithoutProposalsInput>
+    where?: ProductSourceLinkWhereInput
+  }
+
+  export type ProductSourceLinkUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: ProductSourceLinkWhereInput
+    data: XOR<ProductSourceLinkUpdateWithoutProposalsInput, ProductSourceLinkUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type ProductSourceLinkUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredient?: IngredientUpdateOneRequiredWithoutSourceLinksNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutLinksNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IngredientUpsertWithoutPriceProposalsInput = {
+    update: XOR<IngredientUpdateWithoutPriceProposalsInput, IngredientUncheckedUpdateWithoutPriceProposalsInput>
+    create: XOR<IngredientCreateWithoutPriceProposalsInput, IngredientUncheckedCreateWithoutPriceProposalsInput>
+    where?: IngredientWhereInput
+  }
+
+  export type IngredientUpdateToOneWithWhereWithoutPriceProposalsInput = {
+    where?: IngredientWhereInput
+    data: XOR<IngredientUpdateWithoutPriceProposalsInput, IngredientUncheckedUpdateWithoutPriceProposalsInput>
+  }
+
+  export type IngredientUpdateWithoutPriceProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
+    factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
+    recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+  }
+
+  export type IngredientUncheckedUpdateWithoutPriceProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    packagePriceCents?: IntFieldUpdateOperationsInput | number
+    packageQty?: FloatFieldUpdateOperationsInput | number
+    packageUnit?: StringFieldUpdateOperationsInput | string
+    baseUnit?: StringFieldUpdateOperationsInput | string
+    factorId?: NullableStringFieldUpdateOperationsInput | string | null
+    conversionFactor?: FloatFieldUpdateOperationsInput | number
+    costPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    density?: NullableFloatFieldUpdateOperationsInput | number | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    importedFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewFlag?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+  }
+
+  export type PriceSourceUpsertWithoutProposalsInput = {
+    update: XOR<PriceSourceUpdateWithoutProposalsInput, PriceSourceUncheckedUpdateWithoutProposalsInput>
+    create: XOR<PriceSourceCreateWithoutProposalsInput, PriceSourceUncheckedCreateWithoutProposalsInput>
+    where?: PriceSourceWhereInput
+  }
+
+  export type PriceSourceUpdateToOneWithWhereWithoutProposalsInput = {
+    where?: PriceSourceWhereInput
+    data: XOR<PriceSourceUpdateWithoutProposalsInput, PriceSourceUncheckedUpdateWithoutProposalsInput>
+  }
+
+  export type PriceSourceUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    supplier?: SupplierUpdateOneWithoutPriceSourcesNestedInput
+    links?: ProductSourceLinkUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateWithoutProposalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: ProductSourceLinkUncheckedUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type RecipePriceHistoryUpsertWithWhereUniqueWithoutProposalInput = {
+    where: RecipePriceHistoryWhereUniqueInput
+    update: XOR<RecipePriceHistoryUpdateWithoutProposalInput, RecipePriceHistoryUncheckedUpdateWithoutProposalInput>
+    create: XOR<RecipePriceHistoryCreateWithoutProposalInput, RecipePriceHistoryUncheckedCreateWithoutProposalInput>
+  }
+
+  export type RecipePriceHistoryUpdateWithWhereUniqueWithoutProposalInput = {
+    where: RecipePriceHistoryWhereUniqueInput
+    data: XOR<RecipePriceHistoryUpdateWithoutProposalInput, RecipePriceHistoryUncheckedUpdateWithoutProposalInput>
+  }
+
+  export type RecipePriceHistoryUpdateManyWithWhereWithoutProposalInput = {
+    where: RecipePriceHistoryScalarWhereInput
+    data: XOR<RecipePriceHistoryUpdateManyMutationInput, RecipePriceHistoryUncheckedUpdateManyWithoutProposalInput>
+  }
+
   export type IngredientCreateManySupplierInput = {
     id?: string
     code?: string | null
@@ -37731,6 +48048,27 @@ export namespace Prisma {
     notes?: string | null
     importedFrom?: string | null
     reviewFlag?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceSourceCreateManySupplierInput = {
+    id?: string
+    code: string
+    name: string
+    baseUrl?: string | null
+    adapterType: string
+    captureMode?: string
+    taxMode?: string
+    currency?: string
+    rateLimitMs?: number
+    timeoutMs?: number
+    proposalTtlHours?: number
+    priceAlertThresholdPct?: number
+    configJson?: string | null
+    isActive?: boolean
+    lastSyncedAt?: Date | string | null
+    lastStatus?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -37755,6 +48093,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     factorRef?: UnitConversionRefUpdateOneWithoutIngredientsNestedInput
     recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateWithoutSupplierInput = {
@@ -37777,6 +48118,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateManyWithoutSupplierInput = {
@@ -37800,6 +48144,75 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PriceSourceUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: ProductSourceLinkUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: ProductSourceLinkUncheckedUpdateManyWithoutSourceNestedInput
+    syncRuns?: PriceSyncRunUncheckedUpdateManyWithoutSourceNestedInput
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutSourceNestedInput
+  }
+
+  export type PriceSourceUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    baseUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    adapterType?: StringFieldUpdateOperationsInput | string
+    captureMode?: StringFieldUpdateOperationsInput | string
+    taxMode?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    rateLimitMs?: IntFieldUpdateOperationsInput | number
+    timeoutMs?: IntFieldUpdateOperationsInput | number
+    proposalTtlHours?: IntFieldUpdateOperationsInput | number
+    priceAlertThresholdPct?: FloatFieldUpdateOperationsInput | number
+    configJson?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RecipeIngredientCreateManyIngredientInput = {
     id?: string
     recipeId: string
@@ -37807,6 +48220,74 @@ export namespace Prisma {
     unit: string
     costCents: number
     notes?: string | null
+  }
+
+  export type PresentationMaterialCreateManyIngredientInput = {
+    id?: string
+    presentationId: string
+    materialType?: string
+    name: string
+    quantity: number
+    unit: string
+    unitCostCents: number
+    totalCostCents: number
+  }
+
+  export type ProductSourceLinkCreateManyIngredientInput = {
+    id?: string
+    sourceId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceUpdateProposalCreateManyIngredientInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RecipeIngredientUpdateWithoutIngredientInput = {
@@ -37834,6 +48315,214 @@ export namespace Prisma {
     unit?: StringFieldUpdateOperationsInput | string
     costCents?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PresentationMaterialUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    materialType?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    presentation?: RecipePresentationUpdateOneRequiredWithoutMaterialsNestedInput
+  }
+
+  export type PresentationMaterialUncheckedUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    presentationId?: StringFieldUpdateOperationsInput | string
+    materialType?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PresentationMaterialUncheckedUpdateManyWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    presentationId?: StringFieldUpdateOperationsInput | string
+    materialType?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProductSourceLinkUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: PriceSourceUpdateOneRequiredWithoutLinksNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateManyWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceUpdateProposalUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    run?: PriceSyncRunUpdateOneWithoutProposalsNestedInput
+    link?: ProductSourceLinkUpdateOneWithoutProposalsNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutProposalsNestedInput
+    priceHistoryEntries?: RecipePriceHistoryUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutIngredientInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RecipeIngredientCreateManyRecipeInput = {
@@ -37888,6 +48577,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type PresentationSubrecipeCreateManySubRecipeInput = {
+    id?: string
+    presentationId: string
+    name: string
+    quantity: number
+    unit: string
+    costCents: number
+  }
+
   export type SaleItemCreateManyRecipeInput = {
     id?: string
     saleId: string
@@ -37903,6 +48601,7 @@ export namespace Prisma {
 
   export type RecipePriceHistoryCreateManyRecipeInput = {
     id?: string
+    proposalId?: string | null
     batchCostCents: number
     unitCostCents: number
     priceCents: number
@@ -38075,6 +48774,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PresentationSubrecipeUpdateWithoutSubRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    costCents?: IntFieldUpdateOperationsInput | number
+    presentation?: RecipePresentationUpdateOneRequiredWithoutSubrecipesNestedInput
+  }
+
+  export type PresentationSubrecipeUncheckedUpdateWithoutSubRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    presentationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    costCents?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PresentationSubrecipeUncheckedUpdateManyWithoutSubRecipeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    presentationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    costCents?: IntFieldUpdateOperationsInput | number
+  }
+
   export type SaleItemUpdateWithoutRecipeInput = {
     id?: StringFieldUpdateOperationsInput | string
     productName?: StringFieldUpdateOperationsInput | string
@@ -38122,10 +48848,12 @@ export namespace Prisma {
     margin?: FloatFieldUpdateOperationsInput | number
     recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    proposal?: PriceUpdateProposalUpdateOneWithoutPriceHistoryEntriesNestedInput
   }
 
   export type RecipePriceHistoryUncheckedUpdateWithoutRecipeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
     priceCents?: IntFieldUpdateOperationsInput | number
@@ -38136,6 +48864,7 @@ export namespace Prisma {
 
   export type RecipePriceHistoryUncheckedUpdateManyWithoutRecipeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
     priceCents?: IntFieldUpdateOperationsInput | number
@@ -38303,13 +49032,13 @@ export namespace Prisma {
 
   export type PresentationMaterialUpdateWithoutPresentationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
     materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     unitCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
+    ingredient?: IngredientUpdateOneWithoutPresentationMaterialsNestedInput
   }
 
   export type PresentationMaterialUncheckedUpdateWithoutPresentationInput = {
@@ -38336,11 +49065,11 @@ export namespace Prisma {
 
   export type PresentationSubrecipeUpdateWithoutPresentationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subRecipeId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     costCents?: IntFieldUpdateOperationsInput | number
+    subRecipe?: RecipeUpdateOneWithoutPresentationSubrecipesNestedInput
   }
 
   export type PresentationSubrecipeUncheckedUpdateWithoutPresentationInput = {
@@ -38785,6 +49514,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     supplier?: SupplierUpdateOneWithoutIngredientsNestedInput
     recipeIngredients?: RecipeIngredientUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateWithoutFactorRefInput = {
@@ -38807,6 +49539,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipeIngredients?: RecipeIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+    presentationMaterials?: PresentationMaterialUncheckedUpdateManyWithoutIngredientNestedInput
+    sourceLinks?: ProductSourceLinkUncheckedUpdateManyWithoutIngredientNestedInput
+    priceProposals?: PriceUpdateProposalUncheckedUpdateManyWithoutIngredientNestedInput
   }
 
   export type IngredientUncheckedUpdateManyWithoutFactorRefInput = {
@@ -38878,6 +49613,608 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductSourceLinkCreateManySourceInput = {
+    id?: string
+    ingredientId: string
+    isPrimary?: boolean
+    externalSku?: string | null
+    externalUrl?: string | null
+    externalName?: string | null
+    expectedPackageQty: number
+    expectedPackageUnit: string
+    expectedConversionFactor?: number
+    expectedBaseQty: number
+    packTolerancePct?: number
+    applyStrategy?: string
+    taxRatePct?: number
+    lastCheckedAt?: Date | string | null
+    lastSeenPriceCents?: number | null
+    lastSeenInStock?: boolean | null
+    lastError?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceSyncRunCreateManySourceInput = {
+    id?: string
+    triggerType: string
+    status?: string
+    totalChecked?: number
+    proposalsCreated?: number
+    errorsCount?: number
+    summaryJson?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+  }
+
+  export type PriceUpdateProposalCreateManySourceInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    linkId?: string | null
+    ingredientId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductSourceLinkUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ingredient?: IngredientUpdateOneRequiredWithoutSourceLinksNestedInput
+    proposals?: PriceUpdateProposalUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutLinkNestedInput
+  }
+
+  export type ProductSourceLinkUncheckedUpdateManyWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    externalSku?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    externalName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedPackageQty?: FloatFieldUpdateOperationsInput | number
+    expectedPackageUnit?: StringFieldUpdateOperationsInput | string
+    expectedConversionFactor?: FloatFieldUpdateOperationsInput | number
+    expectedBaseQty?: FloatFieldUpdateOperationsInput | number
+    packTolerancePct?: FloatFieldUpdateOperationsInput | number
+    applyStrategy?: StringFieldUpdateOperationsInput | string
+    taxRatePct?: FloatFieldUpdateOperationsInput | number
+    lastCheckedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastSeenPriceCents?: NullableIntFieldUpdateOperationsInput | number | null
+    lastSeenInStock?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceSyncRunUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    proposals?: PriceUpdateProposalUpdateManyWithoutRunNestedInput
+  }
+
+  export type PriceSyncRunUncheckedUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    proposals?: PriceUpdateProposalUncheckedUpdateManyWithoutRunNestedInput
+  }
+
+  export type PriceSyncRunUncheckedUpdateManyWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerType?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    totalChecked?: IntFieldUpdateOperationsInput | number
+    proposalsCreated?: IntFieldUpdateOperationsInput | number
+    errorsCount?: IntFieldUpdateOperationsInput | number
+    summaryJson?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PriceUpdateProposalUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    run?: PriceSyncRunUpdateOneWithoutProposalsNestedInput
+    link?: ProductSourceLinkUpdateOneWithoutProposalsNestedInput
+    ingredient?: IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput
+    priceHistoryEntries?: RecipePriceHistoryUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceUpdateProposalCreateManyLinkInput = {
+    id?: string
+    code: string
+    runId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceUpdateProposalUpdateWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    run?: PriceSyncRunUpdateOneWithoutProposalsNestedInput
+    ingredient?: IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutProposalsNestedInput
+    priceHistoryEntries?: RecipePriceHistoryUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    runId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PriceUpdateProposalCreateManyRunInput = {
+    id?: string
+    code: string
+    linkId?: string | null
+    ingredientId: string
+    sourceId: string
+    status?: string
+    applyStrategyUsed?: string
+    currentPriceCents: number
+    currentCostPerBaseUnit: number
+    currentIngredientUpdatedAt: Date | string
+    detectedPriceCents: number
+    detectedInStock?: boolean
+    detectedPackQty?: number | null
+    detectedPackUnit?: string | null
+    detectedRawTitle?: string | null
+    proposedPriceCents: number
+    proposedCostPerBaseUnit: number
+    proposedPackageQty?: number | null
+    proposedPackageUnit?: string | null
+    proposedConversionFactor?: number | null
+    diffPriceCents: number
+    diffPercent: number
+    packCheckStatus?: string
+    alertsJson?: string | null
+    evidenceUrl?: string | null
+    reviewNote?: string | null
+    reviewedAt?: Date | string | null
+    expiresAt: Date | string
+    appliedSnapshotJson?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PriceUpdateProposalUpdateWithoutRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: ProductSourceLinkUpdateOneWithoutProposalsNestedInput
+    ingredient?: IngredientUpdateOneRequiredWithoutPriceProposalsNestedInput
+    source?: PriceSourceUpdateOneRequiredWithoutProposalsNestedInput
+    priceHistoryEntries?: RecipePriceHistoryUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateWithoutRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priceHistoryEntries?: RecipePriceHistoryUncheckedUpdateManyWithoutProposalNestedInput
+  }
+
+  export type PriceUpdateProposalUncheckedUpdateManyWithoutRunInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    linkId?: NullableStringFieldUpdateOperationsInput | string | null
+    ingredientId?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    applyStrategyUsed?: StringFieldUpdateOperationsInput | string
+    currentPriceCents?: IntFieldUpdateOperationsInput | number
+    currentCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    currentIngredientUpdatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    detectedPriceCents?: IntFieldUpdateOperationsInput | number
+    detectedInStock?: BoolFieldUpdateOperationsInput | boolean
+    detectedPackQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    detectedPackUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    detectedRawTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedPriceCents?: IntFieldUpdateOperationsInput | number
+    proposedCostPerBaseUnit?: FloatFieldUpdateOperationsInput | number
+    proposedPackageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    proposedPackageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    proposedConversionFactor?: NullableFloatFieldUpdateOperationsInput | number | null
+    diffPriceCents?: IntFieldUpdateOperationsInput | number
+    diffPercent?: FloatFieldUpdateOperationsInput | number
+    packCheckStatus?: StringFieldUpdateOperationsInput | string
+    alertsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    evidenceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appliedSnapshotJson?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecipePriceHistoryCreateManyProposalInput = {
+    id?: string
+    recipeId: string
+    batchCostCents: number
+    unitCostCents: number
+    priceCents: number
+    margin: number
+    recordedAt?: Date | string
+    reason?: string | null
+  }
+
+  export type RecipePriceHistoryUpdateWithoutProposalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchCostCents?: IntFieldUpdateOperationsInput | number
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    priceCents?: IntFieldUpdateOperationsInput | number
+    margin?: FloatFieldUpdateOperationsInput | number
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    recipe?: RecipeUpdateOneRequiredWithoutPriceHistoryNestedInput
+  }
+
+  export type RecipePriceHistoryUncheckedUpdateWithoutProposalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+    batchCostCents?: IntFieldUpdateOperationsInput | number
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    priceCents?: IntFieldUpdateOperationsInput | number
+    margin?: FloatFieldUpdateOperationsInput | number
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RecipePriceHistoryUncheckedUpdateManyWithoutProposalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+    batchCostCents?: IntFieldUpdateOperationsInput | number
+    unitCostCents?: IntFieldUpdateOperationsInput | number
+    priceCents?: IntFieldUpdateOperationsInput | number
+    margin?: FloatFieldUpdateOperationsInput | number
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -38923,6 +50260,22 @@ export namespace Prisma {
      * @deprecated Use ImportSessionCountOutputTypeDefaultArgs instead
      */
     export type ImportSessionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ImportSessionCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceSourceCountOutputTypeDefaultArgs instead
+     */
+    export type PriceSourceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceSourceCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductSourceLinkCountOutputTypeDefaultArgs instead
+     */
+    export type ProductSourceLinkCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductSourceLinkCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceSyncRunCountOutputTypeDefaultArgs instead
+     */
+    export type PriceSyncRunCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceSyncRunCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceUpdateProposalCountOutputTypeDefaultArgs instead
+     */
+    export type PriceUpdateProposalCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceUpdateProposalCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -39011,6 +50364,22 @@ export namespace Prisma {
      * @deprecated Use ImportRowDefaultArgs instead
      */
     export type ImportRowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ImportRowDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceSourceDefaultArgs instead
+     */
+    export type PriceSourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceSourceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductSourceLinkDefaultArgs instead
+     */
+    export type ProductSourceLinkArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductSourceLinkDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceSyncRunDefaultArgs instead
+     */
+    export type PriceSyncRunArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceSyncRunDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PriceUpdateProposalDefaultArgs instead
+     */
+    export type PriceUpdateProposalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PriceUpdateProposalDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

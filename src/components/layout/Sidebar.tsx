@@ -14,6 +14,7 @@ import {
   Scale,
   FileSpreadsheet,
   Database,
+  TrendingUp,
   Menu,
   X,
 } from "lucide-react";
@@ -24,6 +25,7 @@ const navigation = [
   { name: "Ventas & Cobros", href: "/ventas", icon: ShoppingCart },
   { name: "Cuadre Semanal", href: "/cuadre", icon: CalendarDays },
   { name: "Productos & Insumos", href: "/ingredientes", icon: UtensilsCrossed },
+  { name: "Actualización de Precios", href: "/actualizacion-precios", icon: TrendingUp },
   { name: "Recetas & Subrecetas", href: "/recetas", icon: ChefHat },
   { name: "Costos y Precios", href: "/costos-precios", icon: BadgeDollarSign },
   { name: "Gastos Operativos", href: "/gastos", icon: Receipt },
