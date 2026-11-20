@@ -42,8 +42,14 @@ export async function GET(request: Request) {
     const items = await prisma.ingredient.findMany({
       where,
       include: { supplier: true, factorRef: true },
-      orderBy: { name: "asc" },
+      orderBy: { code: "desc" },
     });
+
+    const parseCodeNum = (code?: string | null) => {
+      const m = code?.match(/(\d+)$/);
+      return m ? parseInt(m[1], 10) : 0;
+    };
+    items.sort((a: any, b: any) => parseCodeNum(b.code) - parseCodeNum(a.code));
 
     return NextResponse.json({ success: true, data: items.map(mapIngredientDto) });
   } catch (error: any) {

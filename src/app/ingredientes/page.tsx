@@ -14,6 +14,8 @@ import {
   Trash2,
   RotateCcw,
   RefreshCw,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
@@ -82,6 +84,7 @@ export default function IngredientesPage() {
 
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<IngredientItem | null>(null);
 
@@ -282,15 +285,45 @@ export default function IngredientesPage() {
     return fallbacks[slug] || slug;
   };
 
-  const filtered = ingredients.filter((ing) => {
-    const q = search.toLowerCase();
-    const matchesSearch =
-      ing.name.toLowerCase().includes(q) ||
-      (ing.code && ing.code.toLowerCase().includes(q)) ||
-      (ing.supplierName && ing.supplierName.toLowerCase().includes(q));
-    const matchesCategory = selectedCategory === "ALL" || ing.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const parseCodeNumber = (code?: string | null) => {
+    const match = code?.match(/(\d+)$/);
+    return match ? parseInt(match[1], 10) : 0;
+  };
+
+  const filtered = ingredients
+    .filter((ing) => {
+      const q = search.toLowerCase();
+      const matchesSearch =
+        ing.name.toLowerCase().includes(q) ||
+        (ing.code && ing.code.toLowerCase().includes(q)) ||
+        (ing.supplierName && ing.supplierName.toLowerCase().includes(q));
+      const matchesCategory = selectedCategory === "ALL" || ing.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => parseCodeNumber(b.code) - parseCodeNumber(a.code));
+
+  const categoryOrder =
+    categories.length > 0
+      ? categories.map((c) => c.slug)
+      : ["INGREDIENT", "PACKAGING", "DECORATION", "UTENSIL"];
+
+  const groupedMap = new Map<string, IngredientItem[]>();
+  for (const item of filtered) {
+    const list = groupedMap.get(item.category) || [];
+    list.push(item);
+    groupedMap.set(item.category, list);
+  }
+
+  const orderedCategoryKeys = [
+    ...categoryOrder.filter((slug) => groupedMap.has(slug)),
+    ...Array.from(groupedMap.keys()).filter((slug) => !categoryOrder.includes(slug)),
+  ];
+
+  const groupedSections = orderedCategoryKeys.map((slug) => ({
+    slug,
+    label: getCategoryLabel(slug),
+    items: groupedMap.get(slug) || [],
+  }));
 
   return (
     <div className="min-h-screen bg-[#FAF8F6]">
@@ -394,110 +427,150 @@ export default function IngredientesPage() {
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-[#E8E2D9] shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#FAF8F6] border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
-                    <th className="py-3 px-4">ID</th>
-                    <th className="py-3 px-4">Nombre / Producto</th>
-                    <th className="py-3 px-4">Categoría</th>
-                    <th className="py-3 px-4">Suplidor</th>
-                    <th className="py-3 px-4">Presentación Compra</th>
-                    <th className="py-3 px-4">Costo x Unidad Base</th>
-                    <th className="py-3 px-4">Estado</th>
-                    <th className="py-3 px-4 text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#E8E2D9] text-sm">
-                  {filtered.map((item) => (
-                    <tr
-                      key={item.id}
-                      className={`hover:bg-[#FAF8F6]/80 transition-colors ${
-                        !item.isActive ? "opacity-60 bg-gray-50" : ""
-                      }`}
-                    >
-                      <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#F3EFEA] text-[#9C4266]">
-                          {item.code || item.id.slice(0, 8)}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 font-medium text-[#4A3B32]">
-                        <div className="flex items-center gap-2">
-                          <span>{item.name}</span>
-                          {item.reviewFlag && (
-                            <span
-                              title={item.notes || "Dato importado con alerta"}
-                              className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#FEFCBF] text-[#744210]"
+          <div className="space-y-6">
+            {groupedSections.map((section) => {
+              const isCollapsed = Boolean(collapsedSections[section.slug]);
+              return (
+                <section
+                  key={section.slug}
+                  className="bg-white rounded-xl border border-[#E8E2D9] shadow-sm overflow-hidden"
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCollapsedSections((prev) => ({
+                        ...prev,
+                        [section.slug]: !prev[section.slug],
+                      }))
+                    }
+                    className="w-full px-4 py-3 bg-[#FAF8F6] border-b border-[#E8E2D9] flex items-center justify-between text-left hover:bg-[#F3EFEA]/70 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      {isCollapsed ? (
+                        <ChevronRight className="w-4 h-4 text-[#9C4266]" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-[#9C4266]" />
+                      )}
+                      <h2 className="font-serif font-bold text-base text-[#4A3B32]">
+                        {section.label}
+                      </h2>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#F3EFEA] text-[#9C4266] tabular-nums">
+                        {section.items.length}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-[#7D6E65] font-medium">
+                      Orden: ID descendente
+                    </span>
+                  </button>
+
+                  {!isCollapsed && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-[#FAF8F6]/60 border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
+                            <th className="py-3 px-4">ID</th>
+                            <th className="py-3 px-4">Nombre / Producto</th>
+                            <th className="py-3 px-4">Categoría</th>
+                            <th className="py-3 px-4">Suplidor</th>
+                            <th className="py-3 px-4">Presentación Compra</th>
+                            <th className="py-3 px-4">Costo x Unidad Base</th>
+                            <th className="py-3 px-4">Estado</th>
+                            <th className="py-3 px-4 text-right">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E8E2D9] text-sm">
+                          {section.items.map((item) => (
+                            <tr
+                              key={item.id}
+                              className={`hover:bg-[#FAF8F6]/80 transition-colors ${
+                                !item.isActive ? "opacity-60 bg-[#F3EFEA]/50" : ""
+                              }`}
                             >
-                              Revisión
-                            </span>
-                          )}
-                        </div>
-                        {item.importedFrom && (
-                          <span className="text-[10px] text-[#A89F91] block">
-                            Origen: {item.importedFrom}
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#F3EFEA] text-[#7D6E65]">
-                          {getCategoryLabel(item.category)}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-[#7D6E65]">
-                        {item.supplierName || "—"}
-                      </td>
-                      <td className="py-3.5 px-4 text-[#4A3B32] tabular-nums">
-                        <div className="font-medium">{formatDOP(item.packagePriceCents)}</div>
-                        <div className="text-xs text-[#7D6E65] flex items-center gap-1.5 flex-wrap">
-                          <span>
-                            por {item.packageQty} {item.packageUnit}
-                          </span>
-                          {(item.conversionFactor && item.conversionFactor !== 1) || item.factorName ? (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#FAF5F7] text-[#9C4266] border border-[#F3D5E2]">
-                              Factor ×{item.conversionFactor ?? 1}
-                            </span>
-                          ) : null}
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-4 text-[#9C4266] font-semibold tabular-nums">
-                        RD$ {(item.costPerBaseUnit).toFixed(4)} / {item.baseUnit}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                            item.isActive
-                              ? "bg-[#C6F6D5] text-[#22543D]"
-                              : "bg-[#FED7D7] text-[#742A2A]"
-                          }`}
-                        >
-                          {item.isActive ? "Activo" : "Inactivo"}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleOpenEdit(item)}
-                            title="Editar insumo"
-                            className="p-1.5 text-[#7D6E65] hover:text-[#9C4266] rounded hover:bg-[#F3EFEA] transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleToggleActive(item)}
-                            title={item.isActive ? "Desactivar" : "Reactivar"}
-                            className="p-1.5 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#F3EFEA] transition-colors"
-                          >
-                            {item.isActive ? <Trash2 className="w-4 h-4" /> : <RotateCcw className="w-4 h-4" />}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                              <td className="py-3.5 px-4">
+                                <span className="inline-flex items-center font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#F3EFEA] text-[#9C4266]">
+                                  {item.code || item.id.slice(0, 8)}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 font-medium text-[#4A3B32]">
+                                <div className="flex items-center gap-2">
+                                  <span>{item.name}</span>
+                                  {item.reviewFlag && (
+                                    <span
+                                      title={item.notes || "Dato importado con alerta"}
+                                      className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#FEFCBF] text-[#744210]"
+                                    >
+                                      Revisión
+                                    </span>
+                                  )}
+                                </div>
+                                {item.importedFrom && (
+                                  <span className="text-[10px] text-[#A89F91] block">
+                                    Origen: {item.importedFrom}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3.5 px-4">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#F3EFEA] text-[#7D6E65]">
+                                  {getCategoryLabel(item.category)}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 text-[#7D6E65]">
+                                {item.supplierName || "—"}
+                              </td>
+                              <td className="py-3.5 px-4 text-[#4A3B32] tabular-nums">
+                                <div className="font-medium">{formatDOP(item.packagePriceCents)}</div>
+                                <div className="text-xs text-[#7D6E65] flex items-center gap-1.5 flex-wrap">
+                                  <span>
+                                    por {item.packageQty} {item.packageUnit}
+                                  </span>
+                                  {(item.conversionFactor && item.conversionFactor !== 1) || item.factorName ? (
+                                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#FAF5F7] text-[#9C4266] border border-[#F3D5E2]">
+                                      Factor ×{item.conversionFactor ?? 1}
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </td>
+                              <td className="py-3.5 px-4 text-[#9C4266] font-semibold tabular-nums">
+                                RD$ {(item.costPerBaseUnit).toFixed(4)} / {item.baseUnit}
+                              </td>
+                              <td className="py-3.5 px-4">
+                                <span
+                                  className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                                    item.isActive
+                                      ? "bg-[#C6F6D5] text-[#22543D]"
+                                      : "bg-[#FED7D7] text-[#742A2A]"
+                                  }`}
+                                >
+                                  {item.isActive ? "Activo" : "Inactivo"}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-4 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={() => handleOpenEdit(item)}
+                                    title="Editar insumo"
+                                    className="p-1.5 text-[#7D6E65] hover:text-[#9C4266] rounded hover:bg-[#F3EFEA] transition-colors"
+                                  >
+                                    <Edit2 className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleToggleActive(item)}
+                                    title={item.isActive ? "Desactivar" : "Reactivar"}
+                                    className="p-1.5 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#F3EFEA] transition-colors"
+                                  >
+                                    {item.isActive ? <Trash2 className="w-4 h-4" /> : <RotateCcw className="w-4 h-4" />}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
           </div>
         )}
 
