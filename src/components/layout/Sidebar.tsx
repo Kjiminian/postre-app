@@ -12,7 +12,7 @@ import {
   Receipt,
   Scale,
   FileSpreadsheet,
-  Settings,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,11 +20,12 @@ const navigation = [
   { name: "Panel Principal", href: "/", icon: LayoutDashboard },
   { name: "Ventas & Cobros", href: "/ventas", icon: ShoppingCart },
   { name: "Cuadre Semanal", href: "/cuadre", icon: CalendarDays },
-  { name: "Ingredientes & Insumos", href: "/ingredientes", icon: UtensilsCrossed },
+  { name: "Productos & Insumos", href: "/ingredientes", icon: UtensilsCrossed },
   { name: "Recetas & Subrecetas", href: "/recetas", icon: ChefHat },
   { name: "Costos y Precios", href: "/costos-precios", icon: BadgeDollarSign },
   { name: "Gastos Operativos", href: "/gastos", icon: Receipt },
   { name: "Conversor de Unidades", href: "/conversiones", icon: Scale },
+  { name: "Mantenimientos", href: "/mantenimientos", icon: Database },
   { name: "Importación XLSX", href: "/importar", icon: FileSpreadsheet },
 ];
 

@@ -274,6 +274,51 @@ const tests = [
       assert.strictEqual(historicalSaleItem.totalCostCents, 40000);
     },
   },
+  {
+    name: "IDs Identificadores Secuenciales con Huecos (SUP-001, SUP-003 -> SUP-004)",
+    fn: () => {
+      const parseSeq = (code, prefix) => {
+        if (!code) return 0;
+        const m = code.match(new RegExp(`^${prefix}-(\\d+)$`, "i"));
+        return m ? parseInt(m[1], 10) : 0;
+      };
+      const nextCode = (codes, prefix) => {
+        const max = codes.reduce((acc, c) => Math.max(acc, parseSeq(c, prefix)), 0);
+        return `${prefix}-${String(max + 1).padStart(3, "0")}`;
+      };
+      assert.strictEqual(nextCode([], "PROD"), "PROD-001");
+      assert.strictEqual(nextCode(["SUP-001", "SUP-003", null], "SUP"), "SUP-004");
+      assert.strictEqual(nextCode(["CAT-009"], "CAT"), "CAT-010");
+    },
+  },
+  {
+    name: "Sección de Factor en Productos: Factor Explícito vs Conversión Estándar (PRE-001)",
+    fn: () => {
+      const calcBase = ({ priceCents, qty, pkgUnit, baseUnit, factor }) => {
+        if (!Number.isFinite(factor) || factor <= 0) return { ok: false };
+        let effectiveQty = qty * factor;
+        if (factor === 1 && pkgUnit !== baseUnit) {
+          if (pkgUnit === "lb" && baseUnit === "g") effectiveQty = qty * 453.59237;
+        }
+        return { ok: true, effectiveQty, costPerBaseUnit: (priceCents / 100) / effectiveQty };
+      };
+
+      // Caso 1: Factor explícito (1 caja de 12 unidades = 12 unidades base)
+      const withFactor = calcBase({ priceCents: 60000, qty: 1, pkgUnit: "unidad", baseUnit: "unidad", factor: 12 });
+      assert.strictEqual(withFactor.ok, true);
+      assert.strictEqual(withFactor.effectiveQty, 12);
+      assert.strictEqual(withFactor.costPerBaseUnit, 50);
+
+      // Caso 2: Factor = 1 con unidades distintas (1 lb -> 453.59237 g)
+      const withStd = calcBase({ priceCents: 10000, qty: 1, pkgUnit: "lb", baseUnit: "g", factor: 1 });
+      assert.strictEqual(withStd.ok, true);
+      assert.ok(Math.abs(withStd.effectiveQty - 453.59237) < 0.0001);
+
+      // Caso 3: Factor <= 0 rechazado
+      const invalid = calcBase({ priceCents: 10000, qty: 1, pkgUnit: "g", baseUnit: "g", factor: 0 });
+      assert.strictEqual(invalid.ok, false);
+    },
+  },
 ];
 
 console.log("=================================================");

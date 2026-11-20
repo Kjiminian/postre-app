@@ -12,15 +12,17 @@ import {
   Package,
   Edit2,
   Trash2,
+  RotateCcw,
   RefreshCw,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
-import { normalizeToBase } from "@/lib/conversions";
+import { calculateIngredientBaseCost } from "@/lib/ingredient-cost";
 import { ItemCategory } from "@/types";
 
 interface IngredientItem {
   id: string;
+  code?: string | null;
   name: string;
   category: ItemCategory;
   supplierId?: string | null;
@@ -29,6 +31,9 @@ interface IngredientItem {
   packageQty: number;
   packageUnit: string;
   baseUnit: string;
+  factorId?: string | null;
+  factorName?: string | null;
+  conversionFactor?: number;
   costPerBaseUnit: number;
   density?: number | null;
   reviewFlag: boolean;
@@ -39,12 +44,39 @@ interface IngredientItem {
 
 interface SupplierItem {
   id: string;
+  code?: string | null;
   name: string;
+}
+
+interface CategoryItem {
+  id: string;
+  code: string;
+  slug: string;
+  name: string;
+}
+
+interface UnitItem {
+  id: string;
+  code: string;
+  symbol: string;
+  name: string;
+}
+
+interface FactorItem {
+  id: string;
+  code?: string | null;
+  name: string;
+  fromUnit: string;
+  toUnit: string;
+  factor: number;
 }
 
 export default function IngredientesPage() {
   const [ingredients, setIngredients] = useState<IngredientItem[]>([]);
   const [suppliers, setSuppliers] = useState<SupplierItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [units, setUnits] = useState<UnitItem[]>([]);
+  const [factors, setFactors] = useState<FactorItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,6 +94,8 @@ export default function IngredientesPage() {
     packageQty: 1,
     packageUnit: "unidad",
     baseUnit: "unidad",
+    factorId: "",
+    conversionFactor: "1",
     density: "",
     notes: "",
   });
@@ -70,18 +104,33 @@ export default function IngredientesPage() {
     setLoading(true);
     setError(null);
     try {
-      const [resIng, resSup] = await Promise.all([
+      const [resIng, resSup, resCat, resUni, resFac] = await Promise.all([
         fetch("/api/ingredientes?includeInactive=true"),
         fetch("/api/proveedores"),
+        fetch("/api/categorias"),
+        fetch("/api/unidades"),
+        fetch("/api/conversiones"),
       ]);
 
-      const dataIng = await resIng.json();
-      const dataSup = await resSup.json();
+      const [dataIng, dataSup, dataCat, dataUni, dataFac] = await Promise.all([
+        resIng.json(),
+        resSup.json(),
+        resCat.json(),
+        resUni.json(),
+        resFac.json(),
+      ]);
 
       if (dataIng.success) setIngredients(dataIng.data);
-      else throw new Error(dataIng.error || "Error cargando ingredientes");
+      else throw new Error(dataIng.error || "Error cargando productos");
 
       if (dataSup.success) setSuppliers(dataSup.data);
+      else throw new Error(dataSup.error || "Error cargando suplidores");
+      if (dataCat.success) setCategories(dataCat.data);
+      else throw new Error(dataCat.error || "Error cargando categorías");
+      if (dataUni.success) setUnits(dataUni.data);
+      else throw new Error(dataUni.error || "Error cargando unidades");
+      if (dataFac.success) setFactors(dataFac.data);
+      else throw new Error(dataFac.error || "Error cargando factores");
     } catch (err: any) {
       setError(err.message || "Error al conectar con la base de datos");
     } finally {
@@ -96,19 +145,28 @@ export default function IngredientesPage() {
   // Cálculo en vivo del costo por unidad base
   const calcLiveCost = () => {
     const priceCents = Math.round((Number(formData.packagePriceDOP) || 0) * 100);
-    const qty = Number(formData.packageQty) || 1;
+    const qty = Number(formData.packageQty) || 0;
+    const factorNum = Number(formData.conversionFactor) || 0;
     const densityVal = formData.density ? Number(formData.density) : undefined;
 
-    const baseResult = normalizeToBase(qty, formData.packageUnit, formData.baseUnit, densityVal);
+    const baseResult = calculateIngredientBaseCost({
+      packagePriceCents: priceCents,
+      packageQty: qty,
+      packageUnit: formData.packageUnit,
+      baseUnit: formData.baseUnit,
+      conversionFactor: factorNum,
+      hasExplicitFactor: Boolean(formData.factorId) || factorNum !== 1,
+      density: densityVal,
+    });
 
     if (!baseResult.ok) {
-      return { costFormatted: "—", error: baseResult.error };
+      return { costFormatted: "—", effectiveQty: 0, error: baseResult.error };
     }
 
-    const costPerBaseDOP = (priceCents / 100) / baseResult.value;
     return {
-      costFormatted: `RD$ ${costPerBaseDOP.toFixed(4)} por ${formData.baseUnit}`,
-      costRaw: costPerBaseDOP,
+      costFormatted: `RD$ ${baseResult.costPerBaseUnit.toFixed(4)} por ${formData.baseUnit}`,
+      effectiveQty: baseResult.effectiveBaseQty,
+      costRaw: baseResult.costPerBaseUnit,
       error: null,
     };
   };
@@ -119,12 +177,14 @@ export default function IngredientesPage() {
     setEditingItem(null);
     setFormData({
       name: "",
-      category: (selectedCategory !== "ALL" ? selectedCategory : "INGREDIENT") as ItemCategory,
+      category: (selectedCategory !== "ALL" ? selectedCategory : categories[0]?.slug || "INGREDIENT") as ItemCategory,
       supplierId: "",
       packagePriceDOP: 100,
       packageQty: 1,
       packageUnit: "unidad",
       baseUnit: "unidad",
+      factorId: "",
+      conversionFactor: "1",
       density: "",
       notes: "",
     });
@@ -141,6 +201,8 @@ export default function IngredientesPage() {
       packageQty: item.packageQty,
       packageUnit: item.packageUnit,
       baseUnit: item.baseUnit,
+      factorId: item.factorId || "",
+      conversionFactor: String(item.conversionFactor ?? 1),
       density: item.density ? String(item.density) : "",
       notes: item.notes || "",
     });
@@ -159,6 +221,8 @@ export default function IngredientesPage() {
       packageQty: Number(formData.packageQty) || 1,
       packageUnit: formData.packageUnit,
       baseUnit: formData.baseUnit,
+      factorId: formData.factorId || null,
+      conversionFactor: Number(formData.conversionFactor) || 1,
       density: formData.density ? Number(formData.density) : null,
       notes: formData.notes,
     };
@@ -197,16 +261,33 @@ export default function IngredientesPage() {
         body: JSON.stringify({ id: item.id, isActive: !item.isActive }),
       });
       const json = await res.json();
-      if (json.success) loadData();
+      if (!json.success) {
+        throw new Error(json.error || "No se pudo actualizar el estado");
+      }
+      loadData();
     } catch (err: any) {
       alert("Error al actualizar estado: " + err.message);
     }
   };
 
+  const getCategoryLabel = (slug: string) => {
+    const found = categories.find((c) => c.slug === slug);
+    if (found) return found.name;
+    const fallbacks: Record<string, string> = {
+      INGREDIENT: "Ingrediente",
+      PACKAGING: "Empaque",
+      DECORATION: "Decoración",
+      UTENSIL: "Utensilio",
+    };
+    return fallbacks[slug] || slug;
+  };
+
   const filtered = ingredients.filter((ing) => {
+    const q = search.toLowerCase();
     const matchesSearch =
-      ing.name.toLowerCase().includes(search.toLowerCase()) ||
-      (ing.supplierName && ing.supplierName.toLowerCase().includes(search.toLowerCase()));
+      ing.name.toLowerCase().includes(q) ||
+      (ing.code && ing.code.toLowerCase().includes(q)) ||
+      (ing.supplierName && ing.supplierName.toLowerCase().includes(q));
     const matchesCategory = selectedCategory === "ALL" || ing.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -256,10 +337,14 @@ export default function IngredientesPage() {
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
             {[
               { id: "ALL", label: "Todos" },
-              { id: "INGREDIENT", label: "Ingredientes" },
-              { id: "PACKAGING", label: "Empaques" },
-              { id: "DECORATION", label: "Decoración" },
-              { id: "UTENSIL", label: "Utensilios" },
+              ...(categories.length > 0
+                ? categories.map((c) => ({ id: c.slug, label: c.name }))
+                : [
+                    { id: "INGREDIENT", label: "Ingredientes" },
+                    { id: "PACKAGING", label: "Empaques" },
+                    { id: "DECORATION", label: "Decoración" },
+                    { id: "UTENSIL", label: "Utensilios" },
+                  ]),
             ].map((cat) => (
               <button
                 key={cat.id}
@@ -314,7 +399,8 @@ export default function IngredientesPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-[#FAF8F6] border-b border-[#E8E2D9] text-xs font-semibold text-[#7D6E65] uppercase tracking-wider">
-                    <th className="py-3 px-4">Nombre / Insumo</th>
+                    <th className="py-3 px-4">ID</th>
+                    <th className="py-3 px-4">Nombre / Producto</th>
                     <th className="py-3 px-4">Categoría</th>
                     <th className="py-3 px-4">Suplidor</th>
                     <th className="py-3 px-4">Presentación Compra</th>
@@ -331,6 +417,11 @@ export default function IngredientesPage() {
                         !item.isActive ? "opacity-60 bg-gray-50" : ""
                       }`}
                     >
+                      <td className="py-3.5 px-4">
+                        <span className="inline-flex items-center font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#F3EFEA] text-[#9C4266]">
+                          {item.code || item.id.slice(0, 8)}
+                        </span>
+                      </td>
                       <td className="py-3.5 px-4 font-medium text-[#4A3B32]">
                         <div className="flex items-center gap-2">
                           <span>{item.name}</span>
@@ -351,25 +442,26 @@ export default function IngredientesPage() {
                       </td>
                       <td className="py-3.5 px-4">
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#F3EFEA] text-[#7D6E65]">
-                          {item.category === "INGREDIENT"
-                            ? "Ingrediente"
-                            : item.category === "PACKAGING"
-                            ? "Empaque"
-                            : item.category === "DECORATION"
-                            ? "Decoración"
-                            : "Utensilio"}
+                          {getCategoryLabel(item.category)}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-[#7D6E65]">
                         {item.supplierName || "—"}
                       </td>
-                      <td className="py-3.5 px-4 text-[#4A3B32]">
+                      <td className="py-3.5 px-4 text-[#4A3B32] tabular-nums">
                         <div className="font-medium">{formatDOP(item.packagePriceCents)}</div>
-                        <div className="text-xs text-[#7D6E65]">
-                          por {item.packageQty} {item.packageUnit}
+                        <div className="text-xs text-[#7D6E65] flex items-center gap-1.5 flex-wrap">
+                          <span>
+                            por {item.packageQty} {item.packageUnit}
+                          </span>
+                          {(item.conversionFactor && item.conversionFactor !== 1) || item.factorName ? (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#FAF5F7] text-[#9C4266] border border-[#F3D5E2]">
+                              Factor ×{item.conversionFactor ?? 1}
+                            </span>
+                          ) : null}
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-[#9C4266] font-semibold">
+                      <td className="py-3.5 px-4 text-[#9C4266] font-semibold tabular-nums">
                         RD$ {(item.costPerBaseUnit).toFixed(4)} / {item.baseUnit}
                       </td>
                       <td className="py-3.5 px-4">
@@ -397,7 +489,7 @@ export default function IngredientesPage() {
                             title={item.isActive ? "Desactivar" : "Reactivar"}
                             className="p-1.5 text-[#7D6E65] hover:text-[#C53030] rounded hover:bg-[#F3EFEA] transition-colors"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            {item.isActive ? <Trash2 className="w-4 h-4" /> : <RotateCcw className="w-4 h-4" />}
                           </button>
                         </div>
                       </td>
@@ -420,11 +512,16 @@ export default function IngredientesPage() {
                 <X className="w-5 h-5" />
               </button>
 
-              <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">
-                {editingItem ? "Editar Insumo" : "Nuevo Insumo o Empaque"}
-              </h2>
+              <div className="flex items-center gap-2 mb-1">
+                <h2 className="text-xl font-serif font-bold text-[#4A3B32]">
+                  {editingItem ? "Editar Producto / Insumo" : "Nuevo Producto / Insumo"}
+                </h2>
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#F3EFEA] text-[#9C4266]">
+                  {editingItem ? editingItem.code || editingItem.id.slice(0, 8) : "PROD-XXX"}
+                </span>
+              </div>
               <p className="text-xs text-[#7D6E65] mb-5">
-                Ingresa el costo del empaque comercial para calcular automáticamente el costo por unidad base.
+                Ingresa el costo del empaque comercial y su factor de conversión para calcular automáticamente el costo por unidad base.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -448,10 +545,20 @@ export default function IngredientesPage() {
                       onChange={(e) => setFormData({ ...formData, category: e.target.value as ItemCategory })}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] focus:outline-none focus:ring-2 focus:ring-[#9C4266] bg-white"
                     >
-                      <option value="INGREDIENT">Ingrediente</option>
-                      <option value="PACKAGING">Empaque</option>
-                      <option value="DECORATION">Decoración</option>
-                      <option value="UTENSIL">Utensilio</option>
+                      {categories.length > 0 ? (
+                        categories.map((c) => (
+                          <option key={c.id} value={c.slug}>
+                            {c.name} ({c.code})
+                          </option>
+                        ))
+                      ) : (
+                        <>
+                          <option value="INGREDIENT">Ingrediente</option>
+                          <option value="PACKAGING">Empaque</option>
+                          <option value="DECORATION">Decoración</option>
+                          <option value="UTENSIL">Utensilio</option>
+                        </>
+                      )}
                     </select>
                   </div>
                   <div>
@@ -509,14 +616,24 @@ export default function IngredientesPage() {
                         onChange={(e) => setFormData({ ...formData, packageUnit: e.target.value })}
                         className="w-full px-2 py-1.5 text-sm rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
                       >
-                        <option value="unidad">unidad</option>
-                        <option value="g">gramos (g)</option>
-                        <option value="kg">kilos (kg)</option>
-                        <option value="lb">libras (lb)</option>
-                        <option value="oz">onzas (oz)</option>
-                        <option value="ml">mililitros (ml)</option>
-                        <option value="l">litros (l)</option>
-                        <option value="yarda">yarda</option>
+                        {units.length > 0 ? (
+                          units.map((u) => (
+                            <option key={u.id} value={u.symbol}>
+                              {u.name} ({u.symbol})
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="unidad">unidad</option>
+                            <option value="g">gramos (g)</option>
+                            <option value="kg">kilos (kg)</option>
+                            <option value="lb">libras (lb)</option>
+                            <option value="oz">onzas (oz)</option>
+                            <option value="ml">mililitros (ml)</option>
+                            <option value="l">litros (l)</option>
+                            <option value="yarda">yarda</option>
+                          </>
+                        )}
                       </select>
                     </div>
                   </div>
@@ -529,10 +646,20 @@ export default function IngredientesPage() {
                         onChange={(e) => setFormData({ ...formData, baseUnit: e.target.value })}
                         className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
                       >
-                        <option value="unidad">unidad</option>
-                        <option value="g">gramo (g)</option>
-                        <option value="ml">mililitro (ml)</option>
-                        <option value="yarda">yarda</option>
+                        {units.length > 0 ? (
+                          units.map((u) => (
+                            <option key={u.id} value={u.symbol}>
+                              {u.name} ({u.symbol})
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="unidad">unidad</option>
+                            <option value="g">gramo (g)</option>
+                            <option value="ml">mililitro (ml)</option>
+                            <option value="yarda">yarda</option>
+                          </>
+                        )}
                       </select>
                     </div>
                     <div>
@@ -551,11 +678,67 @@ export default function IngredientesPage() {
                   </div>
                 </div>
 
+                {/* SECCIÓN DE FACTOR */}
+                <div className="p-3.5 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2.5">
+                  <div className="text-xs font-semibold text-[#4A3B32] flex items-center justify-between">
+                    <span>Sección de Factor de Conversión</span>
+                    <span className="text-[10px] font-normal text-[#7D6E65]">
+                      Cantidad × Factor = Base ({formData.baseUnit})
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div className="sm:col-span-2">
+                      <label className="block text-[11px] text-[#7D6E65] mb-1">Factor del Catálogo (opcional)</label>
+                      <select
+                        value={formData.factorId}
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          const found = factors.find((f) => f.id === selectedId);
+                          setFormData({
+                            ...formData,
+                            factorId: selectedId,
+                            conversionFactor: found ? String(found.factor) : "1",
+                          });
+                        }}
+                        className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
+                      >
+                        <option value="">(Conversión estándar / manual)</option>
+                        {factors.map((f) => (
+                          <option key={f.id} value={f.id}>
+                            {f.code ? `[${f.code}] ` : ""}
+                            {f.name} (1 {f.fromUnit} = {f.factor} {f.toUnit})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] text-[#7D6E65] mb-1">Factor (&gt; 0)</label>
+                      <input
+                        type="number"
+                        step="any"
+                        min="0.0001"
+                        required
+                        value={formData.conversionFactor}
+                        onChange={(e) => setFormData({ ...formData, conversionFactor: e.target.value })}
+                        className="w-full px-2.5 py-1.5 text-sm rounded-lg border border-[#E8E2D9] bg-white focus:outline-none focus:ring-2 focus:ring-[#9C4266]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 {/* Previsualización en vivo */}
                 <div className="p-3 rounded-lg bg-[#FAF5F7] border border-[#F3D5E2] flex items-center justify-between">
                   <div>
-                    <span className="text-[11px] text-[#7D6E65] block font-medium">Costo unitario calculado:</span>
+                    <span className="text-[11px] text-[#7D6E65] block font-medium">
+                      Costo unitario calculado
+                      {livePreview.effectiveQty > 0
+                        ? ` (${livePreview.effectiveQty.toFixed(2)} ${formData.baseUnit} efectivos)`
+                        : ""}:
+                    </span>
                     <span className="text-sm font-bold text-[#9C4266]">{livePreview.costFormatted}</span>
+                    {livePreview.error && (
+                      <span className="block text-[11px] text-[#C53030] mt-0.5">{livePreview.error}</span>
+                    )}
                   </div>
                   <Sparkles className="w-5 h-5 text-[#9C4266]" />
                 </div>

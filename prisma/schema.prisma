@@ -30,6 +30,7 @@ model User {
 
 model Supplier {
   id          String       @id @default(cuid())
+  code        String?      @unique
   name        String
   phone       String?
   notes       String?
@@ -41,17 +42,47 @@ model Supplier {
   @@map("suppliers")
 }
 
+model ProductCategory {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  slug        String   @unique
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("product_categories")
+}
+
+model MeasureUnit {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  symbol    String   @unique
+  name      String
+  unitType  String   @default("MASS") // MASS | VOLUME | COUNT | OTHER
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("measure_units")
+}
+
 model Ingredient {
   id               String          @id @default(cuid())
+  code             String?         @unique
   name             String
-  category         String          @default("INGREDIENT") // INGREDIENT | PACKAGING | DECORATION | UTENSIL
+  category         String          @default("INGREDIENT") // INGREDIENT | PACKAGING | DECORATION | UTENSIL o slug de ProductCategory
   supplierId       String?
   supplier         Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
   packagePriceCents Int            // Precio del empaque en centavos (RD$)
   packageQty       Float           // Cantidad en el empaque
   packageUnit      String          // Unidad del empaque: g, kg, ml, l, lb, oz, unidad
   baseUnit         String          // Unidad base para cálculos: g, ml, unidad
-  costPerBaseUnit  Float           // Calculado: packagePriceCents / (qty en baseUnit)
+  factorId         String?
+  factorRef        UnitConversionRef? @relation(fields: [factorId], references: [id], onDelete: SetNull)
+  conversionFactor Float           @default(1) // Factor multiplicador hacia unidad base
+  costPerBaseUnit  Float           // Calculado: packagePriceCents / 100 / (packageQty * conversionFactor)
   density          Float?          // g/ml para conversiones volumen→masa
   isActive         Boolean         @default(true)
   notes            String?
@@ -212,6 +243,7 @@ model RecipePriceHistory {
 
 model Customer {
   id        String   @id @default(cuid())
+  code      String?  @unique
   name      String
   phone     String?
   email     String?
@@ -349,19 +381,21 @@ model OperationalExpense {
 // ─── Módulo 7: Conversiones y Equivalencias ──────────────────────────────────
 
 model UnitConversionRef {
-  id          String   @id @default(cuid())
-  name        String   @unique // "taza_harina", "cucharada_azucar"
-  category    String   @default("GENERAL") // MASS | VOLUME | COUNT | INGREDIENT | GENERAL
+  id          String       @id @default(cuid())
+  code        String?      @unique
+  name        String       @unique // "taza_harina", "cucharada_azucar"
+  category    String       @default("GENERAL") // MASS | VOLUME | COUNT | INGREDIENT | GENERAL
   fromUnit    String
   toUnit      String
-  factor      Float    // toUnit = fromUnit * factor
-  ingredient  String?  // Si aplica sólo a un ingrediente
-  isEditable  Boolean  @default(true)
-  isActive    Boolean  @default(true)
-  source      String   @default("EXCEL") // "EXCEL" | "STANDARD" | "USER"
+  factor      Float        // toUnit = fromUnit * factor
+  ingredient  String?      // Si aplica sólo a un ingrediente
+  isEditable  Boolean      @default(true)
+  isActive    Boolean      @default(true)
+  source      String       @default("EXCEL") // "EXCEL" | "STANDARD" | "USER"
   notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  ingredients Ingredient[]
 
   @@map("unit_conversion_refs")
 }

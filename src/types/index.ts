@@ -41,7 +41,7 @@ export type Unit = MassUnit | VolumeUnit | "unidad";
 
 // ─── DTOs de Negocio ──────────────────────────────────────────────────────────
 
-export type ItemCategory = "INGREDIENT" | "PACKAGING" | "DECORATION" | "UTENSIL";
+export type ItemCategory = string;
 export type RecipeType = "MOTHER" | "SUBRECIPE";
 export type PricingMethod = "MARGIN" | "MARKUP";
 

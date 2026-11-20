@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { createWithSequentialCode, ENTITY_CODE_PREFIX } from "@/lib/codes";
+import { handleApiError } from "@/lib/api-errors";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const includeInactive = searchParams.get("includeInactive") === "true";
+
     const customers = await prisma.customer.findMany({
-      where: { isActive: true },
+      where: includeInactive ? {} : { isActive: true },
       include: {
         _count: { select: { sales: true } },
       },
@@ -12,22 +17,44 @@ export async function GET() {
     });
     return NextResponse.json({ success: true, data: customers });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, email, notes } = body;
-    if (!name) return NextResponse.json({ success: false, error: "Nombre es requerido" }, { status: 400 });
+    const name = typeof body?.name === "string" ? body.name.trim() : "";
+    const phone = typeof body?.phone === "string" ? body.phone.trim() : null;
+    const email = typeof body?.email === "string" ? body.email.trim() : null;
+    const notes = typeof body?.notes === "string" ? body.notes.trim() : null;
 
-    const created = await prisma.customer.create({
-      data: { name, phone: phone || null, email: email || null, notes: notes || null, isActive: true },
-    });
+    if (!name) {
+      return NextResponse.json({ success: false, error: "El nombre del cliente es requerido." }, { status: 400 });
+    }
+
+    const created = await createWithSequentialCode(
+      async () => {
+        const rows = await prisma.customer.findMany({ select: { code: true } });
+        return rows.map((r: { code: string | null }) => r.code);
+      },
+      ENTITY_CODE_PREFIX.CUSTOMER,
+      (code) =>
+        prisma.customer.create({
+          data: {
+            code,
+            name,
+            phone: phone || null,
+            email: email || null,
+            notes: notes || null,
+            isActive: true,
+          },
+        })
+    );
+
     return NextResponse.json({ success: true, data: created });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -35,21 +62,30 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json();
     const { id, name, phone, email, notes, isActive } = body;
-    if (!id) return NextResponse.json({ success: false, error: "ID requerido" }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ success: false, error: "ID requerido." }, { status: 400 });
+    }
+
+    const data: Record<string, any> = {};
+    if (name !== undefined) {
+      const trimmed = typeof name === "string" ? name.trim() : "";
+      if (!trimmed) {
+        return NextResponse.json({ success: false, error: "El nombre del cliente no puede estar vacío." }, { status: 400 });
+      }
+      data.name = trimmed;
+    }
+    if (phone !== undefined) data.phone = typeof phone === "string" ? phone.trim() || null : null;
+    if (email !== undefined) data.email = typeof email === "string" ? email.trim() || null : null;
+    if (notes !== undefined) data.notes = typeof notes === "string" ? notes.trim() || null : null;
+    if (isActive !== undefined) data.isActive = Boolean(isActive);
 
     const updated = await prisma.customer.update({
       where: { id },
-      data: {
-        ...(name && { name }),
-        ...(phone !== undefined && { phone }),
-        ...(email !== undefined && { email }),
-        ...(notes !== undefined && { notes }),
-        ...(isActive !== undefined && { isActive }),
-      },
+      data,
     });
     return NextResponse.json({ success: true, data: updated });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -57,7 +93,9 @@ export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
-    if (!id) return NextResponse.json({ success: false, error: "ID requerido" }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ success: false, error: "ID requerido." }, { status: 400 });
+    }
 
     const deactivated = await prisma.customer.update({
       where: { id },
@@ -65,6 +103,6 @@ export async function DELETE(request: Request) {
     });
     return NextResponse.json({ success: true, data: deactivated });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }

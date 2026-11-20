@@ -132,6 +132,7 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.SupplierScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
   phone: 'phone',
   notes: 'notes',
@@ -140,8 +141,31 @@ exports.Prisma.SupplierScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MeasureUnitScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  symbol: 'symbol',
+  name: 'name',
+  unitType: 'unitType',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.IngredientScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
   category: 'category',
   supplierId: 'supplierId',
@@ -149,6 +173,8 @@ exports.Prisma.IngredientScalarFieldEnum = {
   packageQty: 'packageQty',
   packageUnit: 'packageUnit',
   baseUnit: 'baseUnit',
+  factorId: 'factorId',
+  conversionFactor: 'conversionFactor',
   costPerBaseUnit: 'costPerBaseUnit',
   density: 'density',
   isActive: 'isActive',
@@ -260,6 +286,7 @@ exports.Prisma.RecipePriceHistoryScalarFieldEnum = {
 
 exports.Prisma.CustomerScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
   phone: 'phone',
   email: 'email',
@@ -354,6 +381,7 @@ exports.Prisma.OperationalExpenseScalarFieldEnum = {
 
 exports.Prisma.UnitConversionRefScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
   category: 'category',
   fromUnit: 'fromUnit',
@@ -406,6 +434,8 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Supplier: 'Supplier',
+  ProductCategory: 'ProductCategory',
+  MeasureUnit: 'MeasureUnit',
   Ingredient: 'Ingredient',
   Recipe: 'Recipe',
   RecipePresentation: 'RecipePresentation',
