@@ -370,6 +370,8 @@ exports.Prisma.OperationalExpenseScalarFieldEnum = {
   expenseDate: 'expenseDate',
   categoryId: 'categoryId',
   concept: 'concept',
+  baseAmountCents: 'baseAmountCents',
+  percentage: 'percentage',
   amountCents: 'amountCents',
   paymentMethod: 'paymentMethod',
   weeklyCloseId: 'weeklyCloseId',

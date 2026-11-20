@@ -21956,10 +21956,14 @@ export namespace Prisma {
   }
 
   export type OperationalExpenseAvgAggregateOutputType = {
+    baseAmountCents: number | null
+    percentage: number | null
     amountCents: number | null
   }
 
   export type OperationalExpenseSumAggregateOutputType = {
+    baseAmountCents: number | null
+    percentage: number | null
     amountCents: number | null
   }
 
@@ -21968,6 +21972,8 @@ export namespace Prisma {
     expenseDate: Date | null
     categoryId: string | null
     concept: string | null
+    baseAmountCents: number | null
+    percentage: number | null
     amountCents: number | null
     paymentMethod: string | null
     weeklyCloseId: string | null
@@ -21982,6 +21988,8 @@ export namespace Prisma {
     expenseDate: Date | null
     categoryId: string | null
     concept: string | null
+    baseAmountCents: number | null
+    percentage: number | null
     amountCents: number | null
     paymentMethod: string | null
     weeklyCloseId: string | null
@@ -21996,6 +22004,8 @@ export namespace Prisma {
     expenseDate: number
     categoryId: number
     concept: number
+    baseAmountCents: number
+    percentage: number
     amountCents: number
     paymentMethod: number
     weeklyCloseId: number
@@ -22008,10 +22018,14 @@ export namespace Prisma {
 
 
   export type OperationalExpenseAvgAggregateInputType = {
+    baseAmountCents?: true
+    percentage?: true
     amountCents?: true
   }
 
   export type OperationalExpenseSumAggregateInputType = {
+    baseAmountCents?: true
+    percentage?: true
     amountCents?: true
   }
 
@@ -22020,6 +22034,8 @@ export namespace Prisma {
     expenseDate?: true
     categoryId?: true
     concept?: true
+    baseAmountCents?: true
+    percentage?: true
     amountCents?: true
     paymentMethod?: true
     weeklyCloseId?: true
@@ -22034,6 +22050,8 @@ export namespace Prisma {
     expenseDate?: true
     categoryId?: true
     concept?: true
+    baseAmountCents?: true
+    percentage?: true
     amountCents?: true
     paymentMethod?: true
     weeklyCloseId?: true
@@ -22048,6 +22066,8 @@ export namespace Prisma {
     expenseDate?: true
     categoryId?: true
     concept?: true
+    baseAmountCents?: true
+    percentage?: true
     amountCents?: true
     paymentMethod?: true
     weeklyCloseId?: true
@@ -22149,6 +22169,8 @@ export namespace Prisma {
     expenseDate: Date
     categoryId: string
     concept: string
+    baseAmountCents: number | null
+    percentage: number | null
     amountCents: number
     paymentMethod: string
     weeklyCloseId: string | null
@@ -22182,6 +22204,8 @@ export namespace Prisma {
     expenseDate?: boolean
     categoryId?: boolean
     concept?: boolean
+    baseAmountCents?: boolean
+    percentage?: boolean
     amountCents?: boolean
     paymentMethod?: boolean
     weeklyCloseId?: boolean
@@ -22198,6 +22222,8 @@ export namespace Prisma {
     expenseDate?: boolean
     categoryId?: boolean
     concept?: boolean
+    baseAmountCents?: boolean
+    percentage?: boolean
     amountCents?: boolean
     paymentMethod?: boolean
     weeklyCloseId?: boolean
@@ -22214,6 +22240,8 @@ export namespace Prisma {
     expenseDate?: boolean
     categoryId?: boolean
     concept?: boolean
+    baseAmountCents?: boolean
+    percentage?: boolean
     amountCents?: boolean
     paymentMethod?: boolean
     weeklyCloseId?: boolean
@@ -22243,6 +22271,8 @@ export namespace Prisma {
       expenseDate: Date
       categoryId: string
       concept: string
+      baseAmountCents: number | null
+      percentage: number | null
       amountCents: number
       paymentMethod: string
       weeklyCloseId: string | null
@@ -22649,6 +22679,8 @@ export namespace Prisma {
     readonly expenseDate: FieldRef<"OperationalExpense", 'DateTime'>
     readonly categoryId: FieldRef<"OperationalExpense", 'String'>
     readonly concept: FieldRef<"OperationalExpense", 'String'>
+    readonly baseAmountCents: FieldRef<"OperationalExpense", 'Int'>
+    readonly percentage: FieldRef<"OperationalExpense", 'Float'>
     readonly amountCents: FieldRef<"OperationalExpense", 'Int'>
     readonly paymentMethod: FieldRef<"OperationalExpense", 'String'>
     readonly weeklyCloseId: FieldRef<"OperationalExpense", 'String'>
@@ -26450,6 +26482,8 @@ export namespace Prisma {
     expenseDate: 'expenseDate',
     categoryId: 'categoryId',
     concept: 'concept',
+    baseAmountCents: 'baseAmountCents',
+    percentage: 'percentage',
     amountCents: 'amountCents',
     paymentMethod: 'paymentMethod',
     weeklyCloseId: 'weeklyCloseId',
@@ -28148,6 +28182,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFilter<"OperationalExpense"> | Date | string
     categoryId?: StringFilter<"OperationalExpense"> | string
     concept?: StringFilter<"OperationalExpense"> | string
+    baseAmountCents?: IntNullableFilter<"OperationalExpense"> | number | null
+    percentage?: FloatNullableFilter<"OperationalExpense"> | number | null
     amountCents?: IntFilter<"OperationalExpense"> | number
     paymentMethod?: StringFilter<"OperationalExpense"> | string
     weeklyCloseId?: StringNullableFilter<"OperationalExpense"> | string | null
@@ -28164,6 +28200,8 @@ export namespace Prisma {
     expenseDate?: SortOrder
     categoryId?: SortOrder
     concept?: SortOrder
+    baseAmountCents?: SortOrderInput | SortOrder
+    percentage?: SortOrderInput | SortOrder
     amountCents?: SortOrder
     paymentMethod?: SortOrder
     weeklyCloseId?: SortOrderInput | SortOrder
@@ -28183,6 +28221,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFilter<"OperationalExpense"> | Date | string
     categoryId?: StringFilter<"OperationalExpense"> | string
     concept?: StringFilter<"OperationalExpense"> | string
+    baseAmountCents?: IntNullableFilter<"OperationalExpense"> | number | null
+    percentage?: FloatNullableFilter<"OperationalExpense"> | number | null
     amountCents?: IntFilter<"OperationalExpense"> | number
     paymentMethod?: StringFilter<"OperationalExpense"> | string
     weeklyCloseId?: StringNullableFilter<"OperationalExpense"> | string | null
@@ -28199,6 +28239,8 @@ export namespace Prisma {
     expenseDate?: SortOrder
     categoryId?: SortOrder
     concept?: SortOrder
+    baseAmountCents?: SortOrderInput | SortOrder
+    percentage?: SortOrderInput | SortOrder
     amountCents?: SortOrder
     paymentMethod?: SortOrder
     weeklyCloseId?: SortOrderInput | SortOrder
@@ -28221,6 +28263,8 @@ export namespace Prisma {
     expenseDate?: DateTimeWithAggregatesFilter<"OperationalExpense"> | Date | string
     categoryId?: StringWithAggregatesFilter<"OperationalExpense"> | string
     concept?: StringWithAggregatesFilter<"OperationalExpense"> | string
+    baseAmountCents?: IntNullableWithAggregatesFilter<"OperationalExpense"> | number | null
+    percentage?: FloatNullableWithAggregatesFilter<"OperationalExpense"> | number | null
     amountCents?: IntWithAggregatesFilter<"OperationalExpense"> | number
     paymentMethod?: StringWithAggregatesFilter<"OperationalExpense"> | string
     weeklyCloseId?: StringNullableWithAggregatesFilter<"OperationalExpense"> | string | null
@@ -30264,6 +30308,8 @@ export namespace Prisma {
     id?: string
     expenseDate: Date | string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     notes?: string | null
@@ -30279,6 +30325,8 @@ export namespace Prisma {
     expenseDate: Date | string
     categoryId: string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     weeklyCloseId?: string | null
@@ -30292,6 +30340,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30307,6 +30357,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     weeklyCloseId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30321,6 +30373,8 @@ export namespace Prisma {
     expenseDate: Date | string
     categoryId: string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     weeklyCloseId?: string | null
@@ -30334,6 +30388,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -30347,6 +30403,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     weeklyCloseId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -31947,6 +32005,17 @@ export namespace Prisma {
     isActive?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ExpenseCategoryRelationFilter = {
     is?: ExpenseCategoryWhereInput
     isNot?: ExpenseCategoryWhereInput
@@ -31957,6 +32026,8 @@ export namespace Prisma {
     expenseDate?: SortOrder
     categoryId?: SortOrder
     concept?: SortOrder
+    baseAmountCents?: SortOrder
+    percentage?: SortOrder
     amountCents?: SortOrder
     paymentMethod?: SortOrder
     weeklyCloseId?: SortOrder
@@ -31967,6 +32038,8 @@ export namespace Prisma {
   }
 
   export type OperationalExpenseAvgOrderByAggregateInput = {
+    baseAmountCents?: SortOrder
+    percentage?: SortOrder
     amountCents?: SortOrder
   }
 
@@ -31975,6 +32048,8 @@ export namespace Prisma {
     expenseDate?: SortOrder
     categoryId?: SortOrder
     concept?: SortOrder
+    baseAmountCents?: SortOrder
+    percentage?: SortOrder
     amountCents?: SortOrder
     paymentMethod?: SortOrder
     weeklyCloseId?: SortOrder
@@ -31989,6 +32064,8 @@ export namespace Prisma {
     expenseDate?: SortOrder
     categoryId?: SortOrder
     concept?: SortOrder
+    baseAmountCents?: SortOrder
+    percentage?: SortOrder
     amountCents?: SortOrder
     paymentMethod?: SortOrder
     weeklyCloseId?: SortOrder
@@ -31999,7 +32076,25 @@ export namespace Prisma {
   }
 
   export type OperationalExpenseSumOrderByAggregateInput = {
+    baseAmountCents?: SortOrder
+    percentage?: SortOrder
     amountCents?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type UnitConversionRefCountOrderByAggregateInput = {
@@ -33172,6 +33267,14 @@ export namespace Prisma {
     connect?: WeeklyCloseWhereUniqueInput
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput = {
     create?: XOR<ExpenseCategoryCreateWithoutExpensesInput, ExpenseCategoryUncheckedCreateWithoutExpensesInput>
     connectOrCreate?: ExpenseCategoryCreateOrConnectWithoutExpensesInput
@@ -33503,6 +33606,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IngredientCreateWithoutSupplierInput = {
@@ -36193,6 +36312,8 @@ export namespace Prisma {
     id?: string
     expenseDate: Date | string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     notes?: string | null
@@ -36207,6 +36328,8 @@ export namespace Prisma {
     expenseDate: Date | string
     categoryId: string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     notes?: string | null
@@ -36264,6 +36387,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFilter<"OperationalExpense"> | Date | string
     categoryId?: StringFilter<"OperationalExpense"> | string
     concept?: StringFilter<"OperationalExpense"> | string
+    baseAmountCents?: IntNullableFilter<"OperationalExpense"> | number | null
+    percentage?: FloatNullableFilter<"OperationalExpense"> | number | null
     amountCents?: IntFilter<"OperationalExpense"> | number
     paymentMethod?: StringFilter<"OperationalExpense"> | string
     weeklyCloseId?: StringNullableFilter<"OperationalExpense"> | string | null
@@ -36277,6 +36402,8 @@ export namespace Prisma {
     id?: string
     expenseDate: Date | string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     notes?: string | null
@@ -36290,6 +36417,8 @@ export namespace Prisma {
     id?: string
     expenseDate: Date | string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     weeklyCloseId?: string | null
@@ -37375,6 +37504,8 @@ export namespace Prisma {
     expenseDate: Date | string
     categoryId: string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     notes?: string | null
@@ -37439,6 +37570,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37453,6 +37586,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37466,6 +37601,8 @@ export namespace Prisma {
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37478,6 +37615,8 @@ export namespace Prisma {
     id?: string
     expenseDate: Date | string
     concept: string
+    baseAmountCents?: number | null
+    percentage?: number | null
     amountCents: number
     paymentMethod?: string
     weeklyCloseId?: string | null
@@ -37491,6 +37630,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37504,6 +37645,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     weeklyCloseId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37517,6 +37660,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
     concept?: StringFieldUpdateOperationsInput | string
+    baseAmountCents?: NullableIntFieldUpdateOperationsInput | number | null
+    percentage?: NullableFloatFieldUpdateOperationsInput | number | null
     amountCents?: IntFieldUpdateOperationsInput | number
     paymentMethod?: StringFieldUpdateOperationsInput | string
     weeklyCloseId?: NullableStringFieldUpdateOperationsInput | string | null

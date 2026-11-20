@@ -364,6 +364,8 @@ model OperationalExpense {
   categoryId           String
   category             ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   concept              String
+  baseAmountCents      Int?
+  percentage           Float?
   amountCents          Int
   paymentMethod        String          @default("EFECTIVO")
   weeklyCloseId        String?

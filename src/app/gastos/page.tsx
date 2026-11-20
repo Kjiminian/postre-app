@@ -20,6 +20,8 @@ interface ExpenseItem {
   categoryId: string;
   category: { id: string; name: string };
   concept: string;
+  baseAmountCents?: number | null;
+  percentage?: number | null;
   amountCents: number;
   paymentMethod: string;
   isIngredientPurchase: boolean;
@@ -45,11 +47,16 @@ export default function GastosPage() {
     expenseDate: new Date().toISOString().slice(0, 10),
     categoryId: "",
     concept: "",
-    amountDOP: 0,
+    baseAmountDOP: 0,
+    percentage: 10,
     paymentMethod: "EFECTIVO",
     isIngredientPurchase: false,
     notes: "",
   });
+
+  const calculatedAmountCents = Math.round(
+    Math.round((Number(formData.baseAmountDOP) || 0) * 100) * ((Number(formData.percentage) || 0) / 100)
+  );
 
   const loadData = async () => {
     setLoading(true);
@@ -76,7 +83,7 @@ export default function GastosPage() {
 
   const handleCreateExpense = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.concept || formData.amountDOP <= 0 || !formData.categoryId) return;
+    if (!formData.concept || formData.baseAmountDOP <= 0 || formData.percentage <= 0 || !formData.categoryId) return;
 
     try {
       const res = await fetch("/api/gastos", {
@@ -85,7 +92,8 @@ export default function GastosPage() {
         body: JSON.stringify({
           categoryId: formData.categoryId,
           concept: formData.concept,
-          amountCents: Math.round(formData.amountDOP * 100),
+          baseAmountCents: Math.round(formData.baseAmountDOP * 100),
+          percentage: Number(formData.percentage),
           expenseDate: formData.expenseDate,
           paymentMethod: formData.paymentMethod,
           isIngredientPurchase: formData.isIngredientPurchase,
@@ -96,7 +104,14 @@ export default function GastosPage() {
       if (!json.success) throw new Error(json.error);
 
       setIsModalOpen(false);
-      setFormData((prev) => ({ ...prev, concept: "", amountDOP: 0, notes: "", isIngredientPurchase: false }));
+      setFormData((prev) => ({
+        ...prev,
+        concept: "",
+        baseAmountDOP: 0,
+        percentage: 10,
+        notes: "",
+        isIngredientPurchase: false,
+      }));
       loadData();
     } catch (err: any) {
       alert("Error al registrar gasto: " + err.message);
@@ -235,8 +250,9 @@ export default function GastosPage() {
                     <th className="py-3 px-4">Fecha</th>
                     <th className="py-3 px-4">Categoría</th>
                     <th className="py-3 px-4">Concepto / Detalle</th>
+                    <th className="py-3 px-4">Porcentaje / Base</th>
                     <th className="py-3 px-4">Método de Pago</th>
-                    <th className="py-3 px-4">Monto (RD$)</th>
+                    <th className="py-3 px-4">Monto Calculado</th>
                     <th className="py-3 px-4 text-right">Acción</th>
                   </tr>
                 </thead>
@@ -260,12 +276,26 @@ export default function GastosPage() {
                         )}
                         {exp.notes && <div className="text-xs text-[#7D6E65]">{exp.notes}</div>}
                       </td>
+                      <td className="py-3 px-4 text-xs text-[#7D6E65] tabular-nums">
+                        {exp.percentage != null && exp.baseAmountCents != null ? (
+                          <div>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded font-semibold bg-[#FAF5F7] text-[#9C4266] border border-[#F3D5E2]">
+                              {exp.percentage}%
+                            </span>
+                            <div className="text-[11px] text-[#7D6E65] mt-0.5">
+                              sobre {formatDOP(exp.baseAmountCents)}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-[#A89F91]">Monto directo</span>
+                        )}
+                      </td>
                       <td className="py-3 px-4 text-xs text-[#7D6E65]">
                         <span className="px-2 py-0.5 rounded bg-[#FAF8F6] border border-[#E8E2D9]">
                           {exp.paymentMethod}
                         </span>
                       </td>
-                      <td className="py-3 px-4 font-bold text-base text-[#4A3B32]">
+                      <td className="py-3 px-4 font-bold text-base text-[#4A3B32] tabular-nums">
                         {formatDOP(exp.amountCents)}
                       </td>
                       <td className="py-3 px-4 text-right">
@@ -295,7 +325,7 @@ export default function GastosPage() {
 
               <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">Registrar Gasto Operativo</h2>
               <p className="text-xs text-[#7D6E65] mb-4">
-                Ingresa el concepto y el monto para deducirlo del cuadre semanal.
+                Ingresa el monto base y el porcentaje (%) para calcular el gasto operativo y deducirlo del cuadre semanal.
               </p>
 
               <form onSubmit={handleCreateExpense} className="space-y-4">
@@ -338,17 +368,31 @@ export default function GastosPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Monto (RD$)</label>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Monto Base (RD$)</label>
                     <input
                       type="number"
                       step="0.01"
                       min="0.01"
                       required
-                      value={formData.amountDOP || ""}
-                      onChange={(e) => setFormData({ ...formData, amountDOP: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 text-base font-bold rounded-lg border border-[#E8E2D9]"
+                      value={formData.baseAmountDOP || ""}
+                      onChange={(e) => setFormData({ ...formData, baseAmountDOP: parseFloat(e.target.value) || 0 })}
+                      placeholder="Ej. 1000.00"
+                      className="w-full px-3 py-2 text-sm font-semibold rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Porcentaje (%)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={formData.percentage || ""}
+                      onChange={(e) => setFormData({ ...formData, percentage: parseFloat(e.target.value) || 0 })}
+                      placeholder="Ej. 15"
+                      className="w-full px-3 py-2 text-sm font-bold text-[#9C4266] rounded-lg border border-[#E8E2D9] tabular-nums"
                     />
                   </div>
                   <div>
@@ -363,6 +407,15 @@ export default function GastosPage() {
                       <option value="TARJETA">Tarjeta de Débito/Crédito</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="p-3 rounded-lg bg-[#FAF5F7] border border-[#F3D5E2] flex items-center justify-between">
+                  <span className="text-xs font-medium text-[#7D6E65]">
+                    Monto calculado del gasto ({formData.percentage || 0}% de RD$ {(formData.baseAmountDOP || 0).toFixed(2)}):
+                  </span>
+                  <span className="text-base font-bold text-[#9C4266] tabular-nums">
+                    {formatDOP(calculatedAmountCents)}
+                  </span>
                 </div>
 
                 <div className="p-3 rounded-lg bg-[#FAF8F6] border border-[#E8E2D9]">
