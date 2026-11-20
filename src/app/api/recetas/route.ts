@@ -1,15 +1,61 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { calculateMotherRecipeCosts, recalculateRecipeAndPresentations } from "@/lib/services/presentations";
+import { handleApiError } from "@/lib/api-errors";
 
-// GET /api/recetas — Listar Recetas Madre y Subrecetas
+const recipeIngredientSchema = z.object({
+  ingredientId: z.string().min(1),
+  quantity: z.coerce.number().positive(),
+  unit: z.string().min(1).default("g"),
+  costCents: z.coerce.number().int().min(0).optional(),
+});
+
+const createRecipeSchema = z.object({
+  name: z.string().trim().min(1),
+  recipeType: z.enum(["MOTHER", "SUBRECIPE"]).default("MOTHER"),
+  description: z.string().optional().nullable(),
+  yieldQty: z.coerce.number().positive().default(1),
+  yieldUnit: z.string().trim().min(1).default("porciones"),
+  laborPercent: z.coerce.number().min(0).default(0),
+  overheadPercent: z.coerce.number().min(0).default(0),
+  contingencyPercent: z.coerce.number().min(0).default(0),
+  packageCostCents: z.coerce.number().int().min(0).default(0),
+  targetMargin: z.coerce.number().min(0).lt(100).default(40),
+  currentPriceCents: z.coerce.number().int().min(0).optional(),
+  commercialRefCents: z.coerce.number().int().min(0).optional().nullable(),
+  notes: z.string().optional().nullable(),
+  ingredients: z.array(recipeIngredientSchema).default([]),
+});
+
+const updateRecipeSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(1).optional(),
+  description: z.string().optional().nullable(),
+  recipeType: z.enum(["MOTHER", "SUBRECIPE"]).optional(),
+  yieldQty: z.coerce.number().positive().optional(),
+  yieldUnit: z.string().trim().min(1).optional(),
+  laborPercent: z.coerce.number().min(0).optional(),
+  overheadPercent: z.coerce.number().min(0).optional(),
+  contingencyPercent: z.coerce.number().min(0).optional(),
+  packageCostCents: z.coerce.number().int().min(0).optional(),
+  targetMargin: z.coerce.number().min(0).lt(100).optional(),
+  currentPriceCents: z.coerce.number().int().min(0).optional(),
+  commercialRefCents: z.coerce.number().int().min(0).optional().nullable(),
+  notes: z.string().optional().nullable(),
+  ingredients: z.array(recipeIngredientSchema).optional(),
+});
+
+// GET /api/recetas — Listar Recetas Madre y Subrecetas (excluye ARCHIVED por defecto)
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type"); // MOTHER | SUBRECIPE | ALL
+    const includeArchived = searchParams.get("includeArchived") === "true";
 
     const where: any = {};
     if (type && type !== "ALL") where.recipeType = type;
+    if (!includeArchived) where.status = { not: "ARCHIVED" };
 
     const recipes = await prisma.recipe.findMany({
       where,
@@ -22,7 +68,10 @@ export async function GET(request: Request) {
           include: {
             materials: true,
             subrecipes: true,
+            parent: { select: { id: true, name: true, unitTotalCostExactCents: true, totalCostCents: true } },
+            groupPresentations: { where: { isActive: true }, select: { id: true, name: true, groupQty: true, totalCostCents: true, finalPriceCents: true } },
           },
+          orderBy: [{ isComposite: "asc" }, { name: "asc" }],
         },
       },
       orderBy: { name: "asc" },
@@ -30,7 +79,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ success: true, data: recipes });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -38,48 +87,55 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const parsed = createRecipeSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Datos inválidos de receta. Verifica nombre, rendimiento (>0) y porcentajes." },
+        { status: 400 }
+      );
+    }
+
     const {
       name,
-      recipeType = "MOTHER",
+      recipeType,
       description,
-      yieldQty = 1,
-      yieldUnit = "porciones",
-      laborPercent = 0,
-      overheadPercent = 0,
-      packageCostCents = 0,
-      targetMargin = 40,
-      currentPriceCents = 0,
+      yieldQty,
+      yieldUnit,
+      laborPercent,
+      overheadPercent,
+      contingencyPercent,
+      packageCostCents,
+      targetMargin,
+      currentPriceCents,
+      commercialRefCents,
       notes,
-      ingredients = [], // Array de { ingredientId, quantity, unit, costCents }
-    } = body;
-
-    if (!name || yieldQty <= 0) {
-      return NextResponse.json({ success: false, error: "Nombre y rendimiento (>0) son requeridos" }, { status: 400 });
-    }
+      ingredients,
+    } = parsed.data;
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + Date.now();
 
-    // Sumar ingredientes
     let ingredientsCostCents = 0;
-    const formattedIngredients = ingredients.map((ing: any) => {
-      ingredientsCostCents += ing.costCents || 0;
+    const formattedIngredients = ingredients.map((ing) => {
+      const lineCost = ing.costCents ?? 0;
+      ingredientsCostCents += lineCost;
       return {
         ingredientId: ing.ingredientId,
-        quantity: parseFloat(ing.quantity) || 0,
-        unit: ing.unit || "g",
-        costCents: parseInt(ing.costCents) || 0,
+        quantity: ing.quantity,
+        unit: ing.unit,
+        costCents: lineCost,
       };
     });
 
     const costs = calculateMotherRecipeCosts({
       ingredientsCostCents,
-      laborPercent: parseFloat(laborPercent) || 0,
-      overheadPercent: parseFloat(overheadPercent) || 0,
-      packageCostCents: parseInt(packageCostCents) || 0,
-      yieldQty: parseFloat(yieldQty) || 1,
+      laborPercent,
+      overheadPercent,
+      contingencyPercent,
+      packageCostCents,
+      yieldQty,
     });
 
-    const marginFraction = (parseFloat(targetMargin) || 40) / 100;
+    const marginFraction = targetMargin / 100;
     const suggestedPriceCents =
       marginFraction < 1 ? Math.ceil(costs.unitCostCents / (1 - marginFraction)) : costs.unitCostCents;
 
@@ -89,17 +145,21 @@ export async function POST(request: Request) {
         slug,
         recipeType,
         description: description || null,
-        yield: parseFloat(yieldQty) || 1,
+        yield: yieldQty,
         yieldUnit,
-        laborPercent: parseFloat(laborPercent) || 0,
-        overheadPercent: parseFloat(overheadPercent) || 0,
-        packageCostCents: parseInt(packageCostCents) || 0,
-        targetMargin: parseFloat(targetMargin) || 40,
+        laborPercent,
+        overheadPercent,
+        contingencyPercent,
+        subtotalBeforeContingencyCents: costs.subtotalBeforeContingencyCents,
+        batchCostExactCents: costs.batchCostExactCents,
+        packageCostCents,
+        commercialRefCents: commercialRefCents ?? null,
+        targetMargin,
         batchCostCents: costs.batchCostCents,
         unitCostCents: costs.unitCostCents,
         costPerYieldUnit: costs.costPerYieldUnit,
         suggestedPriceCents,
-        currentPriceCents: currentPriceCents ? parseInt(currentPriceCents) : suggestedPriceCents,
+        currentPriceCents: currentPriceCents ?? suggestedPriceCents,
         status: "ACTIVE",
         notes: notes || null,
         ingredients: {
@@ -114,44 +174,69 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: created });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
-// PUT /api/recetas — Actualizar receta y recalcular en cascada
+// PUT /api/recetas — Actualizar receta madre y recalcular en cascada topológica
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    const { id, name, description, recipeType, yieldQty, yieldUnit, laborPercent, overheadPercent, packageCostCents, targetMargin, currentPriceCents, notes, ingredients } = body;
+    const parsed = updateRecipeSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Datos inválidos al actualizar receta madre." },
+        { status: 400 }
+      );
+    }
 
-    if (!id) return NextResponse.json({ success: false, error: "ID requerido" }, { status: 400 });
+    const {
+      id,
+      name,
+      description,
+      recipeType,
+      yieldQty,
+      yieldUnit,
+      laborPercent,
+      overheadPercent,
+      contingencyPercent,
+      packageCostCents,
+      targetMargin,
+      currentPriceCents,
+      commercialRefCents,
+      notes,
+      ingredients,
+    } = parsed.data;
 
     await prisma.$transaction(async (tx: any) => {
-      // Si se envían nuevos ingredientes, reemplazar
       if (Array.isArray(ingredients)) {
         await tx.recipeIngredient.deleteMany({ where: { recipeId: id } });
-        await tx.recipeIngredient.createMany({
-          data: ingredients.map((ing: any) => ({
-            recipeId: id,
-            ingredientId: ing.ingredientId,
-            quantity: parseFloat(ing.quantity) || 0,
-            unit: ing.unit || "g",
-            costCents: parseInt(ing.costCents) || 0,
-          })),
-        });
+        if (ingredients.length > 0) {
+          await tx.recipeIngredient.createMany({
+            data: ingredients.map((ing) => ({
+              recipeId: id,
+              ingredientId: ing.ingredientId,
+              quantity: ing.quantity,
+              unit: ing.unit,
+              costCents: ing.costCents ?? 0,
+            })),
+          });
+        }
       }
 
-      const updateData: any = {};
+      const updateData: Record<string, any> = {};
       if (name !== undefined) updateData.name = name;
       if (description !== undefined) updateData.description = description;
       if (recipeType !== undefined) updateData.recipeType = recipeType;
-      if (yieldQty !== undefined) updateData.yield = parseFloat(yieldQty);
+      if (yieldQty !== undefined) updateData.yield = yieldQty;
       if (yieldUnit !== undefined) updateData.yieldUnit = yieldUnit;
-      if (laborPercent !== undefined) updateData.laborPercent = parseFloat(laborPercent);
-      if (overheadPercent !== undefined) updateData.overheadPercent = parseFloat(overheadPercent);
-      if (packageCostCents !== undefined) updateData.packageCostCents = parseInt(packageCostCents);
-      if (targetMargin !== undefined) updateData.targetMargin = parseFloat(targetMargin);
-      if (currentPriceCents !== undefined) updateData.currentPriceCents = parseInt(currentPriceCents);
+      if (laborPercent !== undefined) updateData.laborPercent = laborPercent;
+      if (overheadPercent !== undefined) updateData.overheadPercent = overheadPercent;
+      if (contingencyPercent !== undefined) updateData.contingencyPercent = contingencyPercent;
+      if (packageCostCents !== undefined) updateData.packageCostCents = packageCostCents;
+      if (targetMargin !== undefined) updateData.targetMargin = targetMargin;
+      if (currentPriceCents !== undefined) updateData.currentPriceCents = currentPriceCents;
+      if (commercialRefCents !== undefined) updateData.commercialRefCents = commercialRefCents;
       if (notes !== undefined) updateData.notes = notes;
 
       await tx.recipe.update({
@@ -160,12 +245,11 @@ export async function PUT(request: Request) {
       });
     });
 
-    // Ejecutar recálculo en cascada reactiva para recetas madre y presentaciones
     const result = await recalculateRecipeAndPresentations(id);
 
     return NextResponse.json({ success: true, data: result });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -182,6 +266,6 @@ export async function DELETE(request: Request) {
     });
     return NextResponse.json({ success: true, data: archived });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }

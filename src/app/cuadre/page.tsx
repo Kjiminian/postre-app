@@ -49,6 +49,7 @@ export default function CuadrePage() {
 
   const loadWeeklyData = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/cuadre");
       const json = await res.json();
@@ -83,9 +84,13 @@ export default function CuadrePage() {
     : cashFundCents;
   const cashDifferenceCents = countedCashCents - expectedCashCents;
 
+  const [showConfirmClose, setShowConfirmClose] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
   const handleSaveClose = async () => {
     if (!data) return;
     setIsSaving(true);
+    setFeedback(null);
     try {
       const res = await fetch("/api/cuadre", {
         method: "POST",
@@ -100,11 +105,13 @@ export default function CuadrePage() {
       });
       const json = await res.json();
       if (json.success) {
-        alert("Cuadre semanal fijado exitosamente.");
+        setShowConfirmClose(false);
+        setFeedback({ type: "success", text: "Cuadre semanal fijado y cerrado exitosamente." });
         loadWeeklyData();
       } else throw new Error(json.error);
     } catch (err: any) {
-      alert("Error al fijar cuadre: " + err.message);
+      setShowConfirmClose(false);
+      setFeedback({ type: "error", text: "Error al fijar cuadre: " + err.message });
     } finally {
       setIsSaving(false);
     }
@@ -138,15 +145,60 @@ export default function CuadrePage() {
               </span>
             ) : (
               <button
-                onClick={handleSaveClose}
+                onClick={() => setShowConfirmClose(true)}
                 disabled={isSaving || loading}
-                className="px-4 py-2.5 rounded-lg bg-[#9C4266] hover:bg-[#833554] text-white font-medium text-xs shadow-sm transition-colors"
+                className="px-4 py-2.5 rounded-lg bg-[#9C4266] hover:bg-[#833554] text-white font-medium text-xs shadow-sm transition-colors disabled:opacity-60"
               >
                 {isSaving ? "Guardando..." : "Fijar Arqueo y Cerrar Semana"}
               </button>
             )}
           </div>
         </div>
+
+        {feedback && (
+          <div
+            className={`p-3 rounded-xl border text-xs font-medium flex items-center justify-between ${
+              feedback.type === "success"
+                ? "bg-[#C6F6D5]/60 border-[#9AE6B4] text-[#22543D]"
+                : "bg-[#FED7D7]/60 border-[#FEB2B2] text-[#742A2A]"
+            }`}
+          >
+            <span>{feedback.text}</span>
+            <button onClick={() => setFeedback(null)} className="underline text-[11px]">
+              Cerrar
+            </button>
+          </div>
+        )}
+
+        {showConfirmClose && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-[#E8E2D9] space-y-4">
+              <h3 className="text-lg font-serif font-bold text-[#4A3B32]">Confirmar Cierre Semanal</h3>
+              <p className="text-xs text-[#7D6E65] leading-relaxed">
+                Estás a punto de cerrar el cuadre semanal con un efectivo contado de{" "}
+                <strong className="text-[#4A3B32]">{formatDOP(countedCashCents)}</strong> (diferencia:{" "}
+                <strong className="text-[#9C4266]">{formatDOP(cashDifferenceCents)}</strong>). ¿Deseas continuar?
+              </p>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmClose(false)}
+                  className="px-4 py-2 text-xs font-semibold text-[#7D6E65] hover:bg-[#FAF8F6] rounded-lg"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  disabled={isSaving}
+                  onClick={handleSaveClose}
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#9C4266] hover:bg-[#831843] rounded-lg disabled:opacity-60"
+                >
+                  {isSaving ? "Cerrando..." : "Confirmar Cierre"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <div className="bg-white rounded-xl p-12 border border-[#E8E2D9] text-center">

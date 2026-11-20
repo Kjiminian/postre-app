@@ -48,7 +48,7 @@ export default function GastosPage() {
     categoryId: "",
     concept: "",
     baseAmountDOP: 0,
-    percentage: 10,
+    percentage: 100,
     paymentMethod: "EFECTIVO",
     isIngredientPurchase: false,
     notes: "",
@@ -60,6 +60,7 @@ export default function GastosPage() {
 
   const loadData = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/gastos");
       const json = await res.json();
@@ -108,7 +109,7 @@ export default function GastosPage() {
         ...prev,
         concept: "",
         baseAmountDOP: 0,
-        percentage: 10,
+        percentage: 100,
         notes: "",
         isIngredientPurchase: false,
       }));

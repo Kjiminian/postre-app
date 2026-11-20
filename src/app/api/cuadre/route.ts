@@ -1,80 +1,105 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { getWeekBounds } from "@/lib/constants";
+import { handleApiError } from "@/lib/api-errors";
 
-function getWeekBounds(date: Date) {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diffToMonday = day === 0 ? -6 : 1 - day;
-  const monday = new Date(d);
-  monday.setDate(d.getDate() + diffToMonday);
-  monday.setHours(0, 0, 0, 0);
+const closeWeekSchema = z.object({
+  weekStart: z.string().min(1),
+  weekEnd: z.string().min(1),
+  cashFundCents: z.coerce.number().int().min(0).default(0),
+  countedCashCents: z.coerce.number().int().min(0).default(0),
+  notes: z.string().optional().nullable(),
+});
 
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
+async function computeWeeklySummary(weekStart: Date, weekEnd: Date) {
+  const [sales, cashPayments, expenses] = await Promise.all([
+    prisma.sale.findMany({
+      where: {
+        status: "ACTIVE",
+        saleDate: { gte: weekStart, lte: weekEnd },
+      },
+      select: {
+        totalCents: true,
+        collectedCents: true,
+        totalCostCents: true,
+      },
+    }),
+    prisma.payment.findMany({
+      where: {
+        method: "EFECTIVO",
+        paidAt: { gte: weekStart, lte: weekEnd },
+        sale: { status: "ACTIVE" },
+      },
+      select: { amountCents: true },
+    }),
+    prisma.operationalExpense.findMany({
+      where: {
+        expenseDate: { gte: weekStart, lte: weekEnd },
+      },
+      select: {
+        amountCents: true,
+        paymentMethod: true,
+        isIngredientPurchase: true,
+      },
+    }),
+  ]);
 
-  return { weekStart: monday, weekEnd: sunday };
+  let invoicedCents = 0;
+  let collectedCents = 0;
+  let costOfGoodsCents = 0;
+  for (const s of sales) {
+    invoicedCents += s.totalCents;
+    collectedCents += s.collectedCents;
+    costOfGoodsCents += s.totalCostCents;
+  }
+
+  let cashCollectedCents = 0;
+  for (const p of cashPayments) {
+    cashCollectedCents += p.amountCents;
+  }
+
+  let operationalExpCents = 0;
+  let cashExpensesCents = 0;
+  for (const e of expenses) {
+    // RF-020: excluir compras de ingredientes ya imputadas al COGS para no duplicar gastos
+    if (e.isIngredientPurchase) continue;
+    operationalExpCents += e.amountCents;
+    if (e.paymentMethod === "EFECTIVO") {
+      cashExpensesCents += e.amountCents;
+    }
+  }
+
+  const pendingCents = Math.max(0, invoicedCents - collectedCents);
+  const netResultCents = invoicedCents - costOfGoodsCents - operationalExpCents;
+
+  return {
+    invoicedCents,
+    collectedCents,
+    pendingCents,
+    costOfGoodsCents,
+    operationalExpCents,
+    netResultCents,
+    cashCollectedCents,
+    cashExpensesCents,
+    salesCount: sales.length,
+    expensesCount: expenses.filter((e: { isIngredientPurchase: boolean }) => !e.isIngredientPurchase).length,
+  };
 }
 
-// GET /api/cuadre — Resumen de la semana actual o específica
+// GET /api/cuadre — Resumen de la semana actual o específica (Lunes a Domingo AST UTC-4)
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const dateParam = searchParams.get("date");
     const targetDate = dateParam ? new Date(dateParam) : new Date();
-    const { weekStart, weekEnd } = getWeekBounds(targetDate);
-
-    // Ventas de la semana
-    const sales = await prisma.sale.findMany({
-      where: {
-        status: "ACTIVE",
-        saleDate: { gte: weekStart, lte: weekEnd },
-      },
-      include: {
-        items: true,
-        payments: true,
-      },
-    });
-
-    // Gastos de la semana
-    const expenses = await prisma.operationalExpense.findMany({
-      where: {
-        expenseDate: { gte: weekStart, lte: weekEnd },
-      },
-      include: { category: true },
-    });
-
-    let invoicedCents = 0;
-    let collectedCents = 0;
-    let costOfGoodsCents = 0;
-    let cashCollectedCents = 0;
-
-    for (const s of sales) {
-      invoicedCents += s.totalCents;
-      collectedCents += s.collectedCents;
-      costOfGoodsCents += s.totalCostCents;
-
-      for (const p of s.payments) {
-        if (p.method === "EFECTIVO") {
-          cashCollectedCents += p.amountCents;
-        }
-      }
+    if (Number.isNaN(targetDate.getTime())) {
+      return NextResponse.json({ success: false, error: "Fecha inválida para el cuadre." }, { status: 400 });
     }
 
-    let operationalExpCents = 0;
-    let cashExpensesCents = 0;
+    const { start: weekStart, end: weekEnd } = getWeekBounds(targetDate);
+    const summary = await computeWeeklySummary(weekStart, weekEnd);
 
-    for (const e of expenses) {
-      operationalExpCents += e.amountCents;
-      if (e.paymentMethod === "EFECTIVO") {
-        cashExpensesCents += e.amountCents;
-      }
-    }
-
-    const pendingCents = Math.max(0, invoicedCents - collectedCents);
-    const netResultCents = invoicedCents - costOfGoodsCents - operationalExpCents;
-
-    // Buscar si ya existe un cierre guardado para esta semana
     const existingClose = await prisma.weeklyClose.findFirst({
       where: {
         weekStart: { gte: new Date(weekStart.getTime() - 1000), lte: new Date(weekStart.getTime() + 1000) },
@@ -86,21 +111,12 @@ export async function GET(request: Request) {
       data: {
         weekStart: weekStart.toISOString(),
         weekEnd: weekEnd.toISOString(),
-        invoicedCents,
-        collectedCents,
-        pendingCents,
-        costOfGoodsCents,
-        operationalExpCents,
-        netResultCents,
-        cashCollectedCents,
-        cashExpensesCents,
-        salesCount: sales.length,
-        expensesCount: expenses.length,
+        ...summary,
         existingClose,
       },
     });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -108,89 +124,67 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      weekStart,
-      weekEnd,
-      cashFundCents = 0,
-      countedCashCents = 0,
-      notes,
-    } = body;
-
-    const startDate = new Date(weekStart);
-    const endDate = new Date(weekEnd);
-
-    // Recalcular totales reales
-    const sales = await prisma.sale.findMany({
-      where: { status: "ACTIVE", saleDate: { gte: startDate, lte: endDate } },
-      include: { payments: true },
-    });
-    const expenses = await prisma.operationalExpense.findMany({
-      where: { expenseDate: { gte: startDate, lte: endDate } },
-    });
-
-    let invoicedCents = 0;
-    let collectedCents = 0;
-    let costOfGoodsCents = 0;
-    let cashCollectedCents = 0;
-
-    for (const s of sales) {
-      invoicedCents += s.totalCents;
-      collectedCents += s.collectedCents;
-      costOfGoodsCents += s.totalCostCents;
-      for (const p of s.payments) {
-        if (p.method === "EFECTIVO") cashCollectedCents += p.amountCents;
-      }
+    const parsed = closeWeekSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: "Datos inválidos para cerrar el cuadre semanal." },
+        { status: 400 }
+      );
     }
 
-    let operationalExpCents = 0;
-    let cashExpensesCents = 0;
-    for (const e of expenses) {
-      operationalExpCents += e.amountCents;
-      if (e.paymentMethod === "EFECTIVO") cashExpensesCents += e.amountCents;
+    const rawStart = new Date(parsed.data.weekStart);
+    if (Number.isNaN(rawStart.getTime())) {
+      return NextResponse.json({ success: false, error: "Fecha de inicio inválida." }, { status: 400 });
     }
 
-    const expectedCashCents = (parseInt(cashFundCents) || 0) + cashCollectedCents - cashExpensesCents;
-    const counted = parseInt(countedCashCents) || 0;
-    const cashDifferenceCents = counted - expectedCashCents;
+    const { start: startDate, end: endDate } = getWeekBounds(rawStart);
+    const summary = await computeWeeklySummary(startDate, endDate);
+
+    const cashFundCents = parsed.data.cashFundCents;
+    const countedCashCents = parsed.data.countedCashCents;
+    const expectedCashCents = cashFundCents + summary.cashCollectedCents - summary.cashExpensesCents;
+    const cashDifferenceCents = countedCashCents - expectedCashCents;
 
     const saved = await prisma.weeklyClose.upsert({
       where: { weekStart: startDate },
       create: {
         weekStart: startDate,
         weekEnd: endDate,
-        invoicedCents,
-        collectedCents,
-        pendingCents: invoicedCents - collectedCents,
-        costOfGoodsCents,
-        operationalExpCents,
-        netResultCents: invoicedCents - costOfGoodsCents - operationalExpCents,
-        cashFundCents: parseInt(cashFundCents) || 0,
+        invoicedCents: summary.invoicedCents,
+        collectedCents: summary.collectedCents,
+        pendingCents: summary.pendingCents,
+        costOfGoodsCents: summary.costOfGoodsCents,
+        operationalExpCents: summary.operationalExpCents,
+        netResultCents: summary.netResultCents,
+        cashFundCents,
         expectedCashCents,
-        countedCashCents: counted,
+        countedCashCents,
         cashDifferenceCents,
         isClosed: true,
         closedAt: new Date(),
-        notes: notes || null,
+        modifiedAfterClose: false,
+        notes: parsed.data.notes || null,
       },
       update: {
-        invoicedCents,
-        collectedCents,
-        pendingCents: invoicedCents - collectedCents,
-        costOfGoodsCents,
-        operationalExpCents,
-        netResultCents: invoicedCents - costOfGoodsCents - operationalExpCents,
-        cashFundCents: parseInt(cashFundCents) || 0,
+        invoicedCents: summary.invoicedCents,
+        collectedCents: summary.collectedCents,
+        pendingCents: summary.pendingCents,
+        costOfGoodsCents: summary.costOfGoodsCents,
+        operationalExpCents: summary.operationalExpCents,
+        netResultCents: summary.netResultCents,
+        cashFundCents,
         expectedCashCents,
-        countedCashCents: counted,
+        countedCashCents,
         cashDifferenceCents,
         isClosed: true,
         closedAt: new Date(),
-        notes: notes || null,
+        modifiedAfterClose: false,
+        notes: parsed.data.notes || null,
       },
     });
 
     return NextResponse.json({ success: true, data: saved });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return handleApiError(error);
   }
 }

@@ -30,7 +30,7 @@ export function calculateCostPerBaseUnit(
     throw new Error(`Error calculando costo base: ${norm.error}`);
   }
   if (norm.value <= 0) throw new Error("La cantidad del empaque en unidad base debe ser mayor a 0");
-  return packagePriceCents / norm.value; // centavos por unidad base (ej: centavos por gramo)
+  return packagePriceCents / 100 / norm.value; // RD$ por unidad base (consistente con DB e ingredient-cost.ts)
 }
 
 /**

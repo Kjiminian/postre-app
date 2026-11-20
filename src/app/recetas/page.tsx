@@ -39,6 +39,10 @@ interface RecipeItem {
   yieldUnit: string;
   laborPercent: number;
   overheadPercent: number;
+  contingencyPercent?: number;
+  subtotalBeforeContingencyCents?: number;
+  batchCostExactCents?: number;
+  commercialRefCents?: number | null;
   packageCostCents: number;
   batchCostCents: number;
   unitCostCents: number;
@@ -66,9 +70,13 @@ interface RecipeItem {
     id: string;
     name: string;
     sizeDescription?: string;
+    consumptionMode?: "YIELD_PER_BATCH" | "BATCH_FRACTION";
+    batchFraction?: number;
     motherRecipeQty: number;
     motherRecipeUnit: string;
     presentationYield: number;
+    baseCostCents?: number;
+    unitTotalCostExactCents?: number;
     packagingCostCents: number;
     additionalCostCents: number;
     totalCostCents: number;
@@ -80,8 +88,13 @@ interface RecipeItem {
     realMarginPercent: number;
     isActive: boolean;
     isComposite?: boolean;
+    parentId?: string | null;
+    parent?: { id: string; name: string; unitTotalCostExactCents?: number; totalCostCents: number } | null;
+    groupQty?: number;
     materials?: Array<{
       id: string;
+      ingredientId?: string | null;
+      materialType?: "PACKAGING" | "DECORATION";
       name: string;
       quantity: number;
       unit: string;
@@ -123,23 +136,40 @@ export default function RecetasPage() {
     yieldUnit: "porciones",
     laborPercent: 40,
     overheadPercent: 30,
+    contingencyPercent: 0,
     packageCostDOP: 0,
     targetMargin: 60,
     notes: "",
     ingredients: [] as Array<{ ingredientId: string; quantity: number; unit: string; costCents: number }>,
   });
 
-  // Formulario Presentación
+  // Formulario Variante / Presentación Agrupada
   const [presForm, setPresForm] = useState({
     name: "",
     sizeDescription: "",
+    consumptionMode: "YIELD_PER_BATCH" as "YIELD_PER_BATCH" | "BATCH_FRACTION",
+    presentationYield: 1,
+    batchFraction: 1,
     motherRecipeQty: 1,
     motherRecipeUnit: "porciones",
+    parentId: "" as string,
+    parentName: "" as string,
+    parentExactCostCents: 0,
+    groupQty: 1,
+    isComposite: false,
     pricingMethod: "MARGIN" as PricingMethod,
     desiredMarginPercent: 35,
     finalPriceDOP: 0,
     notes: "",
-    materials: [] as Array<{ ingredientId?: string; name: string; quantity: number; unit: string; unitCostDOP: number; totalCostCents: number }>,
+    materials: [] as Array<{
+      ingredientId?: string;
+      materialType: "PACKAGING" | "DECORATION";
+      name: string;
+      quantity: number;
+      unit: string;
+      unitCostDOP: number;
+      totalCostCents: number;
+    }>,
   });
 
   const loadData = async () => {
@@ -192,6 +222,7 @@ export default function RecetasPage() {
       yieldUnit: "porciones",
       laborPercent: 30,
       overheadPercent: 20,
+      contingencyPercent: 0,
       packageCostDOP: 0,
       targetMargin: 40,
       notes: "",
@@ -210,6 +241,7 @@ export default function RecetasPage() {
       yieldUnit: recipe.yieldUnit,
       laborPercent: recipe.laborPercent,
       overheadPercent: recipe.overheadPercent,
+      contingencyPercent: recipe.contingencyPercent ?? 0,
       packageCostDOP: (recipe.packageCostCents || 0) / 100,
       targetMargin: recipe.targetMargin,
       notes: recipe.notes || "",
@@ -229,8 +261,44 @@ export default function RecetasPage() {
     setPresForm({
       name: "",
       sizeDescription: "",
+      consumptionMode: "YIELD_PER_BATCH",
+      presentationYield: mother.yield || 1,
+      batchFraction: mother.yield > 0 ? 1 / mother.yield : 1,
       motherRecipeQty: 1,
       motherRecipeUnit: mother.yieldUnit,
+      parentId: "",
+      parentName: "",
+      parentExactCostCents: 0,
+      groupQty: 1,
+      isComposite: false,
+      pricingMethod: "MARGIN",
+      desiredMarginPercent: 35,
+      finalPriceDOP: 0,
+      notes: "",
+      materials: [],
+    });
+    setIsPresModalOpen(true);
+  };
+
+  const handleOpenNewGroupPresentation = (mother: RecipeItem, parentVariant: RecipeItem["presentations"][number]) => {
+    setEditingPresRecordId(null);
+    setSelectedMotherRecipe(mother);
+    setPresForm({
+      name: `Caja de 15 ${parentVariant.name}`,
+      sizeDescription: "Caja x 15 unidades",
+      consumptionMode: parentVariant.consumptionMode || "YIELD_PER_BATCH",
+      presentationYield: parentVariant.presentationYield || 1,
+      batchFraction: parentVariant.batchFraction || 1,
+      motherRecipeQty: parentVariant.motherRecipeQty || 1,
+      motherRecipeUnit: parentVariant.motherRecipeUnit,
+      parentId: parentVariant.id,
+      parentName: parentVariant.name,
+      parentExactCostCents:
+        parentVariant.unitTotalCostExactCents && parentVariant.unitTotalCostExactCents > 0
+          ? parentVariant.unitTotalCostExactCents
+          : parentVariant.totalCostCents,
+      groupQty: 15,
+      isComposite: true,
       pricingMethod: "MARGIN",
       desiredMarginPercent: 35,
       finalPriceDOP: 0,
@@ -243,16 +311,39 @@ export default function RecetasPage() {
   const handleOpenEditPresentation = (mother: RecipeItem, pres: RecipeItem["presentations"][number]) => {
     setEditingPresRecordId(pres.id);
     setSelectedMotherRecipe(mother);
+    const parentExact =
+      pres.parent?.unitTotalCostExactCents && pres.parent.unitTotalCostExactCents > 0
+        ? pres.parent.unitTotalCostExactCents
+        : pres.parent?.totalCostCents || 0;
+    const mode = pres.consumptionMode === "BATCH_FRACTION" ? "BATCH_FRACTION" : "YIELD_PER_BATCH";
+    const frac =
+      pres.batchFraction && pres.batchFraction > 0
+        ? pres.batchFraction
+        : mother.yield > 0 && pres.motherRecipeQty > 0
+        ? pres.motherRecipeQty / mother.yield
+        : 1;
+    const presYield = pres.presentationYield && pres.presentationYield > 0 ? pres.presentationYield : 1 / frac;
+
     setPresForm({
       name: pres.name,
       sizeDescription: pres.sizeDescription || "",
+      consumptionMode: mode,
+      presentationYield: presYield,
+      batchFraction: frac,
       motherRecipeQty: pres.motherRecipeQty,
       motherRecipeUnit: pres.motherRecipeUnit,
+      parentId: pres.parentId || "",
+      parentName: pres.parent?.name || "",
+      parentExactCostCents: parentExact,
+      groupQty: pres.groupQty || 1,
+      isComposite: Boolean(pres.isComposite || pres.parentId),
       pricingMethod: pres.pricingMethod,
       desiredMarginPercent: pres.desiredMarginPercent,
       finalPriceDOP: pres.finalPriceCents / 100,
       notes: "",
       materials: (pres.materials || []).map((m) => ({
+        ingredientId: m.ingredientId || undefined,
+        materialType: m.materialType === "DECORATION" ? "DECORATION" : "PACKAGING",
         name: m.name,
         quantity: m.quantity,
         unit: m.unit,
@@ -268,16 +359,36 @@ export default function RecetasPage() {
       return { baseCostDOP: 0, packagingCostDOP: 0, totalCostDOP: 0, suggestedPriceDOP: 0, profitDOP: 0, realMargin: 0 };
     }
 
-    const baseCostCents = Math.round(selectedMotherRecipe.costPerYieldUnit * presForm.motherRecipeQty);
+    let baseExactCents = 0;
+    if (presForm.parentId && presForm.parentExactCostCents > 0) {
+      baseExactCents = presForm.parentExactCostCents * (presForm.groupQty > 0 ? presForm.groupQty : 1);
+    } else {
+      const motherExact =
+        selectedMotherRecipe.batchCostExactCents && selectedMotherRecipe.batchCostExactCents > 0
+          ? selectedMotherRecipe.batchCostExactCents
+          : selectedMotherRecipe.batchCostCents;
+      const frac =
+        presForm.consumptionMode === "BATCH_FRACTION"
+          ? presForm.batchFraction > 0
+            ? presForm.batchFraction
+            : 1
+          : presForm.presentationYield > 0
+          ? 1 / presForm.presentationYield
+          : 1;
+      baseExactCents = motherExact * frac;
+    }
+
+    const baseCostCents = Math.round(baseExactCents);
     const packagingCostCents = presForm.materials.reduce((sum, m) => sum + (m.totalCostCents || 0), 0);
-    const totalCostCents = baseCostCents + packagingCostCents;
+    const totalExactCents = baseExactCents + packagingCostCents;
+    const totalCostCents = Math.round(totalExactCents);
 
     let suggestedCents = totalCostCents;
     if (presForm.pricingMethod === "MARKUP") {
-      suggestedCents = Math.ceil(totalCostCents * (1 + presForm.desiredMarginPercent / 100));
+      suggestedCents = Math.ceil(totalExactCents * (1 + presForm.desiredMarginPercent / 100));
     } else {
       const frac = presForm.desiredMarginPercent / 100;
-      suggestedCents = frac < 1 ? Math.ceil(totalCostCents / (1 - frac)) : totalCostCents;
+      suggestedCents = frac < 1 ? Math.ceil(totalExactCents / (1 - frac)) : totalCostCents;
     }
 
     const finalCents = presForm.finalPriceDOP > 0 ? Math.round(presForm.finalPriceDOP * 100) : suggestedCents;
@@ -285,7 +396,7 @@ export default function RecetasPage() {
     const realMargin = finalCents > 0 ? ((finalCents - totalCostCents) / finalCents) * 100 : 0;
 
     return {
-      baseCostDOP: baseCostCents / 100,
+      baseCostDOP: baseExactCents / 100,
       packagingCostDOP: packagingCostCents / 100,
       totalCostDOP: totalCostCents / 100,
       suggestedPriceDOP: suggestedCents / 100,
@@ -301,18 +412,32 @@ export default function RecetasPage() {
     if (!selectedMotherRecipe || !presForm.name) return;
 
     try {
+      const effectiveFraction =
+        presForm.consumptionMode === "BATCH_FRACTION"
+          ? presForm.batchFraction
+          : presForm.presentationYield > 0
+          ? 1 / presForm.presentationYield
+          : 1;
+
       const payload = {
         ...(editingPresRecordId ? { id: editingPresRecordId } : { recipeId: selectedMotherRecipe.id }),
         name: presForm.name,
         sizeDescription: presForm.sizeDescription,
-        motherRecipeQty: presForm.motherRecipeQty,
+        consumptionMode: presForm.consumptionMode,
+        presentationYield: presForm.consumptionMode === "YIELD_PER_BATCH" ? presForm.presentationYield : 1 / effectiveFraction,
+        batchFraction: effectiveFraction,
+        motherRecipeQty: (selectedMotherRecipe.yield || 1) * effectiveFraction,
         motherRecipeUnit: presForm.motherRecipeUnit,
+        parentId: presForm.parentId || null,
+        groupQty: presForm.parentId ? presForm.groupQty : 1,
+        isComposite: Boolean(presForm.parentId || presForm.isComposite),
         pricingMethod: presForm.pricingMethod,
         desiredMarginPercent: presForm.desiredMarginPercent,
         finalPriceCents: presForm.finalPriceDOP > 0 ? Math.round(presForm.finalPriceDOP * 100) : undefined,
         notes: presForm.notes,
         materials: presForm.materials.map((m) => ({
           ingredientId: m.ingredientId || null,
+          materialType: m.materialType || "PACKAGING",
           name: m.name,
           quantity: m.quantity,
           unit: m.unit,
@@ -406,7 +531,11 @@ export default function RecetasPage() {
   const modalIngTotalCents = recipeForm.ingredients.reduce((s, i) => s + (i.costCents || 0), 0);
   const modalOverheadCents = Math.round((modalIngTotalCents * recipeForm.overheadPercent) / 100);
   const modalLaborCents = Math.round((modalIngTotalCents * recipeForm.laborPercent) / 100);
-  const modalBatchRealCents = modalIngTotalCents + modalOverheadCents + modalLaborCents + Math.round(recipeForm.packageCostDOP * 100);
+  const modalSubtotalBeforeContingency =
+    modalIngTotalCents + modalOverheadCents + modalLaborCents + Math.round(recipeForm.packageCostDOP * 100);
+  const modalBatchRealCents = Math.round(
+    modalSubtotalBeforeContingency * (1 + (recipeForm.contingencyPercent || 0) / 100)
+  );
   const modalGainBaseCents = Math.round((modalBatchRealCents * recipeForm.targetMargin) / 100);
   const modalTotalWithGainCents = modalBatchRealCents + modalGainBaseCents;
 
@@ -597,7 +726,7 @@ export default function RecetasPage() {
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#9C4266] text-white rounded-lg font-medium hover:bg-[#833554] shadow-sm transition-all"
                         >
                           <Gift className="w-3.5 h-3.5" />
-                          <span>Agregar Presentación</span>
+                          <span>Agregar Variante</span>
                         </button>
                       </div>
                     </div>
@@ -681,10 +810,38 @@ export default function RecetasPage() {
                               <span className="tabular-nums">{formatDOP(laborCents)}</span>
                             </div>
 
-                            <div className="pt-2 border-t border-[#E8E2D9] flex justify-between items-center font-bold text-[#4A3B32]">
-                              <span>SubTotal (Costo Real del Lote)</span>
-                              <span className="text-sm tabular-nums">{formatDOP(subTotalRealCents)}</span>
+                            <div className="pt-2 border-t border-[#E8E2D9] flex justify-between items-center font-semibold text-[#4A3B32]">
+                              <span>Subtotal Antes de Contingencia</span>
+                              <span className="tabular-nums">
+                                {formatDOP(recipe.subtotalBeforeContingencyCents || subTotalRealCents)}
+                              </span>
                             </div>
+
+                            {(recipe.contingencyPercent ?? 0) > 0 && (
+                              <div className="flex justify-between text-[#744210] font-medium">
+                                <span>Contingencia Imprevistos ({recipe.contingencyPercent}%)</span>
+                                <span className="tabular-nums">
+                                  {formatDOP(
+                                    Math.round(
+                                      (recipe.subtotalBeforeContingencyCents || subTotalRealCents) *
+                                        ((recipe.contingencyPercent ?? 0) / 100)
+                                    )
+                                  )}
+                                </span>
+                              </div>
+                            )}
+
+                            <div className="pt-2 border-t border-[#E8E2D9] flex justify-between items-center font-bold text-[#4A3B32]">
+                              <span>Costo Lote c/ Contingencia (Base Variantes)</span>
+                              <span className="text-sm tabular-nums">{formatDOP(recipe.batchCostCents || subTotalRealCents)}</span>
+                            </div>
+
+                            {recipe.commercialRefCents && recipe.commercialRefCents > 0 && (
+                              <div className="flex justify-between items-center text-[11px] px-2 py-1 rounded bg-[#FEFCBF]/70 text-[#744210] border border-[#F6E05E]">
+                                <span>Ref. Comercial Excel (Revisión):</span>
+                                <strong className="tabular-nums">{formatDOP(recipe.commercialRefCents)}</strong>
+                              </div>
+                            )}
 
                             <div className="flex justify-between text-[#22543D] font-medium">
                               <span>Ganancia Receta Base ({recipe.targetMargin}%)</span>
@@ -841,9 +998,18 @@ export default function RecetasPage() {
                                         </div>
 
                                         <div className="flex items-center gap-1">
+                                          {!pres.parentId && (
+                                            <button
+                                              onClick={() => handleOpenNewGroupPresentation(recipe, pres)}
+                                              title="Crear presentación agrupada (ej. Caja de 15)"
+                                              className="px-1.5 py-0.5 text-[10px] font-semibold text-[#9C4266] bg-[#FAF5F7] hover:bg-[#F3D5E2] rounded border border-[#F3D5E2] transition-colors"
+                                            >
+                                              + Agrupada
+                                            </button>
+                                          )}
                                           <button
                                             onClick={() => handleOpenEditPresentation(recipe, pres)}
-                                            title="Editar presentación, materiales, cantidades y costos"
+                                            title="Editar variante, materiales, cantidades y costos"
                                             className="p-1 text-[#7D6E65] hover:text-[#9C4266] hover:bg-white rounded transition-colors"
                                           >
                                             <Edit2 className="w-3.5 h-3.5" />
@@ -1074,7 +1240,7 @@ export default function RecetasPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-6 gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Rendimiento *</label>
                     <input
@@ -1105,6 +1271,7 @@ export default function RecetasPage() {
                     <input
                       type="number"
                       min="0"
+                      step="0.1"
                       value={recipeForm.overheadPercent}
                       onChange={(e) => setRecipeForm({ ...recipeForm, overheadPercent: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
@@ -1115,9 +1282,23 @@ export default function RecetasPage() {
                     <input
                       type="number"
                       min="0"
+                      step="0.1"
                       value={recipeForm.laborPercent}
                       onChange={(e) => setRecipeForm({ ...recipeForm, laborPercent: parseFloat(e.target.value) || 0 })}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] tabular-nums"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#9C4266] mb-1">Contingencia (%)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.1"
+                      value={recipeForm.contingencyPercent}
+                      onChange={(e) =>
+                        setRecipeForm({ ...recipeForm, contingencyPercent: parseFloat(e.target.value) || 0 })
+                      }
+                      className="w-full px-3 py-2 text-sm font-semibold rounded-lg border border-[#F3D5E2] bg-[#FAF5F7] text-[#9C4266] tabular-nums"
                     />
                   </div>
                   <div>
@@ -1281,11 +1462,22 @@ export default function RecetasPage() {
               </button>
 
               <h2 className="text-xl font-serif font-bold text-[#4A3B32] mb-1">
-                {editingPresRecordId ? "Editar Presentación Derivada" : "Nueva Presentación Derivada"}
+                {editingPresRecordId
+                  ? presForm.parentId
+                    ? "Editar Presentación Agrupada"
+                    : "Editar Variante"
+                  : presForm.parentId
+                  ? "Nueva Presentación Agrupada"
+                  : "Nueva Variante"}
               </h2>
-              <p className="text-xs text-[#7D6E65] mb-4">
-                Derivando de <strong>{selectedMotherRecipe.name}</strong> (Costo Real: RD$ {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}/{selectedMotherRecipe.yieldUnit})
-              </p>
+              <div className="p-2.5 rounded-lg bg-[#FAF8F6] border border-[#E8E2D9] text-xs text-[#4A3B32] mb-4 flex flex-wrap items-center justify-between gap-2">
+                <span>
+                  Receta Madre (solo lectura): <strong>{selectedMotherRecipe.name}</strong>
+                </span>
+                <span className="font-semibold text-[#9C4266] tabular-nums">
+                  Costo Lote c/ Contingencia: {formatDOP(selectedMotherRecipe.batchCostCents)}
+                </span>
+              </div>
 
               <form onSubmit={handleSavePresentation} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1312,39 +1504,128 @@ export default function RecetasPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9]">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
-                      Cantidad Receta Madre que consume ({selectedMotherRecipe.yieldUnit})
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0.01"
-                      required
-                      value={presForm.motherRecipeQty}
-                      onChange={(e) => setPresForm({ ...presForm, motherRecipeQty: parseFloat(e.target.value) || 1 })}
-                      className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white tabular-nums"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#7D6E65] mb-1">
-                      O calcular por división del lote:
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[1, 2, 6, 12, selectedMotherRecipe.yield].map((q, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setPresForm({ ...presForm, motherRecipeQty: q })}
-                          className="px-2 py-1 text-[11px] bg-white border border-[#E8E2D9] rounded hover:border-[#9C4266] text-[#4A3B32] font-medium tabular-nums"
-                        >
-                          {q === selectedMotherRecipe.yield ? `1 Lote (${q})` : `${q} ${selectedMotherRecipe.yieldUnit.slice(0, 4)}`}
-                        </button>
-                      ))}
+                {presForm.parentId ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9]">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#7D6E65] mb-1">Variante Origen (solo lectura)</label>
+                      <div className="px-3 py-2 text-sm font-semibold rounded-lg border border-[#E8E2D9] bg-white text-[#4A3B32]">
+                        {presForm.parentName || "Variante vinculada"} (RD$ {(presForm.parentExactCostCents / 100).toFixed(2)}/ud)
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#4A3B32] mb-1">Cantidad de unidades en la caja / grupo *</label>
+                      <input
+                        type="number"
+                        step="1"
+                        min="1"
+                        required
+                        value={presForm.groupQty}
+                        onChange={(e) => setPresForm({ ...presForm, groupQty: Math.max(1, parseFloat(e.target.value) || 1) })}
+                        className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white tabular-nums"
+                      />
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#4A3B32]">Modo único de consumo del lote:</span>
+                      <div className="inline-flex rounded-lg border border-[#E8E2D9] bg-white p-0.5 text-xs">
+                        <button
+                          type="button"
+                          onClick={() => setPresForm({ ...presForm, consumptionMode: "YIELD_PER_BATCH" })}
+                          className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
+                            presForm.consumptionMode === "YIELD_PER_BATCH"
+                              ? "bg-[#9C4266] text-white"
+                              : "text-[#7D6E65] hover:text-[#4A3B32]"
+                          }`}
+                        >
+                          Rendimiento por lote
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPresForm({ ...presForm, consumptionMode: "BATCH_FRACTION" })}
+                          className={`px-2.5 py-1 rounded-md font-semibold transition-colors ${
+                            presForm.consumptionMode === "BATCH_FRACTION"
+                              ? "bg-[#9C4266] text-white"
+                              : "text-[#7D6E65] hover:text-[#4A3B32]"
+                          }`}
+                        >
+                          Fracción del lote
+                        </button>
+                      </div>
+                    </div>
+
+                    {presForm.consumptionMode === "YIELD_PER_BATCH" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                            Unidades por lote (ej. 8 o 15) *
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            min="0.01"
+                            required
+                            value={presForm.presentationYield}
+                            onChange={(e) => {
+                              const y = parseFloat(e.target.value) || 1;
+                              const frac = y > 0 ? 1 / y : 1;
+                              setPresForm({
+                                ...presForm,
+                                presentationYield: y,
+                                batchFraction: frac,
+                                motherRecipeQty: (selectedMotherRecipe.yield || 1) * frac,
+                              });
+                            }}
+                            className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white tabular-nums"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-[#7D6E65] mb-1">
+                            Fracción calculada automáticamente (solo lectura)
+                          </label>
+                          <div className="px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white/70 text-[#7D6E65] tabular-nums">
+                            1 / {presForm.presentationYield} lote ({((1 / Math.max(presForm.presentationYield, 0.01)) * 100).toFixed(2)}%)
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-[#4A3B32] mb-1">
+                            Fracción del lote por unidad (ej. 0.5 = 1/2, 1 = entero) *
+                          </label>
+                          <input
+                            type="number"
+                            step="any"
+                            min="0.01"
+                            required
+                            value={presForm.batchFraction}
+                            onChange={(e) => {
+                              const frac = parseFloat(e.target.value) || 1;
+                              const y = frac > 0 ? 1 / frac : 1;
+                              setPresForm({
+                                ...presForm,
+                                batchFraction: frac,
+                                presentationYield: y,
+                                motherRecipeQty: (selectedMotherRecipe.yield || 1) * frac,
+                              });
+                            }}
+                            className="w-full px-3 py-2 text-sm font-bold rounded-lg border border-[#E8E2D9] bg-white tabular-nums"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-[#7D6E65] mb-1">
+                            Rendimiento calculado (solo lectura)
+                          </label>
+                          <div className="px-3 py-2 text-sm rounded-lg border border-[#E8E2D9] bg-white/70 text-[#7D6E65] tabular-nums">
+                            {(1 / Math.max(presForm.batchFraction, 0.0001)).toFixed(2)} unidades por lote
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Materiales y Empaques */}
                 <div className="p-3.5 rounded-xl bg-[#FAF8F6] border border-[#E8E2D9] space-y-2.5">
@@ -1366,6 +1647,7 @@ export default function RecetasPage() {
                                 ...presForm.materials,
                                 {
                                   ingredientId: found.id,
+                                  materialType: found.category === "DECORATION" ? "DECORATION" : "PACKAGING",
                                   name: found.name,
                                   quantity: 1,
                                   unit: found.baseUnit,
@@ -1392,7 +1674,14 @@ export default function RecetasPage() {
                             ...presForm,
                             materials: [
                               ...presForm.materials,
-                              { name: "Nuevo Producto", quantity: 1, unit: "unidad", unitCostDOP: 25, totalCostCents: 2500 },
+                              {
+                                materialType: "PACKAGING",
+                                name: "Nuevo Producto",
+                                quantity: 1,
+                                unit: "unidad",
+                                unitCostDOP: 25,
+                                totalCostCents: 2500,
+                              },
                             ],
                           })
                         }
@@ -1412,22 +1701,28 @@ export default function RecetasPage() {
                       <span className="col-span-1"></span>
                     </div>
 
-                    {/* Fila 1: Producto de la Receta Madre */}
+                    {/* Fila 1: Base Receta Madre o Variante Origen (solo lectura) */}
                     <div className="grid grid-cols-12 gap-1.5 items-center bg-[#FAF5F7] px-1.5 py-1.5 rounded-lg border border-[#F3D5E2]">
-                      <div className="col-span-5 text-xs font-semibold text-[#9C4266] truncate" title={selectedMotherRecipe.name}>
-                        Base: {selectedMotherRecipe.name}
+                      <div
+                        className="col-span-5 text-xs font-semibold text-[#9C4266] truncate"
+                        title={presForm.parentId ? presForm.parentName : selectedMotherRecipe.name}
+                      >
+                        Base: {presForm.parentId ? presForm.parentName : selectedMotherRecipe.name}
                       </div>
                       <div className="col-span-2 text-right text-xs text-[#7D6E65] tabular-nums">
-                        {(selectedMotherRecipe.costPerYieldUnit / 100).toFixed(2)}
+                        {presForm.parentId
+                          ? (presForm.parentExactCostCents / 100).toFixed(2)
+                          : (selectedMotherRecipe.batchCostCents / 100).toFixed(2)}
                       </div>
-                      <input
-                        type="number"
-                        step="0.1"
-                        min="0.01"
-                        value={presForm.motherRecipeQty}
-                        onChange={(e) => setPresForm({ ...presForm, motherRecipeQty: parseFloat(e.target.value) || 0.01 })}
-                        className="col-span-2 px-2 py-1 text-xs text-right font-bold rounded border border-[#9C4266]/50 bg-white text-[#9C4266] tabular-nums"
-                      />
+                      <div className="col-span-2 text-right text-xs font-bold text-[#9C4266] tabular-nums px-1">
+                        {presForm.parentId
+                          ? `${presForm.groupQty} uds`
+                          : `${(
+                              (presForm.consumptionMode === "BATCH_FRACTION"
+                                ? presForm.batchFraction
+                                : 1 / Math.max(presForm.presentationYield, 0.01)) * 100
+                            ).toFixed(1)}% lote`}
+                      </div>
                       <div className="col-span-2 text-right text-xs font-bold text-[#9C4266] tabular-nums">
                         RD$ {presPreview.baseCostDOP.toFixed(2)}
                       </div>
@@ -1439,22 +1734,37 @@ export default function RecetasPage() {
                     {/* Filas de Materiales y Adicionales */}
                     {presForm.materials.length === 0 ? (
                       <p className="text-[11px] text-[#7D6E65] text-center py-1.5">
-                        Sin empaques o adicionales. Agrega del catálogo o crea un producto manual.
+                        Sin empaques, decoración o adicionales. Agrega del catálogo o crea un producto manual.
                       </p>
                     ) : (
                       presForm.materials.map((m, idx) => (
                         <div key={idx} className="grid grid-cols-12 gap-1.5 items-center">
-                          <input
-                            type="text"
-                            placeholder="Nombre del producto"
-                            value={m.name}
-                            onChange={(e) => {
-                              const next = [...presForm.materials];
-                              next[idx].name = e.target.value;
-                              setPresForm({ ...presForm, materials: next });
-                            }}
-                            className="col-span-5 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white"
-                          />
+                          <div className="col-span-5 flex items-center gap-1">
+                            <select
+                              value={m.materialType || "PACKAGING"}
+                              onChange={(e) => {
+                                const next = [...presForm.materials];
+                                next[idx].materialType = e.target.value as "PACKAGING" | "DECORATION";
+                                setPresForm({ ...presForm, materials: next });
+                              }}
+                              className="px-1 py-1 text-[10px] rounded border border-[#E8E2D9] bg-white text-[#7D6E65]"
+                              title="Tipo de ítem"
+                            >
+                              <option value="PACKAGING">Empaque</option>
+                              <option value="DECORATION">Decoración</option>
+                            </select>
+                            <input
+                              type="text"
+                              placeholder="Nombre del producto"
+                              value={m.name}
+                              onChange={(e) => {
+                                const next = [...presForm.materials];
+                                next[idx].name = e.target.value;
+                                setPresForm({ ...presForm, materials: next });
+                              }}
+                              className="w-full min-w-0 px-2 py-1 text-xs rounded border border-[#E8E2D9] bg-white"
+                            />
+                          </div>
                           <input
                             type="number"
                             step="0.01"

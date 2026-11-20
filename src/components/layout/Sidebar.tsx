@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,6 +14,8 @@ import {
   Scale,
   FileSpreadsheet,
   Database,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,11 +34,12 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  return (
-    <aside className="w-64 bg-cream-100 border-r border-cream-300 min-h-screen flex flex-col shadow-sidebar select-none">
+  const sidebarContent = (
+    <>
       {/* Brand Header */}
-      <div className="p-6 border-b border-cream-300/80 bg-cream-50/50">
+      <div className="p-6 border-b border-cream-300/80 bg-cream-50/50 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-plum-500 to-plum-600 flex items-center justify-center text-white shadow-md font-serif font-bold text-xl">
             K
@@ -45,6 +49,14 @@ export function Sidebar() {
             <p className="text-xs text-ink-muted">Gestión de Repostería RD$</p>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(false)}
+          aria-label="Cerrar menú"
+          className="md:hidden p-1.5 rounded-lg text-ink-muted hover:bg-cream-200"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Navigation Links */}
@@ -59,6 +71,7 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={() => setMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors",
                 isActive
@@ -88,6 +101,39 @@ export function Sidebar() {
           <span>GEM V3</span>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Botón flotante para abrir menú en móvil */}
+      <button
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        aria-label="Abrir menú de navegación"
+        className="md:hidden fixed bottom-4 right-4 z-40 w-12 h-12 rounded-full bg-[#9C4266] text-white shadow-lg flex items-center justify-center hover:bg-[#831843] transition-colors"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* Drawer móvil */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div
+            className="fixed inset-0 bg-black/40"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+          <aside className="relative w-72 max-w-[85vw] bg-cream-100 border-r border-cream-300 min-h-screen flex flex-col shadow-xl z-10">
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+
+      {/* Barra lateral fija en escritorio */}
+      <aside className="hidden md:flex w-64 shrink-0 bg-cream-100 border-r border-cream-300 min-h-screen flex-col shadow-sidebar select-none">
+        {sidebarContent}
+      </aside>
+    </>
   );
 }

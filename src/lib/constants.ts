@@ -30,16 +30,19 @@ export const EXPENSE_CATEGORIES_DEFAULT = [
   "Otros",
 ] as const;
 
-/** Semana ISO: Lunes 00:00 → Domingo 23:59:59 en AST (UTC-4) */
+/** Semana ISO: Lunes 00:00 → Domingo 23:59:59 en AST (UTC-4, República Dominicana) */
 export function getWeekBounds(date: Date): { start: Date; end: Date } {
-  const d = new Date(date);
-  const day = d.getDay(); // 0=Dom, 1=Lun...
-  const diffToMonday = (day === 0 ? -6 : 1 - day);
-  const monday = new Date(d);
-  monday.setDate(d.getDate() + diffToMonday);
-  monday.setHours(0, 0, 0, 0);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
-  return { start: monday, end: sunday };
+  const AST_OFFSET_MS = 4 * 60 * 60 * 1000;
+  const astDate = new Date(date.getTime() - AST_OFFSET_MS);
+  const day = astDate.getUTCDay(); // 0=Dom, 1=Lun...
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  const mondayYear = astDate.getUTCFullYear();
+  const mondayMonth = astDate.getUTCMonth();
+  const mondayDay = astDate.getUTCDate() + diffToMonday;
+
+  // Lunes 00:00:00.000 AST = 04:00:00.000 UTC
+  const start = new Date(Date.UTC(mondayYear, mondayMonth, mondayDay, 4, 0, 0, 0));
+  // Domingo 23:59:59.999 AST = Lunes siguiente 03:59:59.999 UTC
+  const end = new Date(Date.UTC(mondayYear, mondayMonth, mondayDay + 6, 27, 59, 59, 999));
+  return { start, end };
 }

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   TrendingUp,
@@ -10,58 +13,126 @@ import {
   Clock,
   Sparkles,
   CalendarCheck2,
+  RefreshCw,
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { formatDOP } from "@/lib/utils";
 
+const DAY_NAMES = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+const WEEK_ORDER = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
 export default function DashboardPage() {
-  // Métricas del hito presente para K_Sweet (datos demostrativos basados en el modelo de dominio)
-  const weeklyMetrics = {
-    invoicedCents: 4850000, // RD$ 48,500.00
-    collectedCents: 4200000, // RD$ 42,000.00
-    pendingCents: 650000, // RD$ 6,500.00
-    costOfGoodsCents: 1940000, // RD$ 19,400.00
-    expensesCents: 780000, // RD$ 7,800.00
-    netResultCents: 2130000, // RD$ 21,300.00
-  };
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const pendingReviewAlerts = [
-    {
-      id: "REC-01",
-      title: "Cheesecake de Fresa",
-      reason: "Fórmula #REF! detectada en filas 47-51 del archivo de origen",
-      severity: "alta",
-    },
-    {
-      id: "ING-02",
-      title: "Harina de Trigo (Paquete 5 Libras)",
-      reason: "Factor de empaque multiplicado erróneamente en el Excel original (453g vs 2,267.96g)",
-      severity: "alta",
-    },
-    {
-      id: "REC-03",
-      title: "Galletas de Chispas",
-      reason: "Unidad ambigua 'unidad según Excel' requiere validación de porciones",
-      severity: "media",
-    },
-  ];
+  const [weeklyMetrics, setWeeklyMetrics] = useState({
+    invoicedCents: 0,
+    collectedCents: 0,
+    pendingCents: 0,
+    costOfGoodsCents: 0,
+    expensesCents: 0,
+    netResultCents: 0,
+  });
+  const [salesByDay, setSalesByDay] = useState<Array<{ day: string; amountCents: number; count: number }>>(
+    WEEK_ORDER.map((day) => ({ day, amountCents: 0, count: 0 }))
+  );
+  const [topProducts, setTopProducts] = useState<
+    Array<{ name: string; sold: number; totalCents: number; margin: string }>
+  >([]);
+  const [reviewCount, setReviewCount] = useState(0);
 
-  const topProducts = [
-    { name: "Cheesecake Clásico 8\"", sold: 18, totalCents: 2520000, margin: "52%" },
-    { name: "Bizcocho Dominicano Suspiro 1 lb", sold: 12, totalCents: 1560000, margin: "48%" },
-    { name: "Caja Brownies Artesanales (6 uds)", sold: 25, totalCents: 1125000, margin: "58%" },
-    { name: "Tres Leches Tradicional", sold: 14, totalCents: 840000, margin: "45%" },
-  ];
+  const loadDashboard = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [resCuadre, resVentas, resRecetas, resIngredientes] = await Promise.all([
+        fetch("/api/cuadre"),
+        fetch("/api/ventas?status=ACTIVE"),
+        fetch("/api/recetas"),
+        fetch("/api/ingredientes"),
+      ]);
 
-  const salesByDay = [
-    { day: "Lunes", amountCents: 520000, count: 4 },
-    { day: "Martes", amountCents: 680000, count: 5 },
-    { day: "Miércoles", amountCents: 450000, count: 3 },
-    { day: "Jueves", amountCents: 790000, count: 6 },
-    { day: "Viernes", amountCents: 1120000, count: 9 },
-    { day: "Sábado", amountCents: 890000, count: 8 },
-    { day: "Domingo", amountCents: 400000, count: 3 },
-  ];
+      const [dCuadre, dVentas, dRecetas, dIng] = await Promise.all([
+        resCuadre.json(),
+        resVentas.json(),
+        resRecetas.json(),
+        resIngredientes.json(),
+      ]);
+
+      if (!dCuadre.success) throw new Error(dCuadre.error || "Error cargando cuadre semanal");
+      if (!dVentas.success) throw new Error(dVentas.error || "Error cargando ventas");
+
+      const c = dCuadre.data;
+      setWeeklyMetrics({
+        invoicedCents: c.invoicedCents || 0,
+        collectedCents: c.collectedCents || 0,
+        pendingCents: c.pendingCents || 0,
+        costOfGoodsCents: c.costOfGoodsCents || 0,
+        expensesCents: c.operationalExpCents || 0,
+        netResultCents: c.netResultCents || 0,
+      });
+
+      const weekStartMs = new Date(c.weekStart).getTime();
+      const weekEndMs = new Date(c.weekEnd).getTime();
+
+      const dayBuckets: Record<string, { amountCents: number; count: number }> = {};
+      for (const d of WEEK_ORDER) dayBuckets[d] = { amountCents: 0, count: 0 };
+
+      const prodMap = new Map<string, { name: string; sold: number; totalCents: number; costCents: number }>();
+
+      for (const sale of dVentas.data || []) {
+        const sTime = new Date(sale.saleDate).getTime();
+        if (sTime >= weekStartMs && sTime <= weekEndMs) {
+          // Ajustar a AST (UTC-4) para determinar el día exacto en RD
+          const ast = new Date(sTime - 4 * 60 * 60 * 1000);
+          const dayName = DAY_NAMES[ast.getUTCDay()];
+          if (dayBuckets[dayName]) {
+            dayBuckets[dayName].amountCents += sale.totalCents || 0;
+            dayBuckets[dayName].count += 1;
+          }
+        }
+
+        for (const item of sale.items || []) {
+          const key = item.productName || "Producto";
+          const curr = prodMap.get(key) || { name: key, sold: 0, totalCents: 0, costCents: 0 };
+          curr.sold += item.quantity || 0;
+          curr.totalCents += item.totalCents || 0;
+          curr.costCents += item.totalCostCents || 0;
+          prodMap.set(key, curr);
+        }
+      }
+
+      setSalesByDay(WEEK_ORDER.map((day) => ({ day, ...dayBuckets[day] })));
+
+      const top = Array.from(prodMap.values())
+        .sort((a, b) => b.totalCents - a.totalCents)
+        .slice(0, 5)
+        .map((p) => {
+          const marginPct = p.totalCents > 0 ? ((p.totalCents - p.costCents) / p.totalCents) * 100 : 0;
+          return {
+            name: p.name,
+            sold: Number(p.sold.toFixed(1)),
+            totalCents: p.totalCents,
+            margin: `${marginPct.toFixed(0)}%`,
+          };
+        });
+      setTopProducts(top);
+
+      const recReview = (dRecetas.success ? dRecetas.data : []).filter((r: any) => r.reviewFlag).length;
+      const ingReview = (dIng.success ? dIng.data : []).filter((i: any) => i.reviewFlag).length;
+      setReviewCount(recReview + ingReview);
+    } catch (err: any) {
+      setError(err.message || "Error cargando métricas del panel");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
+
+  const maxDayAmount = Math.max(100000, ...salesByDay.map((d) => d.amountCents));
 
   return (
     <div className="min-h-screen bg-cream-100 pb-16">
@@ -70,160 +141,187 @@ export default function DashboardPage() {
         subtitle="Semana activa (Lunes a Domingo) • República Dominicana (RD$)"
       />
 
-      <div className="p-8 max-w-7xl mx-auto space-y-8">
-        {/* Banner de Bienvenida y Alertas Críticas */}
-        {pendingReviewAlerts.length > 0 && (
-          <div className="p-4 rounded-xl border border-amber-300 bg-amber-50/80 shadow-sm flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div className="flex-1 text-sm">
-              <span className="font-semibold text-amber-900">
-                Atención ({pendingReviewAlerts.length} recetas/ingredientes requieren revisión):
-              </span>{" "}
-              <span className="text-amber-800">
-                Se detectaron inconsistencias en las fórmulas del Excel de origen. Están marcadas como borradores y no como costos definitivos.
-              </span>
-              <div className="mt-2 flex gap-2">
-                <Link
-                  href="/recetas"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-plum-600 hover:text-plum-700 underline"
+      <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8">
+        {loading ? (
+          <div className="bg-white rounded-xl p-12 border border-cream-300 text-center space-y-3">
+            <RefreshCw className="w-8 h-8 text-plum-500 animate-spin mx-auto" />
+            <p className="text-sm font-medium text-ink">Cargando métricas reales de la semana...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-[#FFF5F5] rounded-xl p-8 border border-[#FED7D7] text-center space-y-3">
+            <AlertTriangle className="w-8 h-8 text-[#E53E3E] mx-auto" />
+            <p className="text-sm font-semibold text-[#9B2C2C]">{error}</p>
+            <button
+              onClick={loadDashboard}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#E53E3E] text-white text-xs font-semibold rounded-lg"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Reintentar
+            </button>
+          </div>
+        ) : (
+          <>
+            {reviewCount > 0 && (
+              <div className="p-4 rounded-xl border border-amber-300 bg-amber-50/80 shadow-sm flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div className="flex-1 text-sm">
+                  <span className="font-semibold text-amber-900">
+                    Atención ({reviewCount} recetas/insumos marcados para revisión):
+                  </span>{" "}
+                  <span className="text-amber-800">
+                    Existen registros importados desde Excel con referencias comerciales o alertas pendientes de validación.
+                  </span>
+                  <div className="mt-2 flex gap-3">
+                    <Link
+                      href="/recetas"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-plum-600 hover:text-plum-700 underline"
+                    >
+                      Revisar recetas <ArrowRight className="w-3 h-3" />
+                    </Link>
+                    <Link
+                      href="/ingredientes"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-plum-600 hover:text-plum-700 underline"
+                    >
+                      Revisar productos <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tarjetas KPI */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
+                <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
+                  <span>Facturado Semana</span>
+                  <ShoppingCart className="w-4 h-4 text-plum-500" />
+                </div>
+                <p className="text-2xl font-serif font-bold text-ink tabular-nums">
+                  {formatDOP(weeklyMetrics.invoicedCents)}
+                </p>
+                <p className="text-[11px] text-ink-muted mt-1 tabular-nums">
+                  Cobrado: {formatDOP(weeklyMetrics.collectedCents)}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
+                <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
+                  <span>Por Cobrar (Saldo)</span>
+                  <DollarSign className="w-4 h-4 text-amber-600" />
+                </div>
+                <p className="text-2xl font-serif font-bold text-amber-700 tabular-nums">
+                  {formatDOP(weeklyMetrics.pendingCents)}
+                </p>
+                <p className="text-[11px] text-ink-muted mt-1">Saldo pendiente de ventas activas</p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
+                <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
+                  <span>Costos + Gastos Oper.</span>
+                  <Receipt className="w-4 h-4 text-ink-muted" />
+                </div>
+                <p className="text-2xl font-serif font-bold text-ink tabular-nums">
+                  {formatDOP(weeklyMetrics.costOfGoodsCents + weeklyMetrics.expensesCents)}
+                </p>
+                <p className="text-[11px] text-ink-muted mt-1 tabular-nums">
+                  COGS: {formatDOP(weeklyMetrics.costOfGoodsCents)} • Gastos: {formatDOP(weeklyMetrics.expensesCents)}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-white border border-plum-200 shadow-card">
+                <div className="flex items-center justify-between text-xs text-plum-600 font-semibold mb-2">
+                  <span>Resultado Neto Semana</span>
+                  <TrendingUp className="w-4 h-4 text-plum-500" />
+                </div>
+                <p
+                  className={`text-2xl font-serif font-bold tabular-nums ${
+                    weeklyMetrics.netResultCents >= 0 ? "text-sage-600" : "text-red-600"
+                  }`}
                 >
-                  Revisar recetas pendientes <ArrowRight className="w-3 h-3" />
+                  {formatDOP(weeklyMetrics.netResultCents)}
+                </p>
+                <p className="text-[11px] text-ink-muted mt-1">Facturado − COGS − Gastos Operativos</p>
+              </div>
+            </div>
+
+            {/* Ventas por Día & Productos Principales */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 p-6 rounded-xl bg-white border border-cream-300 shadow-card">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-serif font-bold text-ink">Ventas por Día (Semana Actual)</h3>
+                    <p className="text-xs text-ink-muted">Distribución de ingresos y órdenes de Lunes a Domingo</p>
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-cream-200 text-ink-light font-medium tabular-nums">
+                    {salesByDay.reduce((acc, d) => acc + d.count, 0)} órdenes
+                  </span>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  {salesByDay.map((item) => {
+                    const percentage = Math.min(100, Math.round((item.amountCents / maxDayAmount) * 100));
+                    return (
+                      <div key={item.day} className="flex items-center gap-3 text-xs">
+                        <span className="w-20 font-medium text-ink shrink-0">{item.day}</span>
+                        <div className="flex-1 bg-cream-200/80 rounded-full h-3 overflow-hidden">
+                          <div
+                            className="bg-plum-500 h-full rounded-full transition-all duration-500"
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                        <span className="w-24 text-right font-semibold text-ink tabular-nums">
+                          {formatDOP(item.amountCents)}
+                        </span>
+                        <span className="w-16 text-right text-ink-muted tabular-nums">({item.count} ped.)</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="p-6 rounded-xl bg-white border border-cream-300 shadow-card flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-serif font-bold text-ink">Postres Más Vendidos</h3>
+                    <ChefHat className="w-4 h-4 text-plum-500" />
+                  </div>
+
+                  {topProducts.length === 0 ? (
+                    <p className="text-xs text-ink-muted py-6 text-center">
+                      Aún no hay ventas registradas para mostrar el ranking.
+                    </p>
+                  ) : (
+                    <div className="space-y-3.5">
+                      {topProducts.map((p) => (
+                        <div
+                          key={p.name}
+                          className="flex items-center justify-between text-xs pb-3 border-b border-cream-200 last:border-0 last:pb-0 gap-2"
+                        >
+                          <div className="min-w-0">
+                            <p className="font-semibold text-ink truncate">{p.name}</p>
+                            <p className="text-[11px] text-ink-muted tabular-nums">
+                              {p.sold} vendidos • Margen: {p.margin}
+                            </p>
+                          </div>
+                          <span className="font-bold text-plum-600 tabular-nums shrink-0">
+                            {formatDOP(p.totalCents)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <Link
+                  href="/ventas"
+                  className="mt-6 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-cream-100 hover:bg-cream-200 text-plum-600 font-semibold text-xs transition-colors border border-cream-300"
+                >
+                  <span>Ver reporte detallado de ventas</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
-          </div>
+          </>
         )}
-
-        {/* Tarjetas de Métricas Principales (Semana L-D) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Facturado */}
-          <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between text-ink-muted text-xs font-medium uppercase tracking-wider mb-2">
-              <span>Facturado Semanal</span>
-              <ShoppingCart className="w-4 h-4 text-plum-500" />
-            </div>
-            <p className="text-2xl font-bold font-serif text-ink">
-              {formatDOP(weeklyMetrics.invoicedCents)}
-            </p>
-            <div className="mt-2 flex items-center justify-between text-xs text-ink-muted">
-              <span>Cobrado: {formatDOP(weeklyMetrics.collectedCents)}</span>
-              <span className="text-amber-600 font-medium">
-                Pend: {formatDOP(weeklyMetrics.pendingCents)}
-              </span>
-            </div>
-          </div>
-
-          {/* Costo de lo Vendido (COGS) */}
-          <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between text-ink-muted text-xs font-medium uppercase tracking-wider mb-2">
-              <span>Costo de lo Vendido</span>
-              <Receipt className="w-4 h-4 text-plum-500" />
-            </div>
-            <p className="text-2xl font-bold font-serif text-ink">
-              {formatDOP(weeklyMetrics.costOfGoodsCents)}
-            </p>
-            <p className="mt-2 text-xs text-ink-muted">
-              Costos históricos congelados por cada venta
-            </p>
-          </div>
-
-          {/* Gastos Operativos */}
-          <div className="p-5 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between text-ink-muted text-xs font-medium uppercase tracking-wider mb-2">
-              <span>Gastos Operativos</span>
-              <DollarSign className="w-4 h-4 text-plum-500" />
-            </div>
-            <p className="text-2xl font-bold font-serif text-ink">
-              {formatDOP(weeklyMetrics.expensesCents)}
-            </p>
-            <p className="mt-2 text-xs text-ink-muted">
-              Excluye compras de insumos para no duplicar
-            </p>
-          </div>
-
-          {/* Resultado Estimado (Utilidad Neta) */}
-          <div className="p-5 rounded-xl bg-white border border-sage-500/30 shadow-card bg-gradient-to-br from-white to-sage-500/5">
-            <div className="flex items-center justify-between text-sage-600 text-xs font-semibold uppercase tracking-wider mb-2">
-              <span>Resultado Estimado</span>
-              <TrendingUp className="w-4 h-4 text-sage-500" />
-            </div>
-            <p className="text-2xl font-bold font-serif text-sage-600">
-              {formatDOP(weeklyMetrics.netResultCents)}
-            </p>
-            <div className="mt-2 flex items-center justify-between text-xs text-sage-600 font-medium">
-              <span>Margen Neto: 43.9%</span>
-              <span className="text-ink-muted">Lunes a Domingo</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Sección: Ventas por Día & Productos Principales */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Ventas por Día de la Semana */}
-          <div className="lg:col-span-2 p-6 rounded-xl bg-white border border-cream-300 shadow-card">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-serif font-bold text-ink">Ventas por Día (Semana Actual)</h3>
-                <p className="text-xs text-ink-muted">Distribución de ingresos y órdenes de Lunes a Domingo</p>
-              </div>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-cream-200 text-ink-light font-medium">
-                {salesByDay.reduce((acc, d) => acc + d.count, 0)} órdenes
-              </span>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              {salesByDay.map((item) => {
-                const maxAmount = 1200000;
-                const percentage = Math.min(100, Math.round((item.amountCents / maxAmount) * 100));
-                return (
-                  <div key={item.day} className="flex items-center gap-4 text-xs">
-                    <span className="w-20 font-medium text-ink shrink-0">{item.day}</span>
-                    <div className="flex-1 bg-cream-200/80 rounded-full h-3 overflow-hidden">
-                      <div
-                        className="bg-plum-500 h-full rounded-full transition-all duration-500"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    <span className="w-28 text-right font-semibold text-ink">
-                      {formatDOP(item.amountCents)}
-                    </span>
-                    <span className="w-16 text-right text-ink-muted">({item.count} ped.)</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Productos Principales */}
-          <div className="p-6 rounded-xl bg-white border border-cream-300 shadow-card flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-serif font-bold text-ink">Postres Más Vendidos</h3>
-                <ChefHat className="w-4 h-4 text-plum-500" />
-              </div>
-
-              <div className="space-y-3.5">
-                {topProducts.map((p, i) => (
-                  <div key={p.name} className="flex items-center justify-between text-xs pb-3 border-b border-cream-200 last:border-0 last:pb-0">
-                    <div>
-                      <p className="font-semibold text-ink">{p.name}</p>
-                      <p className="text-[11px] text-ink-muted">{p.sold} vendidos • Margen: {p.margin}</p>
-                    </div>
-                    <span className="font-bold text-plum-600">{formatDOP(p.totalCents)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <Link
-              href="/ventas"
-              className="mt-6 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-cream-100 hover:bg-cream-200 text-plum-600 font-semibold text-xs transition-colors border border-cream-300"
-            >
-              <span>Ver reporte detallado de ventas</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
 
         {/* Acceso Rápido a Módulos Críticos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

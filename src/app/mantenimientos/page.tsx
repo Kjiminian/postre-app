@@ -105,6 +105,7 @@ export default function MantenimientosPage() {
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [editingRecord, setEditingRecord] = useState<any | null>(null);
 
@@ -173,6 +174,7 @@ export default function MantenimientosPage() {
 
   const openCreateModal = () => {
     setEditingRecord(null);
+    setModalError(null);
     setForm({
       name: "",
       phone: "",
@@ -192,6 +194,7 @@ export default function MantenimientosPage() {
 
   const openEditModal = (row: any) => {
     setEditingRecord(row);
+    setModalError(null);
     setForm({
       name: row.name || "",
       phone: row.phone || "",
@@ -245,9 +248,10 @@ export default function MantenimientosPage() {
       });
       const json = await res.json();
       if (!json.success) {
-        showToast("error", json.error || "No se pudo guardar el registro");
+        setModalError(json.error || "No se pudo guardar el registro");
         return;
       }
+      setModalError(null);
       setIsModalOpen(false);
       showToast(
         "success",
@@ -603,6 +607,12 @@ export default function MantenimientosPage() {
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {modalError && (
+                  <div className="p-3 rounded-lg bg-[#FED7D7]/70 border border-[#FEB2B2] text-xs font-medium text-[#742A2A] flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>{modalError}</span>
+                  </div>
+                )}
                 {activeTab === "UNITS" && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>

@@ -2787,12 +2787,14 @@ export namespace Prisma {
    */
 
   export type RecipePresentationCountOutputType = {
+    groupPresentations: number
     materials: number
     subrecipes: number
     saleItems: number
   }
 
   export type RecipePresentationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    groupPresentations?: boolean | RecipePresentationCountOutputTypeCountGroupPresentationsArgs
     materials?: boolean | RecipePresentationCountOutputTypeCountMaterialsArgs
     subrecipes?: boolean | RecipePresentationCountOutputTypeCountSubrecipesArgs
     saleItems?: boolean | RecipePresentationCountOutputTypeCountSaleItemsArgs
@@ -2807,6 +2809,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the RecipePresentationCountOutputType
      */
     select?: RecipePresentationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RecipePresentationCountOutputType without action
+   */
+  export type RecipePresentationCountOutputTypeCountGroupPresentationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecipePresentationWhereInput
   }
 
   /**
@@ -7985,6 +7994,10 @@ export namespace Prisma {
     packageCostCents: number | null
     laborPercent: number | null
     overheadPercent: number | null
+    contingencyPercent: number | null
+    subtotalBeforeContingencyCents: number | null
+    batchCostExactCents: number | null
+    commercialRefCents: number | null
     targetMargin: number | null
     batchCostCents: number | null
     unitCostCents: number | null
@@ -7998,6 +8011,10 @@ export namespace Prisma {
     packageCostCents: number | null
     laborPercent: number | null
     overheadPercent: number | null
+    contingencyPercent: number | null
+    subtotalBeforeContingencyCents: number | null
+    batchCostExactCents: number | null
+    commercialRefCents: number | null
     targetMargin: number | null
     batchCostCents: number | null
     unitCostCents: number | null
@@ -8017,6 +8034,10 @@ export namespace Prisma {
     packageCostCents: number | null
     laborPercent: number | null
     overheadPercent: number | null
+    contingencyPercent: number | null
+    subtotalBeforeContingencyCents: number | null
+    batchCostExactCents: number | null
+    commercialRefCents: number | null
     targetMargin: number | null
     batchCostCents: number | null
     unitCostCents: number | null
@@ -8042,6 +8063,10 @@ export namespace Prisma {
     packageCostCents: number | null
     laborPercent: number | null
     overheadPercent: number | null
+    contingencyPercent: number | null
+    subtotalBeforeContingencyCents: number | null
+    batchCostExactCents: number | null
+    commercialRefCents: number | null
     targetMargin: number | null
     batchCostCents: number | null
     unitCostCents: number | null
@@ -8067,6 +8092,10 @@ export namespace Prisma {
     packageCostCents: number
     laborPercent: number
     overheadPercent: number
+    contingencyPercent: number
+    subtotalBeforeContingencyCents: number
+    batchCostExactCents: number
+    commercialRefCents: number
     targetMargin: number
     batchCostCents: number
     unitCostCents: number
@@ -8088,6 +8117,10 @@ export namespace Prisma {
     packageCostCents?: true
     laborPercent?: true
     overheadPercent?: true
+    contingencyPercent?: true
+    subtotalBeforeContingencyCents?: true
+    batchCostExactCents?: true
+    commercialRefCents?: true
     targetMargin?: true
     batchCostCents?: true
     unitCostCents?: true
@@ -8101,6 +8134,10 @@ export namespace Prisma {
     packageCostCents?: true
     laborPercent?: true
     overheadPercent?: true
+    contingencyPercent?: true
+    subtotalBeforeContingencyCents?: true
+    batchCostExactCents?: true
+    commercialRefCents?: true
     targetMargin?: true
     batchCostCents?: true
     unitCostCents?: true
@@ -8120,6 +8157,10 @@ export namespace Prisma {
     packageCostCents?: true
     laborPercent?: true
     overheadPercent?: true
+    contingencyPercent?: true
+    subtotalBeforeContingencyCents?: true
+    batchCostExactCents?: true
+    commercialRefCents?: true
     targetMargin?: true
     batchCostCents?: true
     unitCostCents?: true
@@ -8145,6 +8186,10 @@ export namespace Prisma {
     packageCostCents?: true
     laborPercent?: true
     overheadPercent?: true
+    contingencyPercent?: true
+    subtotalBeforeContingencyCents?: true
+    batchCostExactCents?: true
+    commercialRefCents?: true
     targetMargin?: true
     batchCostCents?: true
     unitCostCents?: true
@@ -8170,6 +8215,10 @@ export namespace Prisma {
     packageCostCents?: true
     laborPercent?: true
     overheadPercent?: true
+    contingencyPercent?: true
+    subtotalBeforeContingencyCents?: true
+    batchCostExactCents?: true
+    commercialRefCents?: true
     targetMargin?: true
     batchCostCents?: true
     unitCostCents?: true
@@ -8282,6 +8331,10 @@ export namespace Prisma {
     packageCostCents: number
     laborPercent: number
     overheadPercent: number
+    contingencyPercent: number
+    subtotalBeforeContingencyCents: number
+    batchCostExactCents: number
+    commercialRefCents: number | null
     targetMargin: number
     batchCostCents: number
     unitCostCents: number
@@ -8326,6 +8379,10 @@ export namespace Prisma {
     packageCostCents?: boolean
     laborPercent?: boolean
     overheadPercent?: boolean
+    contingencyPercent?: boolean
+    subtotalBeforeContingencyCents?: boolean
+    batchCostExactCents?: boolean
+    commercialRefCents?: boolean
     targetMargin?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
@@ -8358,6 +8415,10 @@ export namespace Prisma {
     packageCostCents?: boolean
     laborPercent?: boolean
     overheadPercent?: boolean
+    contingencyPercent?: boolean
+    subtotalBeforeContingencyCents?: boolean
+    batchCostExactCents?: boolean
+    commercialRefCents?: boolean
     targetMargin?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
@@ -8383,6 +8444,10 @@ export namespace Prisma {
     packageCostCents?: boolean
     laborPercent?: boolean
     overheadPercent?: boolean
+    contingencyPercent?: boolean
+    subtotalBeforeContingencyCents?: boolean
+    batchCostExactCents?: boolean
+    commercialRefCents?: boolean
     targetMargin?: boolean
     batchCostCents?: boolean
     unitCostCents?: boolean
@@ -8429,6 +8494,10 @@ export namespace Prisma {
       packageCostCents: number
       laborPercent: number
       overheadPercent: number
+      contingencyPercent: number
+      subtotalBeforeContingencyCents: number
+      batchCostExactCents: number
+      commercialRefCents: number | null
       targetMargin: number
       batchCostCents: number
       unitCostCents: number
@@ -8850,6 +8919,10 @@ export namespace Prisma {
     readonly packageCostCents: FieldRef<"Recipe", 'Int'>
     readonly laborPercent: FieldRef<"Recipe", 'Float'>
     readonly overheadPercent: FieldRef<"Recipe", 'Float'>
+    readonly contingencyPercent: FieldRef<"Recipe", 'Float'>
+    readonly subtotalBeforeContingencyCents: FieldRef<"Recipe", 'Int'>
+    readonly batchCostExactCents: FieldRef<"Recipe", 'Float'>
+    readonly commercialRefCents: FieldRef<"Recipe", 'Int'>
     readonly targetMargin: FieldRef<"Recipe", 'Float'>
     readonly batchCostCents: FieldRef<"Recipe", 'Int'>
     readonly unitCostCents: FieldRef<"Recipe", 'Int'>
@@ -9322,7 +9395,10 @@ export namespace Prisma {
 
   export type RecipePresentationAvgAggregateOutputType = {
     motherRecipeQty: number | null
+    batchFraction: number | null
     presentationYield: number | null
+    baseCostCents: number | null
+    unitTotalCostExactCents: number | null
     packagingCostCents: number | null
     additionalCostCents: number | null
     totalCostCents: number | null
@@ -9331,11 +9407,15 @@ export namespace Prisma {
     finalPriceCents: number | null
     realProfitCents: number | null
     realMarginPercent: number | null
+    groupQty: number | null
   }
 
   export type RecipePresentationSumAggregateOutputType = {
     motherRecipeQty: number | null
+    batchFraction: number | null
     presentationYield: number | null
+    baseCostCents: number | null
+    unitTotalCostExactCents: number | null
     packagingCostCents: number | null
     additionalCostCents: number | null
     totalCostCents: number | null
@@ -9344,6 +9424,7 @@ export namespace Prisma {
     finalPriceCents: number | null
     realProfitCents: number | null
     realMarginPercent: number | null
+    groupQty: number | null
   }
 
   export type RecipePresentationMinAggregateOutputType = {
@@ -9353,7 +9434,11 @@ export namespace Prisma {
     sizeDescription: string | null
     motherRecipeQty: number | null
     motherRecipeUnit: string | null
+    consumptionMode: string | null
+    batchFraction: number | null
     presentationYield: number | null
+    baseCostCents: number | null
+    unitTotalCostExactCents: number | null
     packagingCostCents: number | null
     additionalCostCents: number | null
     totalCostCents: number | null
@@ -9365,6 +9450,8 @@ export namespace Prisma {
     realMarginPercent: number | null
     isActive: boolean | null
     isComposite: boolean | null
+    parentId: string | null
+    groupQty: number | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9377,7 +9464,11 @@ export namespace Prisma {
     sizeDescription: string | null
     motherRecipeQty: number | null
     motherRecipeUnit: string | null
+    consumptionMode: string | null
+    batchFraction: number | null
     presentationYield: number | null
+    baseCostCents: number | null
+    unitTotalCostExactCents: number | null
     packagingCostCents: number | null
     additionalCostCents: number | null
     totalCostCents: number | null
@@ -9389,6 +9480,8 @@ export namespace Prisma {
     realMarginPercent: number | null
     isActive: boolean | null
     isComposite: boolean | null
+    parentId: string | null
+    groupQty: number | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -9401,7 +9494,11 @@ export namespace Prisma {
     sizeDescription: number
     motherRecipeQty: number
     motherRecipeUnit: number
+    consumptionMode: number
+    batchFraction: number
     presentationYield: number
+    baseCostCents: number
+    unitTotalCostExactCents: number
     packagingCostCents: number
     additionalCostCents: number
     totalCostCents: number
@@ -9413,6 +9510,8 @@ export namespace Prisma {
     realMarginPercent: number
     isActive: number
     isComposite: number
+    parentId: number
+    groupQty: number
     notes: number
     createdAt: number
     updatedAt: number
@@ -9422,7 +9521,10 @@ export namespace Prisma {
 
   export type RecipePresentationAvgAggregateInputType = {
     motherRecipeQty?: true
+    batchFraction?: true
     presentationYield?: true
+    baseCostCents?: true
+    unitTotalCostExactCents?: true
     packagingCostCents?: true
     additionalCostCents?: true
     totalCostCents?: true
@@ -9431,11 +9533,15 @@ export namespace Prisma {
     finalPriceCents?: true
     realProfitCents?: true
     realMarginPercent?: true
+    groupQty?: true
   }
 
   export type RecipePresentationSumAggregateInputType = {
     motherRecipeQty?: true
+    batchFraction?: true
     presentationYield?: true
+    baseCostCents?: true
+    unitTotalCostExactCents?: true
     packagingCostCents?: true
     additionalCostCents?: true
     totalCostCents?: true
@@ -9444,6 +9550,7 @@ export namespace Prisma {
     finalPriceCents?: true
     realProfitCents?: true
     realMarginPercent?: true
+    groupQty?: true
   }
 
   export type RecipePresentationMinAggregateInputType = {
@@ -9453,7 +9560,11 @@ export namespace Prisma {
     sizeDescription?: true
     motherRecipeQty?: true
     motherRecipeUnit?: true
+    consumptionMode?: true
+    batchFraction?: true
     presentationYield?: true
+    baseCostCents?: true
+    unitTotalCostExactCents?: true
     packagingCostCents?: true
     additionalCostCents?: true
     totalCostCents?: true
@@ -9465,6 +9576,8 @@ export namespace Prisma {
     realMarginPercent?: true
     isActive?: true
     isComposite?: true
+    parentId?: true
+    groupQty?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -9477,7 +9590,11 @@ export namespace Prisma {
     sizeDescription?: true
     motherRecipeQty?: true
     motherRecipeUnit?: true
+    consumptionMode?: true
+    batchFraction?: true
     presentationYield?: true
+    baseCostCents?: true
+    unitTotalCostExactCents?: true
     packagingCostCents?: true
     additionalCostCents?: true
     totalCostCents?: true
@@ -9489,6 +9606,8 @@ export namespace Prisma {
     realMarginPercent?: true
     isActive?: true
     isComposite?: true
+    parentId?: true
+    groupQty?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -9501,7 +9620,11 @@ export namespace Prisma {
     sizeDescription?: true
     motherRecipeQty?: true
     motherRecipeUnit?: true
+    consumptionMode?: true
+    batchFraction?: true
     presentationYield?: true
+    baseCostCents?: true
+    unitTotalCostExactCents?: true
     packagingCostCents?: true
     additionalCostCents?: true
     totalCostCents?: true
@@ -9513,6 +9636,8 @@ export namespace Prisma {
     realMarginPercent?: true
     isActive?: true
     isComposite?: true
+    parentId?: true
+    groupQty?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -9612,7 +9737,11 @@ export namespace Prisma {
     sizeDescription: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode: string
+    batchFraction: number
     presentationYield: number
+    baseCostCents: number
+    unitTotalCostExactCents: number
     packagingCostCents: number
     additionalCostCents: number
     totalCostCents: number
@@ -9624,6 +9753,8 @@ export namespace Prisma {
     realMarginPercent: number
     isActive: boolean
     isComposite: boolean
+    parentId: string | null
+    groupQty: number
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -9655,7 +9786,11 @@ export namespace Prisma {
     sizeDescription?: boolean
     motherRecipeQty?: boolean
     motherRecipeUnit?: boolean
+    consumptionMode?: boolean
+    batchFraction?: boolean
     presentationYield?: boolean
+    baseCostCents?: boolean
+    unitTotalCostExactCents?: boolean
     packagingCostCents?: boolean
     additionalCostCents?: boolean
     totalCostCents?: boolean
@@ -9667,10 +9802,14 @@ export namespace Prisma {
     realMarginPercent?: boolean
     isActive?: boolean
     isComposite?: boolean
+    parentId?: boolean
+    groupQty?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    parent?: boolean | RecipePresentation$parentArgs<ExtArgs>
+    groupPresentations?: boolean | RecipePresentation$groupPresentationsArgs<ExtArgs>
     materials?: boolean | RecipePresentation$materialsArgs<ExtArgs>
     subrecipes?: boolean | RecipePresentation$subrecipesArgs<ExtArgs>
     saleItems?: boolean | RecipePresentation$saleItemsArgs<ExtArgs>
@@ -9684,7 +9823,11 @@ export namespace Prisma {
     sizeDescription?: boolean
     motherRecipeQty?: boolean
     motherRecipeUnit?: boolean
+    consumptionMode?: boolean
+    batchFraction?: boolean
     presentationYield?: boolean
+    baseCostCents?: boolean
+    unitTotalCostExactCents?: boolean
     packagingCostCents?: boolean
     additionalCostCents?: boolean
     totalCostCents?: boolean
@@ -9696,10 +9839,13 @@ export namespace Prisma {
     realMarginPercent?: boolean
     isActive?: boolean
     isComposite?: boolean
+    parentId?: boolean
+    groupQty?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    parent?: boolean | RecipePresentation$parentArgs<ExtArgs>
   }, ExtArgs["result"]["recipePresentation"]>
 
   export type RecipePresentationSelectScalar = {
@@ -9709,7 +9855,11 @@ export namespace Prisma {
     sizeDescription?: boolean
     motherRecipeQty?: boolean
     motherRecipeUnit?: boolean
+    consumptionMode?: boolean
+    batchFraction?: boolean
     presentationYield?: boolean
+    baseCostCents?: boolean
+    unitTotalCostExactCents?: boolean
     packagingCostCents?: boolean
     additionalCostCents?: boolean
     totalCostCents?: boolean
@@ -9721,6 +9871,8 @@ export namespace Prisma {
     realMarginPercent?: boolean
     isActive?: boolean
     isComposite?: boolean
+    parentId?: boolean
+    groupQty?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9728,6 +9880,8 @@ export namespace Prisma {
 
   export type RecipePresentationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    parent?: boolean | RecipePresentation$parentArgs<ExtArgs>
+    groupPresentations?: boolean | RecipePresentation$groupPresentationsArgs<ExtArgs>
     materials?: boolean | RecipePresentation$materialsArgs<ExtArgs>
     subrecipes?: boolean | RecipePresentation$subrecipesArgs<ExtArgs>
     saleItems?: boolean | RecipePresentation$saleItemsArgs<ExtArgs>
@@ -9735,12 +9889,15 @@ export namespace Prisma {
   }
   export type RecipePresentationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recipe?: boolean | RecipeDefaultArgs<ExtArgs>
+    parent?: boolean | RecipePresentation$parentArgs<ExtArgs>
   }
 
   export type $RecipePresentationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RecipePresentation"
     objects: {
       recipe: Prisma.$RecipePayload<ExtArgs>
+      parent: Prisma.$RecipePresentationPayload<ExtArgs> | null
+      groupPresentations: Prisma.$RecipePresentationPayload<ExtArgs>[]
       materials: Prisma.$PresentationMaterialPayload<ExtArgs>[]
       subrecipes: Prisma.$PresentationSubrecipePayload<ExtArgs>[]
       saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
@@ -9752,7 +9909,11 @@ export namespace Prisma {
       sizeDescription: string | null
       motherRecipeQty: number
       motherRecipeUnit: string
+      consumptionMode: string
+      batchFraction: number
       presentationYield: number
+      baseCostCents: number
+      unitTotalCostExactCents: number
       packagingCostCents: number
       additionalCostCents: number
       totalCostCents: number
@@ -9764,6 +9925,8 @@ export namespace Prisma {
       realMarginPercent: number
       isActive: boolean
       isComposite: boolean
+      parentId: string | null
+      groupQty: number
       notes: string | null
       createdAt: Date
       updatedAt: Date
@@ -10132,6 +10295,8 @@ export namespace Prisma {
   export interface Prisma__RecipePresentationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     recipe<T extends RecipeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecipeDefaultArgs<ExtArgs>>): Prisma__RecipeClient<$Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    parent<T extends RecipePresentation$parentArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentation$parentArgs<ExtArgs>>): Prisma__RecipePresentationClient<$Result.GetResult<Prisma.$RecipePresentationPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    groupPresentations<T extends RecipePresentation$groupPresentationsArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentation$groupPresentationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecipePresentationPayload<ExtArgs>, T, "findMany"> | Null>
     materials<T extends RecipePresentation$materialsArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentation$materialsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PresentationMaterialPayload<ExtArgs>, T, "findMany"> | Null>
     subrecipes<T extends RecipePresentation$subrecipesArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentation$subrecipesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PresentationSubrecipePayload<ExtArgs>, T, "findMany"> | Null>
     saleItems<T extends RecipePresentation$saleItemsArgs<ExtArgs> = {}>(args?: Subset<T, RecipePresentation$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany"> | Null>
@@ -10170,7 +10335,11 @@ export namespace Prisma {
     readonly sizeDescription: FieldRef<"RecipePresentation", 'String'>
     readonly motherRecipeQty: FieldRef<"RecipePresentation", 'Float'>
     readonly motherRecipeUnit: FieldRef<"RecipePresentation", 'String'>
+    readonly consumptionMode: FieldRef<"RecipePresentation", 'String'>
+    readonly batchFraction: FieldRef<"RecipePresentation", 'Float'>
     readonly presentationYield: FieldRef<"RecipePresentation", 'Float'>
+    readonly baseCostCents: FieldRef<"RecipePresentation", 'Int'>
+    readonly unitTotalCostExactCents: FieldRef<"RecipePresentation", 'Float'>
     readonly packagingCostCents: FieldRef<"RecipePresentation", 'Int'>
     readonly additionalCostCents: FieldRef<"RecipePresentation", 'Int'>
     readonly totalCostCents: FieldRef<"RecipePresentation", 'Int'>
@@ -10182,6 +10351,8 @@ export namespace Prisma {
     readonly realMarginPercent: FieldRef<"RecipePresentation", 'Float'>
     readonly isActive: FieldRef<"RecipePresentation", 'Boolean'>
     readonly isComposite: FieldRef<"RecipePresentation", 'Boolean'>
+    readonly parentId: FieldRef<"RecipePresentation", 'String'>
+    readonly groupQty: FieldRef<"RecipePresentation", 'Float'>
     readonly notes: FieldRef<"RecipePresentation", 'String'>
     readonly createdAt: FieldRef<"RecipePresentation", 'DateTime'>
     readonly updatedAt: FieldRef<"RecipePresentation", 'DateTime'>
@@ -10501,6 +10672,41 @@ export namespace Prisma {
   }
 
   /**
+   * RecipePresentation.parent
+   */
+  export type RecipePresentation$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipePresentation
+     */
+    select?: RecipePresentationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipePresentationInclude<ExtArgs> | null
+    where?: RecipePresentationWhereInput
+  }
+
+  /**
+   * RecipePresentation.groupPresentations
+   */
+  export type RecipePresentation$groupPresentationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecipePresentation
+     */
+    select?: RecipePresentationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecipePresentationInclude<ExtArgs> | null
+    where?: RecipePresentationWhereInput
+    orderBy?: RecipePresentationOrderByWithRelationInput | RecipePresentationOrderByWithRelationInput[]
+    cursor?: RecipePresentationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecipePresentationScalarFieldEnum | RecipePresentationScalarFieldEnum[]
+  }
+
+  /**
    * RecipePresentation.materials
    */
   export type RecipePresentation$materialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10603,6 +10809,7 @@ export namespace Prisma {
     id: string | null
     presentationId: string | null
     ingredientId: string | null
+    materialType: string | null
     name: string | null
     quantity: number | null
     unit: string | null
@@ -10614,6 +10821,7 @@ export namespace Prisma {
     id: string | null
     presentationId: string | null
     ingredientId: string | null
+    materialType: string | null
     name: string | null
     quantity: number | null
     unit: string | null
@@ -10625,6 +10833,7 @@ export namespace Prisma {
     id: number
     presentationId: number
     ingredientId: number
+    materialType: number
     name: number
     quantity: number
     unit: number
@@ -10650,6 +10859,7 @@ export namespace Prisma {
     id?: true
     presentationId?: true
     ingredientId?: true
+    materialType?: true
     name?: true
     quantity?: true
     unit?: true
@@ -10661,6 +10871,7 @@ export namespace Prisma {
     id?: true
     presentationId?: true
     ingredientId?: true
+    materialType?: true
     name?: true
     quantity?: true
     unit?: true
@@ -10672,6 +10883,7 @@ export namespace Prisma {
     id?: true
     presentationId?: true
     ingredientId?: true
+    materialType?: true
     name?: true
     quantity?: true
     unit?: true
@@ -10770,6 +10982,7 @@ export namespace Prisma {
     id: string
     presentationId: string
     ingredientId: string | null
+    materialType: string
     name: string
     quantity: number
     unit: string
@@ -10800,6 +11013,7 @@ export namespace Prisma {
     id?: boolean
     presentationId?: boolean
     ingredientId?: boolean
+    materialType?: boolean
     name?: boolean
     quantity?: boolean
     unit?: boolean
@@ -10812,6 +11026,7 @@ export namespace Prisma {
     id?: boolean
     presentationId?: boolean
     ingredientId?: boolean
+    materialType?: boolean
     name?: boolean
     quantity?: boolean
     unit?: boolean
@@ -10824,6 +11039,7 @@ export namespace Prisma {
     id?: boolean
     presentationId?: boolean
     ingredientId?: boolean
+    materialType?: boolean
     name?: boolean
     quantity?: boolean
     unit?: boolean
@@ -10847,6 +11063,7 @@ export namespace Prisma {
       id: string
       presentationId: string
       ingredientId: string | null
+      materialType: string
       name: string
       quantity: number
       unit: string
@@ -11249,6 +11466,7 @@ export namespace Prisma {
     readonly id: FieldRef<"PresentationMaterial", 'String'>
     readonly presentationId: FieldRef<"PresentationMaterial", 'String'>
     readonly ingredientId: FieldRef<"PresentationMaterial", 'String'>
+    readonly materialType: FieldRef<"PresentationMaterial", 'String'>
     readonly name: FieldRef<"PresentationMaterial", 'String'>
     readonly quantity: FieldRef<"PresentationMaterial", 'Float'>
     readonly unit: FieldRef<"PresentationMaterial", 'String'>
@@ -26269,6 +26487,10 @@ export namespace Prisma {
     packageCostCents: 'packageCostCents',
     laborPercent: 'laborPercent',
     overheadPercent: 'overheadPercent',
+    contingencyPercent: 'contingencyPercent',
+    subtotalBeforeContingencyCents: 'subtotalBeforeContingencyCents',
+    batchCostExactCents: 'batchCostExactCents',
+    commercialRefCents: 'commercialRefCents',
     targetMargin: 'targetMargin',
     batchCostCents: 'batchCostCents',
     unitCostCents: 'unitCostCents',
@@ -26293,7 +26515,11 @@ export namespace Prisma {
     sizeDescription: 'sizeDescription',
     motherRecipeQty: 'motherRecipeQty',
     motherRecipeUnit: 'motherRecipeUnit',
+    consumptionMode: 'consumptionMode',
+    batchFraction: 'batchFraction',
     presentationYield: 'presentationYield',
+    baseCostCents: 'baseCostCents',
+    unitTotalCostExactCents: 'unitTotalCostExactCents',
     packagingCostCents: 'packagingCostCents',
     additionalCostCents: 'additionalCostCents',
     totalCostCents: 'totalCostCents',
@@ -26305,6 +26531,8 @@ export namespace Prisma {
     realMarginPercent: 'realMarginPercent',
     isActive: 'isActive',
     isComposite: 'isComposite',
+    parentId: 'parentId',
+    groupQty: 'groupQty',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -26317,6 +26545,7 @@ export namespace Prisma {
     id: 'id',
     presentationId: 'presentationId',
     ingredientId: 'ingredientId',
+    materialType: 'materialType',
     name: 'name',
     quantity: 'quantity',
     unit: 'unit',
@@ -27023,6 +27252,10 @@ export namespace Prisma {
     packageCostCents?: IntFilter<"Recipe"> | number
     laborPercent?: FloatFilter<"Recipe"> | number
     overheadPercent?: FloatFilter<"Recipe"> | number
+    contingencyPercent?: FloatFilter<"Recipe"> | number
+    subtotalBeforeContingencyCents?: IntFilter<"Recipe"> | number
+    batchCostExactCents?: FloatFilter<"Recipe"> | number
+    commercialRefCents?: IntNullableFilter<"Recipe"> | number | null
     targetMargin?: FloatFilter<"Recipe"> | number
     batchCostCents?: IntFilter<"Recipe"> | number
     unitCostCents?: IntFilter<"Recipe"> | number
@@ -27054,6 +27287,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrderInput | SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -27088,6 +27325,10 @@ export namespace Prisma {
     packageCostCents?: IntFilter<"Recipe"> | number
     laborPercent?: FloatFilter<"Recipe"> | number
     overheadPercent?: FloatFilter<"Recipe"> | number
+    contingencyPercent?: FloatFilter<"Recipe"> | number
+    subtotalBeforeContingencyCents?: IntFilter<"Recipe"> | number
+    batchCostExactCents?: FloatFilter<"Recipe"> | number
+    commercialRefCents?: IntNullableFilter<"Recipe"> | number | null
     targetMargin?: FloatFilter<"Recipe"> | number
     batchCostCents?: IntFilter<"Recipe"> | number
     unitCostCents?: IntFilter<"Recipe"> | number
@@ -27119,6 +27360,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrderInput | SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -27152,6 +27397,10 @@ export namespace Prisma {
     packageCostCents?: IntWithAggregatesFilter<"Recipe"> | number
     laborPercent?: FloatWithAggregatesFilter<"Recipe"> | number
     overheadPercent?: FloatWithAggregatesFilter<"Recipe"> | number
+    contingencyPercent?: FloatWithAggregatesFilter<"Recipe"> | number
+    subtotalBeforeContingencyCents?: IntWithAggregatesFilter<"Recipe"> | number
+    batchCostExactCents?: FloatWithAggregatesFilter<"Recipe"> | number
+    commercialRefCents?: IntNullableWithAggregatesFilter<"Recipe"> | number | null
     targetMargin?: FloatWithAggregatesFilter<"Recipe"> | number
     batchCostCents?: IntWithAggregatesFilter<"Recipe"> | number
     unitCostCents?: IntWithAggregatesFilter<"Recipe"> | number
@@ -27176,7 +27425,11 @@ export namespace Prisma {
     sizeDescription?: StringNullableFilter<"RecipePresentation"> | string | null
     motherRecipeQty?: FloatFilter<"RecipePresentation"> | number
     motherRecipeUnit?: StringFilter<"RecipePresentation"> | string
+    consumptionMode?: StringFilter<"RecipePresentation"> | string
+    batchFraction?: FloatFilter<"RecipePresentation"> | number
     presentationYield?: FloatFilter<"RecipePresentation"> | number
+    baseCostCents?: IntFilter<"RecipePresentation"> | number
+    unitTotalCostExactCents?: FloatFilter<"RecipePresentation"> | number
     packagingCostCents?: IntFilter<"RecipePresentation"> | number
     additionalCostCents?: IntFilter<"RecipePresentation"> | number
     totalCostCents?: IntFilter<"RecipePresentation"> | number
@@ -27188,10 +27441,14 @@ export namespace Prisma {
     realMarginPercent?: FloatFilter<"RecipePresentation"> | number
     isActive?: BoolFilter<"RecipePresentation"> | boolean
     isComposite?: BoolFilter<"RecipePresentation"> | boolean
+    parentId?: StringNullableFilter<"RecipePresentation"> | string | null
+    groupQty?: FloatFilter<"RecipePresentation"> | number
     notes?: StringNullableFilter<"RecipePresentation"> | string | null
     createdAt?: DateTimeFilter<"RecipePresentation"> | Date | string
     updatedAt?: DateTimeFilter<"RecipePresentation"> | Date | string
     recipe?: XOR<RecipeRelationFilter, RecipeWhereInput>
+    parent?: XOR<RecipePresentationNullableRelationFilter, RecipePresentationWhereInput> | null
+    groupPresentations?: RecipePresentationListRelationFilter
     materials?: PresentationMaterialListRelationFilter
     subrecipes?: PresentationSubrecipeListRelationFilter
     saleItems?: SaleItemListRelationFilter
@@ -27204,7 +27461,11 @@ export namespace Prisma {
     sizeDescription?: SortOrderInput | SortOrder
     motherRecipeQty?: SortOrder
     motherRecipeUnit?: SortOrder
+    consumptionMode?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -27216,10 +27477,14 @@ export namespace Prisma {
     realMarginPercent?: SortOrder
     isActive?: SortOrder
     isComposite?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    groupQty?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     recipe?: RecipeOrderByWithRelationInput
+    parent?: RecipePresentationOrderByWithRelationInput
+    groupPresentations?: RecipePresentationOrderByRelationAggregateInput
     materials?: PresentationMaterialOrderByRelationAggregateInput
     subrecipes?: PresentationSubrecipeOrderByRelationAggregateInput
     saleItems?: SaleItemOrderByRelationAggregateInput
@@ -27235,7 +27500,11 @@ export namespace Prisma {
     sizeDescription?: StringNullableFilter<"RecipePresentation"> | string | null
     motherRecipeQty?: FloatFilter<"RecipePresentation"> | number
     motherRecipeUnit?: StringFilter<"RecipePresentation"> | string
+    consumptionMode?: StringFilter<"RecipePresentation"> | string
+    batchFraction?: FloatFilter<"RecipePresentation"> | number
     presentationYield?: FloatFilter<"RecipePresentation"> | number
+    baseCostCents?: IntFilter<"RecipePresentation"> | number
+    unitTotalCostExactCents?: FloatFilter<"RecipePresentation"> | number
     packagingCostCents?: IntFilter<"RecipePresentation"> | number
     additionalCostCents?: IntFilter<"RecipePresentation"> | number
     totalCostCents?: IntFilter<"RecipePresentation"> | number
@@ -27247,10 +27516,14 @@ export namespace Prisma {
     realMarginPercent?: FloatFilter<"RecipePresentation"> | number
     isActive?: BoolFilter<"RecipePresentation"> | boolean
     isComposite?: BoolFilter<"RecipePresentation"> | boolean
+    parentId?: StringNullableFilter<"RecipePresentation"> | string | null
+    groupQty?: FloatFilter<"RecipePresentation"> | number
     notes?: StringNullableFilter<"RecipePresentation"> | string | null
     createdAt?: DateTimeFilter<"RecipePresentation"> | Date | string
     updatedAt?: DateTimeFilter<"RecipePresentation"> | Date | string
     recipe?: XOR<RecipeRelationFilter, RecipeWhereInput>
+    parent?: XOR<RecipePresentationNullableRelationFilter, RecipePresentationWhereInput> | null
+    groupPresentations?: RecipePresentationListRelationFilter
     materials?: PresentationMaterialListRelationFilter
     subrecipes?: PresentationSubrecipeListRelationFilter
     saleItems?: SaleItemListRelationFilter
@@ -27263,7 +27536,11 @@ export namespace Prisma {
     sizeDescription?: SortOrderInput | SortOrder
     motherRecipeQty?: SortOrder
     motherRecipeUnit?: SortOrder
+    consumptionMode?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -27275,6 +27552,8 @@ export namespace Prisma {
     realMarginPercent?: SortOrder
     isActive?: SortOrder
     isComposite?: SortOrder
+    parentId?: SortOrderInput | SortOrder
+    groupQty?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -27295,7 +27574,11 @@ export namespace Prisma {
     sizeDescription?: StringNullableWithAggregatesFilter<"RecipePresentation"> | string | null
     motherRecipeQty?: FloatWithAggregatesFilter<"RecipePresentation"> | number
     motherRecipeUnit?: StringWithAggregatesFilter<"RecipePresentation"> | string
+    consumptionMode?: StringWithAggregatesFilter<"RecipePresentation"> | string
+    batchFraction?: FloatWithAggregatesFilter<"RecipePresentation"> | number
     presentationYield?: FloatWithAggregatesFilter<"RecipePresentation"> | number
+    baseCostCents?: IntWithAggregatesFilter<"RecipePresentation"> | number
+    unitTotalCostExactCents?: FloatWithAggregatesFilter<"RecipePresentation"> | number
     packagingCostCents?: IntWithAggregatesFilter<"RecipePresentation"> | number
     additionalCostCents?: IntWithAggregatesFilter<"RecipePresentation"> | number
     totalCostCents?: IntWithAggregatesFilter<"RecipePresentation"> | number
@@ -27307,6 +27590,8 @@ export namespace Prisma {
     realMarginPercent?: FloatWithAggregatesFilter<"RecipePresentation"> | number
     isActive?: BoolWithAggregatesFilter<"RecipePresentation"> | boolean
     isComposite?: BoolWithAggregatesFilter<"RecipePresentation"> | boolean
+    parentId?: StringNullableWithAggregatesFilter<"RecipePresentation"> | string | null
+    groupQty?: FloatWithAggregatesFilter<"RecipePresentation"> | number
     notes?: StringNullableWithAggregatesFilter<"RecipePresentation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"RecipePresentation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RecipePresentation"> | Date | string
@@ -27319,6 +27604,7 @@ export namespace Prisma {
     id?: StringFilter<"PresentationMaterial"> | string
     presentationId?: StringFilter<"PresentationMaterial"> | string
     ingredientId?: StringNullableFilter<"PresentationMaterial"> | string | null
+    materialType?: StringFilter<"PresentationMaterial"> | string
     name?: StringFilter<"PresentationMaterial"> | string
     quantity?: FloatFilter<"PresentationMaterial"> | number
     unit?: StringFilter<"PresentationMaterial"> | string
@@ -27331,6 +27617,7 @@ export namespace Prisma {
     id?: SortOrder
     presentationId?: SortOrder
     ingredientId?: SortOrderInput | SortOrder
+    materialType?: SortOrder
     name?: SortOrder
     quantity?: SortOrder
     unit?: SortOrder
@@ -27346,6 +27633,7 @@ export namespace Prisma {
     NOT?: PresentationMaterialWhereInput | PresentationMaterialWhereInput[]
     presentationId?: StringFilter<"PresentationMaterial"> | string
     ingredientId?: StringNullableFilter<"PresentationMaterial"> | string | null
+    materialType?: StringFilter<"PresentationMaterial"> | string
     name?: StringFilter<"PresentationMaterial"> | string
     quantity?: FloatFilter<"PresentationMaterial"> | number
     unit?: StringFilter<"PresentationMaterial"> | string
@@ -27358,6 +27646,7 @@ export namespace Prisma {
     id?: SortOrder
     presentationId?: SortOrder
     ingredientId?: SortOrderInput | SortOrder
+    materialType?: SortOrder
     name?: SortOrder
     quantity?: SortOrder
     unit?: SortOrder
@@ -27377,6 +27666,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PresentationMaterial"> | string
     presentationId?: StringWithAggregatesFilter<"PresentationMaterial"> | string
     ingredientId?: StringNullableWithAggregatesFilter<"PresentationMaterial"> | string | null
+    materialType?: StringWithAggregatesFilter<"PresentationMaterial"> | string
     name?: StringWithAggregatesFilter<"PresentationMaterial"> | string
     quantity?: FloatWithAggregatesFilter<"PresentationMaterial"> | number
     unit?: StringWithAggregatesFilter<"PresentationMaterial"> | string
@@ -29009,6 +29299,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -29040,6 +29334,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -29071,6 +29369,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -29102,6 +29404,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -29133,6 +29439,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -29158,6 +29468,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -29183,6 +29497,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -29203,7 +29521,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -29215,10 +29537,13 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
@@ -29231,7 +29556,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -29243,9 +29572,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
@@ -29257,7 +29589,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -29269,10 +29605,13 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
@@ -29285,7 +29624,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -29297,9 +29640,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
@@ -29312,7 +29658,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -29324,6 +29674,8 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -29335,7 +29687,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -29347,6 +29703,7 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29359,7 +29716,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -29371,6 +29732,8 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29379,6 +29742,7 @@ export namespace Prisma {
   export type PresentationMaterialCreateInput = {
     id?: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -29391,6 +29755,7 @@ export namespace Prisma {
     id?: string
     presentationId: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -29401,6 +29766,7 @@ export namespace Prisma {
   export type PresentationMaterialUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -29413,6 +29779,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     presentationId?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -29424,6 +29791,7 @@ export namespace Prisma {
     id?: string
     presentationId: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -29434,6 +29802,7 @@ export namespace Prisma {
   export type PresentationMaterialUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -29445,6 +29814,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     presentationId?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -31138,6 +31508,17 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type SubRecipeUseListRelationFilter = {
     every?: SubRecipeUseWhereInput
     some?: SubRecipeUseWhereInput
@@ -31189,6 +31570,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -31208,6 +31593,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -31227,6 +31616,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -31252,6 +31645,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -31271,6 +31668,10 @@ export namespace Prisma {
     packageCostCents?: SortOrder
     laborPercent?: SortOrder
     overheadPercent?: SortOrder
+    contingencyPercent?: SortOrder
+    subtotalBeforeContingencyCents?: SortOrder
+    batchCostExactCents?: SortOrder
+    commercialRefCents?: SortOrder
     targetMargin?: SortOrder
     batchCostCents?: SortOrder
     unitCostCents?: SortOrder
@@ -31279,9 +31680,30 @@ export namespace Prisma {
     currentPriceCents?: SortOrder
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type RecipeRelationFilter = {
     is?: RecipeWhereInput
     isNot?: RecipeWhereInput
+  }
+
+  export type RecipePresentationNullableRelationFilter = {
+    is?: RecipePresentationWhereInput | null
+    isNot?: RecipePresentationWhereInput | null
   }
 
   export type PresentationMaterialListRelationFilter = {
@@ -31311,7 +31733,11 @@ export namespace Prisma {
     sizeDescription?: SortOrder
     motherRecipeQty?: SortOrder
     motherRecipeUnit?: SortOrder
+    consumptionMode?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -31323,6 +31749,8 @@ export namespace Prisma {
     realMarginPercent?: SortOrder
     isActive?: SortOrder
     isComposite?: SortOrder
+    parentId?: SortOrder
+    groupQty?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31330,7 +31758,10 @@ export namespace Prisma {
 
   export type RecipePresentationAvgOrderByAggregateInput = {
     motherRecipeQty?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -31339,6 +31770,7 @@ export namespace Prisma {
     finalPriceCents?: SortOrder
     realProfitCents?: SortOrder
     realMarginPercent?: SortOrder
+    groupQty?: SortOrder
   }
 
   export type RecipePresentationMaxOrderByAggregateInput = {
@@ -31348,7 +31780,11 @@ export namespace Prisma {
     sizeDescription?: SortOrder
     motherRecipeQty?: SortOrder
     motherRecipeUnit?: SortOrder
+    consumptionMode?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -31360,6 +31796,8 @@ export namespace Prisma {
     realMarginPercent?: SortOrder
     isActive?: SortOrder
     isComposite?: SortOrder
+    parentId?: SortOrder
+    groupQty?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31372,7 +31810,11 @@ export namespace Prisma {
     sizeDescription?: SortOrder
     motherRecipeQty?: SortOrder
     motherRecipeUnit?: SortOrder
+    consumptionMode?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -31384,6 +31826,8 @@ export namespace Prisma {
     realMarginPercent?: SortOrder
     isActive?: SortOrder
     isComposite?: SortOrder
+    parentId?: SortOrder
+    groupQty?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31391,7 +31835,10 @@ export namespace Prisma {
 
   export type RecipePresentationSumOrderByAggregateInput = {
     motherRecipeQty?: SortOrder
+    batchFraction?: SortOrder
     presentationYield?: SortOrder
+    baseCostCents?: SortOrder
+    unitTotalCostExactCents?: SortOrder
     packagingCostCents?: SortOrder
     additionalCostCents?: SortOrder
     totalCostCents?: SortOrder
@@ -31400,6 +31847,7 @@ export namespace Prisma {
     finalPriceCents?: SortOrder
     realProfitCents?: SortOrder
     realMarginPercent?: SortOrder
+    groupQty?: SortOrder
   }
 
   export type RecipePresentationRelationFilter = {
@@ -31411,6 +31859,7 @@ export namespace Prisma {
     id?: SortOrder
     presentationId?: SortOrder
     ingredientId?: SortOrder
+    materialType?: SortOrder
     name?: SortOrder
     quantity?: SortOrder
     unit?: SortOrder
@@ -31428,6 +31877,7 @@ export namespace Prisma {
     id?: SortOrder
     presentationId?: SortOrder
     ingredientId?: SortOrder
+    materialType?: SortOrder
     name?: SortOrder
     quantity?: SortOrder
     unit?: SortOrder
@@ -31439,6 +31889,7 @@ export namespace Prisma {
     id?: SortOrder
     presentationId?: SortOrder
     ingredientId?: SortOrder
+    materialType?: SortOrder
     name?: SortOrder
     quantity?: SortOrder
     unit?: SortOrder
@@ -31759,11 +32210,6 @@ export namespace Prisma {
     isNot?: RecipeWhereInput | null
   }
 
-  export type RecipePresentationNullableRelationFilter = {
-    is?: RecipePresentationWhereInput | null
-    isNot?: RecipePresentationWhereInput | null
-  }
-
   export type SaleItemCountOrderByAggregateInput = {
     id?: SortOrder
     saleId?: SortOrder
@@ -32005,17 +32451,6 @@ export namespace Prisma {
     isActive?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type ExpenseCategoryRelationFilter = {
     is?: ExpenseCategoryWhereInput
     isNot?: ExpenseCategoryWhereInput
@@ -32079,22 +32514,6 @@ export namespace Prisma {
     baseAmountCents?: SortOrder
     percentage?: SortOrder
     amountCents?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type UnitConversionRefCountOrderByAggregateInput = {
@@ -32501,6 +32920,14 @@ export namespace Prisma {
     connect?: RecipePriceHistoryWhereUniqueInput | RecipePriceHistoryWhereUniqueInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type RecipeIngredientUpdateManyWithoutRecipeNestedInput = {
     create?: XOR<RecipeIngredientCreateWithoutRecipeInput, RecipeIngredientUncheckedCreateWithoutRecipeInput> | RecipeIngredientCreateWithoutRecipeInput[] | RecipeIngredientUncheckedCreateWithoutRecipeInput[]
     connectOrCreate?: RecipeIngredientCreateOrConnectWithoutRecipeInput | RecipeIngredientCreateOrConnectWithoutRecipeInput[]
@@ -32675,6 +33102,19 @@ export namespace Prisma {
     connect?: RecipeWhereUniqueInput
   }
 
+  export type RecipePresentationCreateNestedOneWithoutGroupPresentationsInput = {
+    create?: XOR<RecipePresentationCreateWithoutGroupPresentationsInput, RecipePresentationUncheckedCreateWithoutGroupPresentationsInput>
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutGroupPresentationsInput
+    connect?: RecipePresentationWhereUniqueInput
+  }
+
+  export type RecipePresentationCreateNestedManyWithoutParentInput = {
+    create?: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput> | RecipePresentationCreateWithoutParentInput[] | RecipePresentationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutParentInput | RecipePresentationCreateOrConnectWithoutParentInput[]
+    createMany?: RecipePresentationCreateManyParentInputEnvelope
+    connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+  }
+
   export type PresentationMaterialCreateNestedManyWithoutPresentationInput = {
     create?: XOR<PresentationMaterialCreateWithoutPresentationInput, PresentationMaterialUncheckedCreateWithoutPresentationInput> | PresentationMaterialCreateWithoutPresentationInput[] | PresentationMaterialUncheckedCreateWithoutPresentationInput[]
     connectOrCreate?: PresentationMaterialCreateOrConnectWithoutPresentationInput | PresentationMaterialCreateOrConnectWithoutPresentationInput[]
@@ -32694,6 +33134,13 @@ export namespace Prisma {
     connectOrCreate?: SaleItemCreateOrConnectWithoutPresentationInput | SaleItemCreateOrConnectWithoutPresentationInput[]
     createMany?: SaleItemCreateManyPresentationInputEnvelope
     connect?: SaleItemWhereUniqueInput | SaleItemWhereUniqueInput[]
+  }
+
+  export type RecipePresentationUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput> | RecipePresentationCreateWithoutParentInput[] | RecipePresentationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutParentInput | RecipePresentationCreateOrConnectWithoutParentInput[]
+    createMany?: RecipePresentationCreateManyParentInputEnvelope
+    connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
   }
 
   export type PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput = {
@@ -32723,6 +33170,30 @@ export namespace Prisma {
     upsert?: RecipeUpsertWithoutPresentationsInput
     connect?: RecipeWhereUniqueInput
     update?: XOR<XOR<RecipeUpdateToOneWithWhereWithoutPresentationsInput, RecipeUpdateWithoutPresentationsInput>, RecipeUncheckedUpdateWithoutPresentationsInput>
+  }
+
+  export type RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput = {
+    create?: XOR<RecipePresentationCreateWithoutGroupPresentationsInput, RecipePresentationUncheckedCreateWithoutGroupPresentationsInput>
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutGroupPresentationsInput
+    upsert?: RecipePresentationUpsertWithoutGroupPresentationsInput
+    disconnect?: RecipePresentationWhereInput | boolean
+    delete?: RecipePresentationWhereInput | boolean
+    connect?: RecipePresentationWhereUniqueInput
+    update?: XOR<XOR<RecipePresentationUpdateToOneWithWhereWithoutGroupPresentationsInput, RecipePresentationUpdateWithoutGroupPresentationsInput>, RecipePresentationUncheckedUpdateWithoutGroupPresentationsInput>
+  }
+
+  export type RecipePresentationUpdateManyWithoutParentNestedInput = {
+    create?: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput> | RecipePresentationCreateWithoutParentInput[] | RecipePresentationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutParentInput | RecipePresentationCreateOrConnectWithoutParentInput[]
+    upsert?: RecipePresentationUpsertWithWhereUniqueWithoutParentInput | RecipePresentationUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: RecipePresentationCreateManyParentInputEnvelope
+    set?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    disconnect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    delete?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    update?: RecipePresentationUpdateWithWhereUniqueWithoutParentInput | RecipePresentationUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: RecipePresentationUpdateManyWithWhereWithoutParentInput | RecipePresentationUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: RecipePresentationScalarWhereInput | RecipePresentationScalarWhereInput[]
   }
 
   export type PresentationMaterialUpdateManyWithoutPresentationNestedInput = {
@@ -32765,6 +33236,20 @@ export namespace Prisma {
     update?: SaleItemUpdateWithWhereUniqueWithoutPresentationInput | SaleItemUpdateWithWhereUniqueWithoutPresentationInput[]
     updateMany?: SaleItemUpdateManyWithWhereWithoutPresentationInput | SaleItemUpdateManyWithWhereWithoutPresentationInput[]
     deleteMany?: SaleItemScalarWhereInput | SaleItemScalarWhereInput[]
+  }
+
+  export type RecipePresentationUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput> | RecipePresentationCreateWithoutParentInput[] | RecipePresentationUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: RecipePresentationCreateOrConnectWithoutParentInput | RecipePresentationCreateOrConnectWithoutParentInput[]
+    upsert?: RecipePresentationUpsertWithWhereUniqueWithoutParentInput | RecipePresentationUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: RecipePresentationCreateManyParentInputEnvelope
+    set?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    disconnect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    delete?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    connect?: RecipePresentationWhereUniqueInput | RecipePresentationWhereUniqueInput[]
+    update?: RecipePresentationUpdateWithWhereUniqueWithoutParentInput | RecipePresentationUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: RecipePresentationUpdateManyWithWhereWithoutParentInput | RecipePresentationUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: RecipePresentationScalarWhereInput | RecipePresentationScalarWhereInput[]
   }
 
   export type PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput = {
@@ -33267,14 +33752,6 @@ export namespace Prisma {
     connect?: WeeklyCloseWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput = {
     create?: XOR<ExpenseCategoryCreateWithoutExpensesInput, ExpenseCategoryUncheckedCreateWithoutExpensesInput>
     connectOrCreate?: ExpenseCategoryCreateOrConnectWithoutExpensesInput
@@ -33583,6 +34060,22 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -33606,22 +34099,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type IngredientCreateWithoutSupplierInput = {
@@ -33997,7 +34474,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34009,9 +34490,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
@@ -34023,7 +34507,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34035,9 +34523,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
@@ -34201,7 +34692,11 @@ export namespace Prisma {
     sizeDescription?: StringNullableFilter<"RecipePresentation"> | string | null
     motherRecipeQty?: FloatFilter<"RecipePresentation"> | number
     motherRecipeUnit?: StringFilter<"RecipePresentation"> | string
+    consumptionMode?: StringFilter<"RecipePresentation"> | string
+    batchFraction?: FloatFilter<"RecipePresentation"> | number
     presentationYield?: FloatFilter<"RecipePresentation"> | number
+    baseCostCents?: IntFilter<"RecipePresentation"> | number
+    unitTotalCostExactCents?: FloatFilter<"RecipePresentation"> | number
     packagingCostCents?: IntFilter<"RecipePresentation"> | number
     additionalCostCents?: IntFilter<"RecipePresentation"> | number
     totalCostCents?: IntFilter<"RecipePresentation"> | number
@@ -34213,6 +34708,8 @@ export namespace Prisma {
     realMarginPercent?: FloatFilter<"RecipePresentation"> | number
     isActive?: BoolFilter<"RecipePresentation"> | boolean
     isComposite?: BoolFilter<"RecipePresentation"> | boolean
+    parentId?: StringNullableFilter<"RecipePresentation"> | string | null
+    groupQty?: FloatFilter<"RecipePresentation"> | number
     notes?: StringNullableFilter<"RecipePresentation"> | string | null
     createdAt?: DateTimeFilter<"RecipePresentation"> | Date | string
     updatedAt?: DateTimeFilter<"RecipePresentation"> | Date | string
@@ -34292,6 +34789,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -34322,6 +34823,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -34346,9 +34851,156 @@ export namespace Prisma {
     create: XOR<RecipeCreateWithoutPresentationsInput, RecipeUncheckedCreateWithoutPresentationsInput>
   }
 
+  export type RecipePresentationCreateWithoutGroupPresentationsInput = {
+    id?: string
+    name: string
+    sizeDescription?: string | null
+    motherRecipeQty: number
+    motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
+    presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
+    packagingCostCents?: number
+    additionalCostCents?: number
+    totalCostCents?: number
+    pricingMethod?: string
+    desiredMarginPercent?: number
+    suggestedPriceCents?: number
+    finalPriceCents?: number
+    realProfitCents?: number
+    realMarginPercent?: number
+    isActive?: boolean
+    isComposite?: boolean
+    groupQty?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
+    subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
+    saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
+  }
+
+  export type RecipePresentationUncheckedCreateWithoutGroupPresentationsInput = {
+    id?: string
+    recipeId: string
+    name: string
+    sizeDescription?: string | null
+    motherRecipeQty: number
+    motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
+    presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
+    packagingCostCents?: number
+    additionalCostCents?: number
+    totalCostCents?: number
+    pricingMethod?: string
+    desiredMarginPercent?: number
+    suggestedPriceCents?: number
+    finalPriceCents?: number
+    realProfitCents?: number
+    realMarginPercent?: number
+    isActive?: boolean
+    isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
+    subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
+    saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
+  }
+
+  export type RecipePresentationCreateOrConnectWithoutGroupPresentationsInput = {
+    where: RecipePresentationWhereUniqueInput
+    create: XOR<RecipePresentationCreateWithoutGroupPresentationsInput, RecipePresentationUncheckedCreateWithoutGroupPresentationsInput>
+  }
+
+  export type RecipePresentationCreateWithoutParentInput = {
+    id?: string
+    name: string
+    sizeDescription?: string | null
+    motherRecipeQty: number
+    motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
+    presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
+    packagingCostCents?: number
+    additionalCostCents?: number
+    totalCostCents?: number
+    pricingMethod?: string
+    desiredMarginPercent?: number
+    suggestedPriceCents?: number
+    finalPriceCents?: number
+    realProfitCents?: number
+    realMarginPercent?: number
+    isActive?: boolean
+    isComposite?: boolean
+    groupQty?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
+    materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
+    subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
+    saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
+  }
+
+  export type RecipePresentationUncheckedCreateWithoutParentInput = {
+    id?: string
+    recipeId: string
+    name: string
+    sizeDescription?: string | null
+    motherRecipeQty: number
+    motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
+    presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
+    packagingCostCents?: number
+    additionalCostCents?: number
+    totalCostCents?: number
+    pricingMethod?: string
+    desiredMarginPercent?: number
+    suggestedPriceCents?: number
+    finalPriceCents?: number
+    realProfitCents?: number
+    realMarginPercent?: number
+    isActive?: boolean
+    isComposite?: boolean
+    groupQty?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
+    materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
+    subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
+    saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
+  }
+
+  export type RecipePresentationCreateOrConnectWithoutParentInput = {
+    where: RecipePresentationWhereUniqueInput
+    create: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput>
+  }
+
+  export type RecipePresentationCreateManyParentInputEnvelope = {
+    data: RecipePresentationCreateManyParentInput | RecipePresentationCreateManyParentInput[]
+  }
+
   export type PresentationMaterialCreateWithoutPresentationInput = {
     id?: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -34359,6 +35011,7 @@ export namespace Prisma {
   export type PresentationMaterialUncheckedCreateWithoutPresentationInput = {
     id?: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -34459,6 +35112,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -34489,6 +35146,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -34506,6 +35167,99 @@ export namespace Prisma {
     usedInRecipes?: SubRecipeUseUncheckedUpdateManyWithoutChildNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutRecipeNestedInput
     priceHistory?: RecipePriceHistoryUncheckedUpdateManyWithoutRecipeNestedInput
+  }
+
+  export type RecipePresentationUpsertWithoutGroupPresentationsInput = {
+    update: XOR<RecipePresentationUpdateWithoutGroupPresentationsInput, RecipePresentationUncheckedUpdateWithoutGroupPresentationsInput>
+    create: XOR<RecipePresentationCreateWithoutGroupPresentationsInput, RecipePresentationUncheckedCreateWithoutGroupPresentationsInput>
+    where?: RecipePresentationWhereInput
+  }
+
+  export type RecipePresentationUpdateToOneWithWhereWithoutGroupPresentationsInput = {
+    where?: RecipePresentationWhereInput
+    data: XOR<RecipePresentationUpdateWithoutGroupPresentationsInput, RecipePresentationUncheckedUpdateWithoutGroupPresentationsInput>
+  }
+
+  export type RecipePresentationUpdateWithoutGroupPresentationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    motherRecipeQty?: FloatFieldUpdateOperationsInput | number
+    motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
+    presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
+    packagingCostCents?: IntFieldUpdateOperationsInput | number
+    additionalCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    pricingMethod?: StringFieldUpdateOperationsInput | string
+    desiredMarginPercent?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    finalPriceCents?: IntFieldUpdateOperationsInput | number
+    realProfitCents?: IntFieldUpdateOperationsInput | number
+    realMarginPercent?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
+    subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
+    saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
+  }
+
+  export type RecipePresentationUncheckedUpdateWithoutGroupPresentationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    motherRecipeQty?: FloatFieldUpdateOperationsInput | number
+    motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
+    presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
+    packagingCostCents?: IntFieldUpdateOperationsInput | number
+    additionalCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    pricingMethod?: StringFieldUpdateOperationsInput | string
+    desiredMarginPercent?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    finalPriceCents?: IntFieldUpdateOperationsInput | number
+    realProfitCents?: IntFieldUpdateOperationsInput | number
+    realMarginPercent?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
+    subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
+    saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
+  }
+
+  export type RecipePresentationUpsertWithWhereUniqueWithoutParentInput = {
+    where: RecipePresentationWhereUniqueInput
+    update: XOR<RecipePresentationUpdateWithoutParentInput, RecipePresentationUncheckedUpdateWithoutParentInput>
+    create: XOR<RecipePresentationCreateWithoutParentInput, RecipePresentationUncheckedCreateWithoutParentInput>
+  }
+
+  export type RecipePresentationUpdateWithWhereUniqueWithoutParentInput = {
+    where: RecipePresentationWhereUniqueInput
+    data: XOR<RecipePresentationUpdateWithoutParentInput, RecipePresentationUncheckedUpdateWithoutParentInput>
+  }
+
+  export type RecipePresentationUpdateManyWithWhereWithoutParentInput = {
+    where: RecipePresentationScalarWhereInput
+    data: XOR<RecipePresentationUpdateManyMutationInput, RecipePresentationUncheckedUpdateManyWithoutParentInput>
   }
 
   export type PresentationMaterialUpsertWithWhereUniqueWithoutPresentationInput = {
@@ -34531,6 +35285,7 @@ export namespace Prisma {
     id?: StringFilter<"PresentationMaterial"> | string
     presentationId?: StringFilter<"PresentationMaterial"> | string
     ingredientId?: StringNullableFilter<"PresentationMaterial"> | string | null
+    materialType?: StringFilter<"PresentationMaterial"> | string
     name?: StringFilter<"PresentationMaterial"> | string
     quantity?: FloatFilter<"PresentationMaterial"> | number
     unit?: StringFilter<"PresentationMaterial"> | string
@@ -34589,7 +35344,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34601,10 +35360,13 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
     subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
   }
@@ -34616,7 +35378,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34628,9 +35394,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
     subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
   }
@@ -34657,7 +35426,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -34669,10 +35442,13 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
     subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
   }
@@ -34684,7 +35460,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -34696,9 +35476,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
     subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
   }
@@ -34709,7 +35492,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34721,10 +35508,13 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemCreateNestedManyWithoutPresentationInput
   }
@@ -34736,7 +35526,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -34748,9 +35542,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutPresentationInput
   }
@@ -34777,7 +35574,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -34789,10 +35590,13 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
   }
@@ -34804,7 +35608,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -34816,9 +35624,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
   }
@@ -34834,6 +35645,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -34864,6 +35679,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -34959,6 +35778,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -34989,6 +35812,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35074,6 +35901,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35104,6 +35935,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35139,6 +35974,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35169,6 +36008,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35215,6 +36058,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35245,6 +36092,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35286,6 +36137,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35316,6 +36171,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35346,6 +36205,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35376,6 +36239,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35422,6 +36289,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35452,6 +36323,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -35883,6 +36758,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35913,6 +36792,10 @@ export namespace Prisma {
     packageCostCents?: number
     laborPercent?: number
     overheadPercent?: number
+    contingencyPercent?: number
+    subtotalBeforeContingencyCents?: number
+    batchCostExactCents?: number
+    commercialRefCents?: number | null
     targetMargin?: number
     batchCostCents?: number
     unitCostCents?: number
@@ -35943,7 +36826,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -35955,10 +36842,13 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipe: RecipeCreateNestedOneWithoutPresentationsInput
+    parent?: RecipePresentationCreateNestedOneWithoutGroupPresentationsInput
+    groupPresentations?: RecipePresentationCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeCreateNestedManyWithoutPresentationInput
   }
@@ -35970,7 +36860,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -35982,9 +36876,12 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    groupPresentations?: RecipePresentationUncheckedCreateNestedManyWithoutParentInput
     materials?: PresentationMaterialUncheckedCreateNestedManyWithoutPresentationInput
     subrecipes?: PresentationSubrecipeUncheckedCreateNestedManyWithoutPresentationInput
   }
@@ -36063,6 +36960,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -36093,6 +36994,10 @@ export namespace Prisma {
     packageCostCents?: IntFieldUpdateOperationsInput | number
     laborPercent?: FloatFieldUpdateOperationsInput | number
     overheadPercent?: FloatFieldUpdateOperationsInput | number
+    contingencyPercent?: FloatFieldUpdateOperationsInput | number
+    subtotalBeforeContingencyCents?: IntFieldUpdateOperationsInput | number
+    batchCostExactCents?: FloatFieldUpdateOperationsInput | number
+    commercialRefCents?: NullableIntFieldUpdateOperationsInput | number | null
     targetMargin?: FloatFieldUpdateOperationsInput | number
     batchCostCents?: IntFieldUpdateOperationsInput | number
     unitCostCents?: IntFieldUpdateOperationsInput | number
@@ -36129,7 +37034,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -36141,10 +37050,13 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
   }
@@ -36156,7 +37068,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -36168,9 +37084,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
   }
@@ -36946,7 +37865,11 @@ export namespace Prisma {
     sizeDescription?: string | null
     motherRecipeQty: number
     motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
     presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
     packagingCostCents?: number
     additionalCostCents?: number
     totalCostCents?: number
@@ -36958,6 +37881,8 @@ export namespace Prisma {
     realMarginPercent?: number
     isActive?: boolean
     isComposite?: boolean
+    parentId?: string | null
+    groupQty?: number
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37061,7 +37986,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -37073,9 +38002,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parent?: RecipePresentationUpdateOneWithoutGroupPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
@@ -37087,7 +38019,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -37099,9 +38035,12 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
     materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
     subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
     saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
@@ -37113,7 +38052,11 @@ export namespace Prisma {
     sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
     motherRecipeQty?: FloatFieldUpdateOperationsInput | number
     motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
     presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
     packagingCostCents?: IntFieldUpdateOperationsInput | number
     additionalCostCents?: IntFieldUpdateOperationsInput | number
     totalCostCents?: IntFieldUpdateOperationsInput | number
@@ -37125,6 +38068,8 @@ export namespace Prisma {
     realMarginPercent?: FloatFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isComposite?: BoolFieldUpdateOperationsInput | boolean
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    groupQty?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37199,9 +38144,39 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type RecipePresentationCreateManyParentInput = {
+    id?: string
+    recipeId: string
+    name: string
+    sizeDescription?: string | null
+    motherRecipeQty: number
+    motherRecipeUnit: string
+    consumptionMode?: string
+    batchFraction?: number
+    presentationYield?: number
+    baseCostCents?: number
+    unitTotalCostExactCents?: number
+    packagingCostCents?: number
+    additionalCostCents?: number
+    totalCostCents?: number
+    pricingMethod?: string
+    desiredMarginPercent?: number
+    suggestedPriceCents?: number
+    finalPriceCents?: number
+    realProfitCents?: number
+    realMarginPercent?: number
+    isActive?: boolean
+    isComposite?: boolean
+    groupQty?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PresentationMaterialCreateManyPresentationInput = {
     id?: string
     ingredientId?: string | null
+    materialType?: string
     name: string
     quantity: number
     unit: string
@@ -37231,9 +38206,105 @@ export namespace Prisma {
     notes?: string | null
   }
 
+  export type RecipePresentationUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    motherRecipeQty?: FloatFieldUpdateOperationsInput | number
+    motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
+    presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
+    packagingCostCents?: IntFieldUpdateOperationsInput | number
+    additionalCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    pricingMethod?: StringFieldUpdateOperationsInput | string
+    desiredMarginPercent?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    finalPriceCents?: IntFieldUpdateOperationsInput | number
+    realProfitCents?: IntFieldUpdateOperationsInput | number
+    realMarginPercent?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipe?: RecipeUpdateOneRequiredWithoutPresentationsNestedInput
+    groupPresentations?: RecipePresentationUpdateManyWithoutParentNestedInput
+    materials?: PresentationMaterialUpdateManyWithoutPresentationNestedInput
+    subrecipes?: PresentationSubrecipeUpdateManyWithoutPresentationNestedInput
+    saleItems?: SaleItemUpdateManyWithoutPresentationNestedInput
+  }
+
+  export type RecipePresentationUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    motherRecipeQty?: FloatFieldUpdateOperationsInput | number
+    motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
+    presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
+    packagingCostCents?: IntFieldUpdateOperationsInput | number
+    additionalCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    pricingMethod?: StringFieldUpdateOperationsInput | string
+    desiredMarginPercent?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    finalPriceCents?: IntFieldUpdateOperationsInput | number
+    realProfitCents?: IntFieldUpdateOperationsInput | number
+    realMarginPercent?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    groupPresentations?: RecipePresentationUncheckedUpdateManyWithoutParentNestedInput
+    materials?: PresentationMaterialUncheckedUpdateManyWithoutPresentationNestedInput
+    subrecipes?: PresentationSubrecipeUncheckedUpdateManyWithoutPresentationNestedInput
+    saleItems?: SaleItemUncheckedUpdateManyWithoutPresentationNestedInput
+  }
+
+  export type RecipePresentationUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recipeId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sizeDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    motherRecipeQty?: FloatFieldUpdateOperationsInput | number
+    motherRecipeUnit?: StringFieldUpdateOperationsInput | string
+    consumptionMode?: StringFieldUpdateOperationsInput | string
+    batchFraction?: FloatFieldUpdateOperationsInput | number
+    presentationYield?: FloatFieldUpdateOperationsInput | number
+    baseCostCents?: IntFieldUpdateOperationsInput | number
+    unitTotalCostExactCents?: FloatFieldUpdateOperationsInput | number
+    packagingCostCents?: IntFieldUpdateOperationsInput | number
+    additionalCostCents?: IntFieldUpdateOperationsInput | number
+    totalCostCents?: IntFieldUpdateOperationsInput | number
+    pricingMethod?: StringFieldUpdateOperationsInput | string
+    desiredMarginPercent?: FloatFieldUpdateOperationsInput | number
+    suggestedPriceCents?: IntFieldUpdateOperationsInput | number
+    finalPriceCents?: IntFieldUpdateOperationsInput | number
+    realProfitCents?: IntFieldUpdateOperationsInput | number
+    realMarginPercent?: FloatFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isComposite?: BoolFieldUpdateOperationsInput | boolean
+    groupQty?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PresentationMaterialUpdateWithoutPresentationInput = {
     id?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -37244,6 +38315,7 @@ export namespace Prisma {
   export type PresentationMaterialUncheckedUpdateWithoutPresentationInput = {
     id?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
@@ -37254,6 +38326,7 @@ export namespace Prisma {
   export type PresentationMaterialUncheckedUpdateManyWithoutPresentationInput = {
     id?: StringFieldUpdateOperationsInput | string
     ingredientId?: NullableStringFieldUpdateOperationsInput | string | null
+    materialType?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string

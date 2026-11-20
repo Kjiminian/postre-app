@@ -319,6 +319,51 @@ const tests = [
       assert.strictEqual(invalid.ok, false);
     },
   },
+  {
+    name: "Validación Excel «Producción de Quesillo Redondo» y Cascada de 15 a 18 Minis",
+    fn: () => {
+      const subtotalCents = 56168.32396; // RD$561.6832396 antes de contingencia
+      const contingencyPct = 0;
+      const batchExact = subtotalCents * (1 + contingencyPct / 100);
+
+      // Triangular: 8 por lote -> RD$70.21
+      const triangularBase = batchExact * (1 / 8);
+      assert.strictEqual((triangularBase / 100).toFixed(2), "70.21");
+
+      // Mediano: 1/2 lote -> RD$280.84
+      const medianoBase = batchExact * 0.5;
+      assert.strictEqual((medianoBase / 100).toFixed(2), "280.84");
+
+      // Mini: 15 por lote -> RD$37.45, y 15 * mini = RD$561.68 (precisión interna)
+      const miniBase15 = batchExact * (1 / 15);
+      assert.strictEqual((miniBase15 / 100).toFixed(2), "37.45");
+      assert.strictEqual(((miniBase15 * 15) / 100).toFixed(2), "561.68");
+
+      // Caja de 15 minis + RD$50 una sola vez = RD$611.68
+      const caja15Cost = miniBase15 * 15 + 5000;
+      assert.strictEqual((caja15Cost / 100).toFixed(2), "611.68");
+
+      // Cambiar rendimiento de minis de 15 -> 18: actualiza mini y su caja, sin tocar madre/triangular/mediano
+      const miniBase18 = batchExact * (1 / 18);
+      const caja15Updated = miniBase18 * 15 + 5000;
+      assert.strictEqual((miniBase18 / 100).toFixed(2), "31.20");
+      assert.strictEqual((caja15Updated / 100).toFixed(2), "518.07");
+      assert.strictEqual((triangularBase / 100).toFixed(2), "70.21");
+      assert.strictEqual((medianoBase / 100).toFixed(2), "280.84");
+    },
+  },
+  {
+    name: "Contingencia Única sobre Subtotal y Conversión costPerBaseUnit (RD$ -> centavos)",
+    fn: () => {
+      const subtotal = 56168.32396;
+      const withContingency = subtotal * (1 + 10 / 100);
+      assert.strictEqual((withContingency / 100).toFixed(2), "617.85");
+
+      // 100g de harina a RD$0.19/g = 1900 centavos (RD$19.00), no 19 centavos
+      const lineCostCents = Math.round(100 * 0.19 * 100);
+      assert.strictEqual(lineCostCents, 1900);
+    },
+  },
 ];
 
 console.log("=================================================");

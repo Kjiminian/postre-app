@@ -65,8 +65,8 @@ export async function calculateIngredientLineCost(
     throw new Error(`Conversión inválida para ${ingredient.name}: ${norm.error}`);
   }
 
-  // Costo en centavos = cantidad_en_base * costo_por_base
-  return Math.round(norm.value * ingredient.costPerBaseUnit);
+  // Costo en centavos = cantidad_en_base * costo_RD$_por_base * 100
+  return Math.round(norm.value * ingredient.costPerBaseUnit * 100);
 }
 
 /**

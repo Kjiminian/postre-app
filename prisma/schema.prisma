@@ -110,8 +110,12 @@ model Recipe {
   packageCostCents  Int              @default(0) // Costo de empaque del lote en centavos
   laborPercent      Float            @default(0) // % mano de obra sobre costo de ingredientes
   overheadPercent   Float            @default(0) // % gastos indirectos (gas, luz, agua)
+  contingencyPercent Float           @default(0) // % contingencia para imprevistos sobre el subtotal del lote
+  subtotalBeforeContingencyCents Int @default(0) // Subtotal antes de contingencia (centavos)
+  batchCostExactCents Float          @default(0) // Costo exacto del lote con contingencia (precisión decimal)
+  commercialRefCents Int?            // Referencia comercial del Excel (ej. recargo 40% RD$786.36)
   targetMargin      Float            @default(40) // Margen objetivo sobre venta %
-  batchCostCents    Int              @default(0) // Calculado: sum ingredientes + empaque + overhead + labor
+  batchCostCents    Int              @default(0) // Calculado redondeado: subtotal + contingencia
   unitCostCents     Int              @default(0) // batchCost / yield
   costPerYieldUnit  Float            @default(0) // Costo por unidad de rendimiento (centavos / yieldUnit)
   suggestedPriceCents Int            @default(0) // unitCost / (1 - margin/100)
@@ -142,7 +146,11 @@ model RecipePresentation {
   sizeDescription       String?                // ej: "2 oz", "15 porciones", "Caja x 12"
   motherRecipeQty       Float                  // Cantidad de receta madre consumida
   motherRecipeUnit      String                 // Unidad consumida (unidad, g, ml, porcion)
+  consumptionMode       String                 @default("YIELD_PER_BATCH") // YIELD_PER_BATCH | BATCH_FRACTION
+  batchFraction         Float                  @default(1) // Fracción exacta del lote consumida por unidad
   presentationYield     Float                  @default(1) // Rendimiento de esta presentación por lote
+  baseCostCents         Int                    @default(0) // Costo base redondeado de receta madre
+  unitTotalCostExactCents Float                @default(0) // Costo total unitario exacto en centavos
   packagingCostCents    Int                    @default(0) // Costo de empaques específicos (vasos, tapas, caja, lazo)
   additionalCostCents   Int                    @default(0) // Costo de toppings o subrecetas complementarias
   totalCostCents        Int                    @default(0) // Costo total unitario de la presentación
@@ -153,7 +161,11 @@ model RecipePresentation {
   realProfitCents       Int                    @default(0) // Ganancia = finalPriceCents - totalCostCents
   realMarginPercent     Float                  @default(0) // Margen real = (finalPriceCents - totalCostCents) / finalPriceCents * 100
   isActive              Boolean                @default(true) // Desactivar sin romper histórico
-  isComposite           Boolean                @default(false) // Si agrupa múltiples unidades (ej. caja 12)
+  isComposite           Boolean                @default(false) // true = presentación agrupada (ej. caja 15 minis)
+  parentId              String?
+  parent                RecipePresentation?    @relation("VariantGroups", fields: [parentId], references: [id], onDelete: SetNull)
+  groupPresentations    RecipePresentation[]   @relation("VariantGroups")
+  groupQty              Float                  @default(1) // Unidades de la variante en la presentación agrupada
   notes                 String?
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
@@ -162,6 +174,7 @@ model RecipePresentation {
   saleItems             SaleItem[]
 
   @@index([recipeId])
+  @@index([parentId])
   @@index([isActive])
   @@map("recipe_presentations")
 }
@@ -171,6 +184,7 @@ model PresentationMaterial {
   presentationId  String
   presentation    RecipePresentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   ingredientId    String?
+  materialType    String             @default("PACKAGING") // PACKAGING | DECORATION
   name            String             // Vaso, Domo, Caja, Capacillo, Cinta, Etiqueta, Mensaje
   quantity        Float
   unit            String
